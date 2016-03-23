@@ -1,0 +1,2 @@
+class DataFormatError(Exception):
+    pass
