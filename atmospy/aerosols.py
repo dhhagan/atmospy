@@ -57,29 +57,35 @@ class ParticleDistribution(object):
 
         s_factor = self.Dp ** 2 * math.pi
         v_factor = self.Dp ** 3 * (math.pi / 6.)
+        m_factor = v_factor * self.density
 
         # Calculate according to S&P 8.4, 8.5
         self.dS             = self.dN.mul(s_factor.values)
         self.dV             = self.dN.mul(v_factor.values)
+        self.dM             = self.dN.mul(m_factor.values)
 
         self.dNdDp          = self.dN.div(self.dDp.values)
         self.dSdDp          = self.dS.div(self.dDp.values)
         self.dVdDp          = self.dV.div(self.dDp.values)
+        self.dMdDp          = self.dM.div(self.dDp.values)
 
         self.dNdlogDp       = self.dNdDp.mul(2.303).mul(self.Dp.values)  # S&P 8.18
         self.dSdlogDp       = self.dSdDp.mul(2.303).mul(self.Dp.values)  # S&P 8.19
         self.dVdlogDp       = self.dVdDp.mul(2.303).mul(self.Dp.values)  # S&P 8.20
+        self.dMdlogDp       = self.dMdDp.mul(2.303).mul(self.Dp.values)  # S&P 8.20
 
         # Integrate bin-wise
         self.dN_area        = self.dNdlogDp.mul(self.dlogDp.values)
         self.dS_area        = self.dSdlogDp.mul(self.dlogDp.values)
         self.dV_area        = self.dVdlogDp.mul(self.dlogDp.values)
+        self.dM_area        = self.dMdlogDp.mul(self.dlogDp.values)
 
         # Dump everything into a panel
         self.data = pd.Panel({
             'dN':       self.dN,
             'dS':       self.dS,
             'dV':       self.dV,
+            'dM':       self.dM,
             'dNdDp':    self.dNdDp,
             'dSdDp':    self.dSdDp,
             'dVdDp':    self.dVdDp,
