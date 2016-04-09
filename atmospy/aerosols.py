@@ -2,6 +2,7 @@ from .errors import DataFormatError
 
 import pandas as pd
 import numpy as np
+import warnings
 import math
 
 class ParticleDistribution(object):
@@ -57,7 +58,7 @@ class ParticleDistribution(object):
 
         self.s_factor = self.Dp ** 2 * math.pi
         self.v_factor = self.Dp ** 3 * (math.pi / 6.)
-        self.m_factor = v_factor * self.density
+        self.m_factor = self.v_factor * self.density
 
         # Set the primary statistics
         self.data = self.calculate(self.dN)
@@ -109,7 +110,7 @@ class ParticleDistribution(object):
         return data
 
     def subset(self, cutoff = None):
-        """Return a subset of data based on the diameter cutoff in micrometers
+        """Return a subset of dN based on the diameter cutoff in micrometers
         """
         if cutoff is None:
             return self.dN
@@ -120,11 +121,18 @@ class ParticleDistribution(object):
         f = (cutoff - (self.info.loc[i]['left'])) / (self.info.loc[i]['right'] - self.info.loc[i]['left'])
 
         # Recalculate the Last bin and return just the subset dN
-        dn = dN.copy()
+        d = self.data[:, 'bin0':'bin{}'.format(i), ['dN', 'dS', 'dV', 'dM']].copy()
 
-        dn['bin{}'.format(i)] = dN['bin{}'.format(i)].mul(f)
+        d.ix[:, 'bin{}'.format(i)] = d[:, 'bin{}'.format(i), :].mul(f)
 
-        return self.calculate(dn.loc[:, 'bin0':'bin{}'.format(i)])
+        return d
+
+    def integrated_mass(self, cutoff):
+        """Return a Series with the PM cutoff of interest
+        """
+        tmp = self.subset(cutoff)
+
+        return tmp[:, :, 'dM'].sum()
 
     def _variance(self, row):
         """
@@ -142,7 +150,7 @@ class ParticleDistribution(object):
         stats = pd.DataFrame()
 
         stats['ntot']  = dN.sum(axis = 1)
-        stats['mean']  = dN.mul(self.Dp.values).sum(axis = 1) / self.stats['ntot']
+        stats['mean']  = dN.mul(self.Dp.values).sum(axis = 1) / stats['ntot']
         stats['var']   = dN.apply(self._variance, axis = 1)
 
         # The divisor trick deals with large numbers...
