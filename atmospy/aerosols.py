@@ -55,47 +55,76 @@ class ParticleDistribution(object):
         self.logDp          = self.info['logDp']
         self.dlogDp         = self.info['dlogDp']
 
-        s_factor = self.Dp ** 2 * math.pi
-        v_factor = self.Dp ** 3 * (math.pi / 6.)
-        m_factor = v_factor * self.density
+        self.s_factor = self.Dp ** 2 * math.pi
+        self.v_factor = self.Dp ** 3 * (math.pi / 6.)
+        self.m_factor = v_factor * self.density
 
+        # Set the primary statistics
+        self.data = self.calculate(self.dN)
+
+    def calculate(self, dN):
+        """Calculate all of the statistics and set them
+        """
         # Calculate according to S&P 8.4, 8.5
-        self.dS             = self.dN.mul(s_factor.values)
-        self.dV             = self.dN.mul(v_factor.values)
-        self.dM             = self.dN.mul(m_factor.values)
+        dS          = dN.mul(self.s_factor.values)
+        dV          = dN.mul(self.v_factor.values)
+        dM          = dN.mul(self.m_factor.values)
 
-        self.dNdDp          = self.dN.div(self.dDp.values)
-        self.dSdDp          = self.dS.div(self.dDp.values)
-        self.dVdDp          = self.dV.div(self.dDp.values)
-        self.dMdDp          = self.dM.div(self.dDp.values)
+        dNdDp       = dN.div(self.dDp.values)
+        dSdDp       = dS.div(self.dDp.values)
+        dVdDp       = dV.div(self.dDp.values)
+        dMdDp       = dM.div(self.dDp.values)
 
-        self.dNdlogDp       = self.dNdDp.mul(2.303).mul(self.Dp.values)  # S&P 8.18
-        self.dSdlogDp       = self.dSdDp.mul(2.303).mul(self.Dp.values)  # S&P 8.19
-        self.dVdlogDp       = self.dVdDp.mul(2.303).mul(self.Dp.values)  # S&P 8.20
-        self.dMdlogDp       = self.dMdDp.mul(2.303).mul(self.Dp.values)  # S&P 8.20
+        dNdlogDp    = dNdDp.mul(2.303).mul(self.Dp.values)  # S&P 8.18
+        dSdlogDp    = dSdDp.mul(2.303).mul(self.Dp.values)  # S&P 8.19
+        dVdlogDp    = dVdDp.mul(2.303).mul(self.Dp.values)  # S&P 8.20
+        dMdlogDp    = dMdDp.mul(2.303).mul(self.Dp.values)  # S&P 8.20
 
         # Integrate bin-wise
-        self.dN_area        = self.dNdlogDp.mul(self.dlogDp.values)
-        self.dS_area        = self.dSdlogDp.mul(self.dlogDp.values)
-        self.dV_area        = self.dVdlogDp.mul(self.dlogDp.values)
-        self.dM_area        = self.dMdlogDp.mul(self.dlogDp.values)
+        dN_area     = dNdlogDp.mul(self.dlogDp.values)
+        dS_area     = dSdlogDp.mul(self.dlogDp.values)
+        dV_area     = dVdlogDp.mul(self.dlogDp.values)
+        dM_area     = dMdlogDp.mul(self.dlogDp.values)
 
         # Dump everything into a panel
-        self.data = pd.Panel({
-            'dN':       self.dN,
-            'dS':       self.dS,
-            'dV':       self.dV,
-            'dM':       self.dM,
-            'dNdDp':    self.dNdDp,
-            'dSdDp':    self.dSdDp,
-            'dVdDp':    self.dVdDp,
-            'dNdlogDp': self.dNdlogDp,
-            'dSdlogDp': self.dSdlogDp,
-            'dVdlogDp': self.dVdlogDp,
-            'dN_area':  self.dN_area,
-            'dS_area':  self.dS_area,
-            'dV_area':  self.dV_area,
+        data = pd.Panel({
+            'dN':       dN,
+            'dS':       dS,
+            'dV':       dV,
+            'dM':       dM,
+            'dNdDp':    dNdDp,
+            'dSdDp':    dSdDp,
+            'dVdDp':    dVdDp,
+            'dMdDp':    dMdDp,
+            'dNdlogDp': dNdlogDp,
+            'dSdlogDp': dSdlogDp,
+            'dVdlogDp': dVdlogDp,
+            'dMdlogDp': dMdlogDp,
+            'dN_area':  dN_area,
+            'dS_area':  dS_area,
+            'dV_area':  dV_area,
+            'dM_area':  dM_area
             }).transpose(1, 2, 0)
+
+        return data
+
+    def subset(self, cutoff = None):
+        """Return a subset of data based on the diameter cutoff in micrometers
+        """
+        if cutoff is None:
+            return self.dN
+
+        # Locate the index of the bin that must be selected
+        i = self.info.query("left < {}".format(cutoff)).index[-1]
+
+        f = (cutoff - (self.info.loc[i]['left'])) / (self.info.loc[i]['right'] - self.info.loc[i]['left'])
+
+        # Recalculate the Last bin and return just the subset dN
+        dn = dN.copy()
+
+        dn['bin{}'.format(i)] = dN['bin{}'.format(i)].mul(f)
+
+        return self.calculate(dn.loc[:, 'bin0':'bin{}'.format(i)])
 
     def _variance(self, row):
         """
@@ -107,28 +136,30 @@ class ParticleDistribution(object):
 
         return row.mul((self.Dp.values - mean) **2).sum() / ntot
 
-    def statistics(self):
+    def statistics(self, dN):
+        """Calculate the particle distribution statistics of dN (assumes dN is in #/cm3)
         """
-        """
-        self.stats['ntot']  = self.dN.sum(axis = 1)
-        self.stats['mean']  = self.dN.mul(self.Dp.values).sum(axis = 1) / self.stats['ntot']
-        self.stats['var']   = self.dN.apply(self._variance, axis = 1)
+        stats = pd.DataFrame()
+
+        stats['ntot']  = dN.sum(axis = 1)
+        stats['mean']  = dN.mul(self.Dp.values).sum(axis = 1) / self.stats['ntot']
+        stats['var']   = dN.apply(self._variance, axis = 1)
 
         # The divisor trick deals with large numbers...
-        self.stats['cmd']   = (self.dN.apply(lambda x: self.Dp.values ** (x / self._divisor), axis = 1).replace(0, np.nan).prod(axis = 1).pow(1. / (self.stats['ntot'] / self._divisor)))
+        stats['cmd']   = (dN.apply(lambda x: self.Dp.values ** (x / self._divisor), axis = 1).replace(0, np.nan).prod(axis = 1).pow(1. / (stats['ntot'] / self._divisor)))
 
         # Calculate the geometric standard deviation per S&P
-        for i, row in self.stats.iterrows():
-            nrow = self.dN.ix[i]
+        for i, row in stats.iterrows():
+            nrow = dN.ix[i]
             try:
-                self.stats.loc[i, 'gsd'] = math.pow(10, np.sqrt(nrow.mul((self.logDp.values - np.log10(row['cmd'])) ** 2).sum() / (row['ntot'] - 1)))
+                stats.loc[i, 'gsd'] = math.pow(10, np.sqrt(nrow.mul((self.logDp.values - np.log10(row['cmd'])) ** 2).sum() / (row['ntot'] - 1)))
             except Exception as e:
-                self.stats.loc[i, 'gsd'] = np.nan
+                stats.loc[i, 'gsd'] = np.nan
 
         # Calculate the SA CMD using S&P 8.50
-        self.stats['cmd_SA'] = self.stats.apply(lambda x: np.exp(np.log(x['cmd']) + 2 * np.log(x['gsd']) ** 2), axis = 1)
+        stats['cmd_SA'] = stats.apply(lambda x: np.exp(np.log(x['cmd']) + 2 * np.log(x['gsd']) ** 2), axis = 1)
 
-        return
+        return stats
 
     def __repr__(self):
         return "Particle Distribution"
