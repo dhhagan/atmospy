@@ -164,8 +164,9 @@ class ParticleDistribution(object):
             except Exception as e:
                 stats.loc[i, 'gsd'] = np.nan
 
-        # Calculate the SA CMD using S&P 8.50
+        # Calculate the SA CMD using S&P 8.50 and 8.53
         stats['cmd_SA'] = stats.apply(lambda x: np.exp(np.log(x['cmd']) + 2 * np.log(x['gsd']) ** 2), axis = 1)
+        stats['cmd_V']  = stats.apply(lambda x: np.exp(np.log(x['cmd']) + 3 * np.log(x['gsd']) ** 2), axis = 1)
 
         return stats
 
