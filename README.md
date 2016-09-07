@@ -3,12 +3,16 @@ atmospy
 
 Python library for the atmospheric sciences
 
-p = '/Users/dh/Documents/GitHub/quals/quals/data/Tata/March 2016'
+    import atmospy
+    import atmospy.io
 
-import atmospy
-import atmospy.io
+    df = atmospy.AlphasenseLoader()
+    df.load(p, "X102 PM*.csv")
 
-df = atmospy.AlphasenseLoader()
-df.load(p, "X102 PM*.csv")
+    a = atmospy.AlphasenseOPCN2(dN = df.hist.resample('10min').mean())
 
-a = atmospy.AlphasenseOPCN2(dN = df.hist.resample('10min').mean())
+## Running Unittests
+
+    coverage run --source atmospy setup.py test
+
+    coverage report -m
