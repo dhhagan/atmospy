@@ -1,0 +1,38 @@
+[tool.poetry]
+name = "atmospy"
+version = "0.1.0-alpha.0"
+description = "Data analysis and visualization for air quality data."
+authors = ["David H Hagan <david.hagan@quant-aq.com>"]
+license = "Apache-2.0"
+maintainers = []
+readme = "README.md"
+homepage = "https://github.com/quant-aq/atmospy/"
+repository = "https://github.com/quant-aq/atmospy/"
+documentation = "https://quant-aq.github.io/atmospy/"
+packages = [
+    { include = "atmospy" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.7.1,<3.10"
+pandas = "^1.2.4"
+seaborn = "^0.11.1"
+numpy = "^1.20.3"
+scipy = "^1.6.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.4"
+pytest-cov = "^2.12.1"
+jupyter = "^1.0.0"
+Sphinx = "^4.0.2"
+pandoc = "^1.0.2"
+sphinx-bootstrap-theme = "^0.7.1"
+numpydoc = "^1.1.0"
+sphinx-issues = "^1.2.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/quant-aq/atmospy/issues"

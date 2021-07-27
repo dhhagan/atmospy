@@ -1,18 +1,21 @@
-atmospy
-=======
+# atmospy: 
 
-Python library for the atmospheric sciences
+[badges go here]
 
-    import atmospy
-    import atmospy.io
+Atmospy is...
 
-    df = atmospy.AlphasenseLoader()
-    df.load(p, "X102 PM*.csv")
+## Documentation
 
-    a = atmospy.AlphasenseOPCN2(dN = df.hist.resample('10min').mean())
+Docs are built using sphinx
 
-## Running Unittests
+## Dependencies
 
-    coverage run --source atmospy setup.py test
+## Installation
 
-    coverage report -m
+## Testing
+
+## Development
+
+Atmospy development takes place on GitHub: https://github.com/quant-aq/atmospy
+
+Please submit bugs that you encounter to the [issue tracker](https://github.com/quant-aq/atmospy/issues) with a reproducible example that clearly demonstrates the problem.
