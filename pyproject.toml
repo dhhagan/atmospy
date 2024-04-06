@@ -6,29 +6,33 @@ authors = ["David H Hagan <david.hagan@quant-aq.com>"]
 license = "Apache-2.0"
 maintainers = []
 readme = "README.md"
-homepage = "https://github.com/quant-aq/atmospy/"
-repository = "https://github.com/quant-aq/atmospy/"
-documentation = "https://quant-aq.github.io/atmospy/"
+homepage = "https://github.com/dhhagan/atmospy/"
+repository = "https://github.com/dhhagan/atmospy/"
+documentation = "https://dhhagan.github.io/atmospy/"
 packages = [
     { include = "atmospy" },
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7.1,<3.10"
-pandas = "^1.2.4"
-seaborn = "^0.11.1"
-numpy = "^1.20.3"
-scipy = "^1.6.3"
+python = ">=3.8"
+pandas = ">=1.2"
+numpy = ">=1.20,<1.24.0 || >1.24.0"
+matplotlib = ">=3.4,<3.6.1 || >3.6.1"
+seaborn = ">=0.12"
 
 [tool.poetry.dev-dependencies]
-pytest = "^6.2.4"
-pytest-cov = "^2.12.1"
-jupyter = "^1.0.0"
-Sphinx = "^4.0.2"
-pandoc = "^1.0.2"
-sphinx-bootstrap-theme = "^0.7.1"
-numpydoc = "^1.1.0"
-sphinx-issues = "^1.2.0"
+# pytest = "^6.2.4"
+# pytest-cov = "^2.12.1"
+# jupyter = "^1.0.0"
+# Sphinx = "^4.0.2"
+# pandoc = "^1.0.2"
+# sphinx-bootstrap-theme = "^0.7.1"
+# numpydoc = "^1.1.0"
+# sphinx-issues = "^1.2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.1"
+pytest-cov = "^5.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
