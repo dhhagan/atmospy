@@ -106,8 +106,32 @@ def load_dataset(name, cache=True, data_home=None, **kwargs):
 def remove_na(vec):
     return
 
-def regressionstats():
-    return
+def check_for_timestamp_col(data, col):
+    """Make sure the column is a proper timestamp according to Pandas.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        Tabular data containing `col`.
+    col : str
+        The name of the column to check.
+    """
+    if not pd.core.dtypes.common.is_datetime64_any_dtype(data[col]):
+        raise TypeError(f"Column `{col}` is not a proper timestamp.")
+    
+def check_for_numeric_cols(data, cols):
+    """Make sure the column(s) is/are numeric.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        Tabular data containing `cols`.
+    cols : list
+        A list of column names to check.
+    """
+    for col in cols:
+        if not pd.core.dtypes.common.is_numeric_dtype(data[col]):
+            raise TypeError(f"Column `{col}` is not numeric. Please convert to a numeric dtype before proceeding.")
 
 # def stats(data, **kwargs):
 #     """[summary]

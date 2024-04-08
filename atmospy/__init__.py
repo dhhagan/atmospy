@@ -1,4 +1,4 @@
-from pkg_resources import get_distribution
+from importlib.metadata import version
 
 # import warnings
 # import pandas as pd
@@ -10,10 +10,11 @@ from .utils import *
 from .calendar import *
 from .relational import *
 from .trends import *
+from .rcmod import *
 
 # Capture the original matplotlib rcParams
 import matplotlib as mpl
 _orig_rc_params = mpl.rcParams.copy()
 
 # Determine the atmospy version
-__version__ = get_distribution('atmospy').version
+__version__ = version('atmospy')
