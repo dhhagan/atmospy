@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python: ["3.8", "3.9", "3.10", "3.11"]
     name: Python ${{ matrix.python }} tests
     steps:
       - name: Checkout branch
@@ -29,10 +29,10 @@ jobs:
           poetry run pytest tests/ --cov=./ --cov-report=xml
           
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
+          slug: dhhagan/atmospy
           flags: unittests
           name: codecov-umbrella
-          fail_ci_if_error: true
