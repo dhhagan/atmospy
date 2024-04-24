@@ -6,9 +6,6 @@ import numpy as np
 from .utils import (
     remove_na,
 )
-from seaborn import (
-    FacetGrid,
-)
 from .utils import (
     check_for_numeric_cols,
     check_for_timestamp_col

@@ -2,7 +2,7 @@ import seaborn as sns
 
 __all__ = ["set_theme"]
 
-def set_theme(context="notebook", style='white', palette='colorblind', 
+def set_theme(context="notebook", style='ticks', palette='colorblind', 
               font='sans-serif', font_scale=1, color_codes=True, rc=None):
     """_summary_
     
