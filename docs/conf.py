@@ -12,23 +12,18 @@
 #
 import os
 import sys
-import sphinx_bootstrap_theme
+import time
+import atmospy
+
 sys.path.insert(0, os.path.abspath('sphinxext'))
 
 
 # -- Project information -----------------------------------------------------
 
 project = 'atmospy'
-import time
-copyright = '2021-{}, QuantAQ, Inc.'.format(time.strftime("%Y"))
-author = 'QuantAQ'
-
-# The full version, including alpha/beta/rc tags
-sys.path.insert(0, os.path.abspath(os.path.pardir))
-import atmospy
-release = atmospy.__version__
-version = atmospy.__version__
-
+copyright = '2021-{}'.format(time.strftime("%Y"))
+author = 'David H. Hagan'
+version = release = atmospy.__version__
 
 # -- General configuration ---------------------------------------------------
 
@@ -43,53 +38,148 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
     'matplotlib.sphinxext.plot_directive',
+    'gallery_generator',
+    # 'tutorial_builder',
     'numpydoc',
-    'sphinx_issues'
+    'sphinx_copybutton',
+    'sphinx_issues',
+    'sphinx_design',
 ]
-
-issues_github_path = "quant-aq/atmospy"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
+# The root document.
+root_doc = "index"
+
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'docstrings', 'nextgen', 'Thumbs.db', '.DS_Store']
 
+# The reST default role (used for this markup: `text`) to use for all documents.
+default_role = 'literal'
+
+# Generate the API documentation when building
 autosummary_generate = True
 numpydoc_show_class_members = False
 
+# Sphinx-issues configuration
+issues_github_path = "dhhagan/atmospy"
+
+# Include the example source for plots in API docs
 plot_include_source = True
 plot_formats = [("png", 90)]
 plot_html_show_formats = False
 plot_html_show_source_link = False
 
 # -- Options for HTML output -------------------------------------------------
+# Don't add a source link in the sidebar
+html_show_sourcelink = False
+
+# Control the appearance of type hints
+autodoc_typehints = "none"
+autodoc_typehints_format = "short"
+
+# Allow shorthand references for main function interface
+rst_prolog = """
+.. currentmodule:: atmospy
+"""
+
+# Define replacements (used in whatsnew bullets)
+rst_epilog = r"""
+
+.. role:: raw-html(raw)
+   :format: html
+
+.. role:: raw-latex(raw)
+   :format: latex
+
+.. |API| replace:: :raw-html:`<span class="badge badge-api">API</span>` :raw-latex:`{\small\sc [API]}`
+.. |Defaults| replace:: :raw-html:`<span class="badge badge-defaults">Defaults</span>` :raw-latex:`{\small\sc [Defaults]}`
+.. |Docs| replace:: :raw-html:`<span class="badge badge-docs">Docs</span>` :raw-latex:`{\small\sc [Docs]}`
+.. |Feature| replace:: :raw-html:`<span class="badge badge-feature">Feature</span>` :raw-latex:`{\small\sc [Feature]}`
+.. |Enhancement| replace:: :raw-html:`<span class="badge badge-enhancement">Enhancement</span>` :raw-latex:`{\small\sc [Enhancement]}`
+.. |Fix| replace:: :raw-html:`<span class="badge badge-fix">Fix</span>` :raw-latex:`{\small\sc [Fix]}`
+.. |Build| replace:: :raw-html:`<span class="badge badge-build">Build</span>` :raw-latex:`{\small\sc [Deps]}`
+
+"""  # noqa
+
+# rst_epilog += "\n".join([
+#     f".. |{key}| replace:: :ref:`{key} <{val.__class__.__name__.lower()}_property>`"
+#     for key, val in PROPERTIES.items()
+# ])
+
+
+
+
+
+
+
+
+
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'bootstrap'
-
-html_theme_options = {
-    'source_link_position': 'footer',
-    'bootswatch_theme': "paper",
-    "navbar_title": " ",
-    'navbar_sidebarrel': False,
-    'bootstrap_version': "3",
-    'nosidebar': True,
-    'body_max_width': "100%",
-    'navbar_links': [
-        ("Gallery", "examples/index"),
-        ("Tutorial", "tutorial"),
-        ("API", "api")
-    ],
-}
-
-html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
+html_theme = 'pydata_sphinx_theme'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# so a file named 'default.css' will overwrite the builtin 'default.css'.
+html_static_path = ['_static', 'example_thumbs']
+for path in html_static_path:
+    if not os.path.exists(path):
+        os.makedirs(path)
+        
+html_css_files = [f'css/custom.css?v={atmospy.__version__}']
+
+# html_logo = "_static/logo-wide-lightbg.svg"
+# html_favicon = "_static/favicon.ico"
+
+html_theme_options = {
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/dhhagan/atmospy",
+            "icon": "fab fa-github",
+            "type": "fontawesome",
+        },
+        # {
+        #     "name": "StackOverflow",
+        #     "url": "https://stackoverflow.com/tags/seaborn",
+        #     "icon": "fab fa-stack-overflow",
+        #     "type": "fontawesome",
+        # },
+        # {
+        #     "name": "Twitter",
+        #     "url": "https://twitter.com/michaelwaskom",
+        #     "icon": "fab fa-twitter",
+        #     "type": "fontawesome",
+        # },
+    ],
+    "show_prev_next": False,
+    "navbar_start": ["navbar-logo"],
+    "navbar_end": ["navbar-icon-links"],
+    "header_links_before_dropdown": 8,
+}
+
+html_context = {
+    "default_mode": "light",
+}
+
+html_sidebars = {
+    "index": [],
+    "examples/index": [],
+    "**": ["sidebar-nav-bs.html"],
+}
+
+# -- Intersphinx ------------------------------------------------
+
+intersphinx_mapping = {
+    'numpy': ('https://numpy.org/doc/stable/', None),
+    'scipy': ('https://docs.scipy.org/doc/scipy/', None),
+    'matplotlib': ('https://matplotlib.org/stable', None),
+    'pandas': ('https://pandas.pydata.org/pandas-docs/stable/', None),
+    'seaborn': ('https://seaborn.pydata.org/', None),
+}
