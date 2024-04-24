@@ -1,13 +1,12 @@
 name: build & release
 on:
-  create:
-    tags:
-      - '*'
+  release:
+    types: [published]
 
 jobs:
     build-n-publish:
         name: Build and publish to PyPI
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         steps:
             - name: Checkout branch
               uses: actions/checkout@v2
@@ -18,13 +17,12 @@ jobs:
                 python-version: 3.8
             
             - name: Install poetry
-              uses: snok/install-poetry@v1.1.1
+              uses: snok/install-poetry@v1
               with:
-                version: 1.1.4
-                create_virtualenvs: true
+                virtualenvs-create: true
             
             - name: Install dependencies
-              run: poetry install
+              run: poetry install --no-interaction
             
             - name: Build and publish to PyPI
               run: |
