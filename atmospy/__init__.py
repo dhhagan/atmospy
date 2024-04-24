@@ -7,10 +7,11 @@ from importlib.metadata import version
 # import os
 
 from .utils import *
+from .rcmod import *
 from .calendar import *
 from .relational import *
 from .trends import *
-from .rcmod import *
+from .rose import *
 
 # Capture the original matplotlib rcParams
 import matplotlib as mpl

@@ -1,15 +1,13 @@
 """Utility functions for internal use."""
 
-"""Utility functions to add:
-  - load dataset: https://github.com/mwaskom/seaborn/blob/master/seaborn/utils.py#L524
-  - 
-"""
 import os
 from urllib.request import (
     urlopen,
     urlretrieve
 )
-from seaborn.external.appdirs import user_cache_dir
+from seaborn.external.appdirs import (
+    user_cache_dir,
+)
 import pandas as pd
 
 DATASET_SOURCE = "https://raw.githubusercontent.com/dhhagan/atmospy-data/main"
@@ -100,6 +98,12 @@ def load_dataset(name, cache=True, data_home=None, **kwargs):
         
     if name == "us-bc":
         df["Timestamp GMT"] = pd.to_datetime(df["Timestamp GMT"])
+        
+    if name == "air-sensors-pm":
+        df["timestamp"] = pd.to_datetime(df["timestamp"])
+    
+    if name == "air-sensors-met":
+        df["timestamp_local"] = pd.to_datetime(df["timestamp_local"])
     
     return df
 
@@ -132,33 +136,3 @@ def check_for_numeric_cols(data, cols):
     for col in cols:
         if not pd.core.dtypes.common.is_numeric_dtype(data[col]):
             raise TypeError(f"Column `{col}` is not numeric. Please convert to a numeric dtype before proceeding.")
-
-# def stats(data, **kwargs):
-#     """[summary]
-#     Calculate MAE, RMSE, MBE, R2 Score
-
-#     Accepts either a dataframe and column names, or two arrays
-
-#     Args:
-#         data ([type]): [description]
-#     """
-#     x = kwargs.pop("x")
-#     y = kwargs.pop("y")
-
-#     return
-
-# def epastats(data, **kwargs):
-#     """[summary]
-
-#     Args:
-#         data ([type]): [description]
-#     """
-#     return
-
-# def statstable(stats, **kwargs):
-#     """[summary]
-
-#     Args:
-#         stats ([type]): [description]
-#     """
-#     return
