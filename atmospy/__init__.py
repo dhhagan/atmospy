@@ -8,7 +8,6 @@ from importlib.metadata import version
 
 from .utils import *
 from .rcmod import *
-from .calendar import *
 from .relational import *
 from .trends import *
 from .rose import *

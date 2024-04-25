@@ -14,39 +14,61 @@ def pollutionroseplot(data=None, *, ws=None, wd=None, pollutant=None,
                       faceted=False, segments=12, bins=[0, 10, 100, 1000], suffix="a.u.",
                       calm=0., lw=1, legend=True, palette="flare",
                       title=None, **kwargs):
-    """_summary_
+    """Plot the intensity and directionality of a variable on a traditional wind-rose plot.
 
+    This function is a modified version of `Phil Hobson's work <https://gist.github.com/phobson/41b41bdd157a2bcf6e14>`_.
 
-    The basis of this function can orginally found here: https://gist.github.com/phobson/41b41bdd157a2bcf6e14
+    Traditionally, a wind rose plots wind speed and direction so that you can see from what 
+    direction is the wind coming from and at what velocity. For air quality purposes, we 
+    often wonder whether or not there is directionality to the intensity of a certain 
+    air pollutant. Well, look no further. This plot allows you to easily visualize the 
+    directionality of a pollutant.
     
     Parameters
     ----------
-    data : _type_, optional
-        _description_, by default None
-    ws : _type_, optional
-        _description_, by default None
-    wd : _type_, optional
-        _description_, by default None
-    pollutant : _type_, optional
-        _description_, by default None
+    data : :class:`pandas.DataFrame`
+        Tabular data as a pandas DataFrame.
+    ws : key in `data`
+        Variable that corresponds to the wind speed data in `data`.
+    wd : key in `data`
+        Variable that corresponds to the wind direction data in `data`.
+    pollutant : key in `data`
+        Variable that corresponds to the pollutant of interest in `data`.
     faceted : bool, optional
-        _description_, by default False
+        Set to `True` if plotting on a FacetGrid, by default False
     segments : int, optional
-        _description_, by default 12
-    bins : list, optional
-        _description_, by default [0, 10, 100, 1000]
+        The number of bins along the theta axis to group by wind direction
+        , by default 12
+    bins : list or array of floats, optional
+        An array of floats corresponding to the bin boundaries
+        for `pollutant`; if the last entry is not inf, it will be 
+        automatically added, by default [0, 10, 100, 1000]
     suffix : str, optional
-        _description_, by default "a.u."
-    calm : _type_, optional
-        _description_, by default 0.
+        The suffix (or units) to use on the labels for `pollutant`, by default "a.u."
+    calm : float, optional
+        Set the definition of calm conditions; data under calm winds 
+        will not be used to compute the statistics and 
+        will be shown on the plot as blank in the center, by default 0.
     lw : int, optional
-        _description_, by default 1
+        Set the line width, by default 1
     legend : bool, optional
-        _description_, by default True
+        If `True` a legend will be added to the figure, by default True
     palette : str, optional
-        _description_, by default "flare"
-    title : _type_, optional
-        _description_, by default None
+        Select the color palette to use, by default "flare"
+    title : str, optional
+        Set the figure title, by default None
+        
+    Returns
+    -------
+    :class:`matplotlib.axes._axes.Axes`
+    
+    Examples
+    --------
+    Using defaults, plot the pollution rose for PM2.5:
+    
+    >>> df = atmospy.load_dataset("air-sensors-met")
+    >>> atmospy.pollutionroseplot(data=df, ws="ws", wd="wd", pollutant="pm25")
+    
     """
     check_for_numeric_cols(data, [ws, wd, pollutant])
 

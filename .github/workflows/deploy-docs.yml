@@ -1,0 +1,39 @@
+name: docs/gh-pages
+on: [workflow_dispatch]
+
+jobs:
+    build-docs:
+        name: Build the docs and push to github pages
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout branch
+              uses: actions/checkout@v2
+
+            - name: Setup Python
+              uses: actions/setup-python@master
+              with:
+                python-version: 3.8
+
+            - name: Install poetry
+              uses: snok/install-poetry@v1
+              with:
+                virtualenvs-create: true
+
+            - name: Install dependencies
+              run: poetry install --no-interaction
+            
+            - name: build docs
+              run: |
+                source $(poetry env info --path)/bin/activate
+                cd docs
+                make clean
+                make notebooks html
+                cd ..
+
+            - name: deploy to gh-pages
+              uses: Cecilapp/GitHub-Pages-deploy@v3
+              env:
+                GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+              with:
+                email: david.hagan@quant-aq.com
+                build_dir: docs/_build/html
