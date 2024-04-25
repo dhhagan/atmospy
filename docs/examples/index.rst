@@ -76,7 +76,9 @@ Example gallery
 .. toctree::
    :hidden:
 
-   ./anscombes_quartet
+   ./calendar_by_day
+
+   ./calendar_by_hour
 
    ./dielplot
 
@@ -91,10 +93,23 @@ Example gallery
 .. raw:: html
 
     <div class='thumb align-center'>
-    <a href=./anscombes_quartet.html>
-    <img src=../_static/anscombes_quartet_thumb.png>
+    <a href=./calendar_by_day.html>
+    <img src=../_static/calendar_by_day_thumb.png>
     <span class='thumb-label'>
-    <p></p>
+    <p>calendarplot</p>
+    </span>
+    </a>
+    </div>
+
+
+
+.. raw:: html
+
+    <div class='thumb align-center'>
+    <a href=./calendar_by_hour.html>
+    <img src=../_static/calendar_by_hour_thumb.png>
+    <span class='thumb-label'>
+    <p>calendarplot</p>
     </span>
     </a>
     </div>

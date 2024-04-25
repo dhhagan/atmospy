@@ -73,7 +73,8 @@ on the marginal axes, you can:
 
 .. code:: ipython3
 
-    atmospy.regplot(df, x="Reference", y="Sensor A", marginal_kws={"bins": 25, "fill": False});
+    atmospy.regplot(df, x="Reference", y="Sensor A", 
+                    marginal_kws={"bins": 25, "fill": False});
 
 
 
@@ -108,42 +109,284 @@ as well:
 Evaluating Trends
 -----------------
 
+While we often look at timeseries data to visualize trends, it can be
+difficult to easily detect trends with large - or long-running -
+datasets. Often, it can be easier to look at hourly or daily averages.
+The ``calendarplot`` function makes it easy to visualize hourly data by
+month or daily data by year.
+
+Visualizing hourly data by month
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Some pollutants - such as ozone - have known diurnal patterns due to the
+photochemical processing of precursor pollutants during the day. Others,
+such as carbon monoxide and other combustion-related pollutants, may
+show strong patterns associated with traffic patterns if near a source.
+Visualizing hourly data can make it easy to identify trends.
+
 .. code:: ipython3
 
-    bc = atmospy.load_dataset("us-bc")
+    ozone = atmospy.load_dataset("us-ozone")
     
-    # Select just a single location
-    single_bc = bc[bc["Location UUID"] == bc["Location UUID"].unique()[0]]
-    
-    atmospy.calendarplot(data=single_bc, x="Timestamp GMT", y="Sample Measurement")
+    # we only want to use a single site for now
+    single_site = ozone[ozone["Location UUID"] == ozone["Location UUID"].unique()[0]]
+
+.. code:: ipython3
+
+    atmospy.calendarplot(
+        data=single_site, 
+        x="Timestamp Local", 
+        y="Sample Measurement", 
+        freq="hour",
+    );
+
+
+
+.. image:: plots_files/plots_14_0.png
+
+
+The figure above shows the time of day on the y-axis and the day of
+month on the x-axis. By looking across the figure from left-to-right,
+you can quickly see that ozone - for the most part - is higher between
+12-6PM than during the early morning. However, the figure above - using
+the defaults - doesn’t look super appealing, so let’s go ahead and
+modify it a bit to make it larger, explicitly set the min and max
+values, and chage to a different color palette:
+
+.. code:: ipython3
+
+    atmospy.calendarplot(
+        data=single_site, 
+        x="Timestamp Local", 
+        y="Sample Measurement", 
+        freq="hour",
+        xlabel="Day of Month",
+        height=4,
+        cmap="flare",
+        vmin=0, vmax=80,
+        title="Ozone in [Month]"
+    );
+
+
+
+.. image:: plots_files/plots_16_0.png
+
+
+Much better! By default, we aggregate data by the ``mean`` value. We can
+also change that up to plot by another aggregate, such as the ``max``:
+
+.. code:: ipython3
+
+    atmospy.calendarplot(
+        data=single_site, 
+        x="Timestamp Local", 
+        y="Sample Measurement", 
+        freq="hour",
+        xlabel="Day of Month",
+        height=4,
+        cmap="flare",
+        vmin=0, vmax=80,
+        title="Peak Ozone in [Month]",
+        agg="max"
+    );
+
+
+
+.. image:: plots_files/plots_18_0.png
+
+
+In this instance, there isn’t much of a difference as the data is
+reported hourly, so the mean and max will be the same (oops). With a
+more highly time-resolved dataset, this would look a bit different.
+
+Visualizing daily data over the course of a year
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We can also visualize daily data over the course of the year - be
+default, we plot the daily average for the pollutant of choice:
+
+.. code:: ipython3
+
+    atmospy.calendarplot(
+        data=single_site, 
+        x="Timestamp Local", 
+        y="Sample Measurement", 
+        freq="day",
+        cbar=False,
+        # xlabel="Day of Month",
+        height=2.5,
+        linewidths=.1
+    );
 
 
 .. parsed-literal::
 
-    /Users/dhhagan/Documents/github/atmospy/atmospy/atmospy/trends.py:69: UserWarning: FixedFormatter should only be used together with FixedLocator
+    /Users/dhhagan/Documents/github/atmospy/atmospy/atmospy/trends.py:72: UserWarning: FixedFormatter should only be used together with FixedLocator
       ax.xaxis.set_ticklabels([
 
 
 
-.. image:: plots_files/plots_13_1.png
+.. image:: plots_files/plots_21_1.png
+
+
+You end up with a nice visualization of long-term data that looks a lot
+like a GitHub contribution graph. It would be even better if we chose a
+dataset that is complete!
+
+Visualizing data completeness
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+While we mostly plot the trend in pollutant concentration, we can easily
+adapt the same figures to plot data completeness by simply switching the
+``agg`` argument from ``mean`` to ``count``:
+
+.. code:: ipython3
+
+    atmospy.calendarplot(
+        data=single_site, 
+        x="Timestamp Local", 
+        y="Sample Measurement", 
+        freq="hour",
+        xlabel="Day of Month",
+        height=4,
+        cmap="flare",
+        vmin=0, vmax=1,
+        title="Ozone Data Completeness in [Month]",
+        agg="count"
+    );
+
+
+
+.. image:: plots_files/plots_24_0.png
+
+
+Visualizing diel trends
+~~~~~~~~~~~~~~~~~~~~~~~
+
+A diel cycle is a pattern that recurs every 24h. Often, we see diel
+trends with pollutants that are driven by daytime chemistry such as
+ozone or are associated with traffic patterns such as carbon monoxide,
+nitrogen oxides, and other combustion tracers. We can easily visualize
+the diel trend using the ``atmospy.dielplot`` function:
+
+.. code:: ipython3
+
+    atmospy.dielplot(
+        data=single_site,
+        x="Timestamp Local",
+        y="Sample Measurement"
+    )
+
+
+
+.. image:: plots_files/plots_26_0.png
+
+
+By default, we plot the mean value as a solid line and the interquartile
+range as the shaded region. We can also customize the figure to adjust
+the axis, add a title, and otherwise configure the plot via keyword
+arguments:
+
+.. code:: ipython3
+
+    atmospy.dielplot(
+        data=single_site,
+        x="Timestamp Local",
+        y="Sample Measurement",
+        title="Diel Trend in Ozone",
+        ylim=(0, None),
+        ylabel="$O_3\;[ppb]$",
+        plot_kws={
+            "lw": 4,
+        }
+    );
+
+
+
+.. image:: plots_files/plots_28_0.png
 
 
 Identifying Sources
 -------------------
 
+Understanding from which direction a pollutant originated is a common
+question in air pollution work. A pollution rose - a variant of the more
+common wind rose - is one way to visualize this. A pollution rose is a
+polar plot that visualizes the originating direction and intensity of a
+specific pollutant. In atmospy, you can use the
+``atmospy.pollutionroseplot`` to visualize this:
+
 .. code:: ipython3
 
+    # load an example dataset with MET info
     met = atmospy.load_dataset("air-sensors-met")
     
-    atmospy.pollutionroseplot(data=met, ws="ws", wd="wd", pollutant="pm25")
+    atmospy.pollutionroseplot(data=met, ws="ws", wd="wd", pollutant="pm25");
 
 
 
-.. image:: plots_files/plots_15_0.png
+.. image:: plots_files/plots_30_0.png
 
 
--  Comparing data
--  evaluating trends
--  diel
--  calendar
--  where is it coming from?
+Data for the pollutant of choice are grouped by both the range of
+pollutant (as set by ``bins``) and by wind direction (as set by
+``segments``). To ensure that data is not included when the wind speed
+is calm (as set by ``calm``), we first remove that data and indicate on
+the figure above using the blank center point at the middle of the
+figure - we assign calm periods evenly across all directions. In the
+figure above, something like a few percent of data records are
+registered as *calm*.
+
+This is important because wind direction data during calm winds isn’t
+really relevant and/or statistically significant depending on the
+instrument used to measure the wind speed and wind direction.
+
+In the figure above, the longer the bar, the more data records that are
+associated with it - in other words, that is the direction from which
+most data came. The color of a bar indicates the pollutant
+concentration. In the figure above, most of the PM2.5 is coming from the
+south-west and south-east. With the pollutant bin sizes set so large,
+it’s hard to see a pollution differential, so let’s go ahead and modify
+that:
+
+.. code:: ipython3
+
+    atmospy.pollutionroseplot(
+        data=met,
+        ws="ws", wd="wd", pollutant="pm25",
+        bins=[0, 8, 15, 25, 35, 50, 100],
+        segments=32,
+        suffix="$µgm^{-3}$",
+        title="$PM_{2.5}$ by Direction at an Unknown Location"
+    );
+
+
+
+.. image:: plots_files/plots_32_0.png
+
+
+The above figure has quite a bit more resolution along both the theta
+and radii as we modified the ``bins`` and ``segments`` parameters. You
+can define ``bins`` to be any array-like structure so long as they’re
+numeric and the function will always add ``inf`` at the end if you
+didn’t include it so that there is always a catch-all bin for values
+higher than the max specified. You can manually define this list to be
+whatever resolution or chunkiness you’d like, or, you can create an
+evenly-spaced array using numpy: ``np.linspace(0, 100, 10)``.
+
+The ``segments`` parameter is a bit different - you define an integer
+number of segments to divide the 360 degrees into and the code will
+automatically handle it.
+
+Above, we went ahead and showed some of the additional configuration
+options that you can include such as the ``suffix``, which labels the
+legend, and the ``title`` which adds a title to the figure.
+
+Facets and other Fun Things
+===========================
+
+Now that you’ve seen how to use the individual plots above, we’re going
+to go over some of the advanced features that are available by
+leveraging seaborn’s great grid functionality.
+
+

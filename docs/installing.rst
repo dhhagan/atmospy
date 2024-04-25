@@ -62,7 +62,7 @@ the instructions below for Getting Help.
 Getting help
 ~~~~~~~~~~~~
 
-If you think you've encountered a bug, please report it on the `GitHub issue tracker <https://github.com/dhhagan/atmospy/issues>`. Please 
+If you think you've encountered a bug, please report it on the `GitHub issue tracker <https://github.com/dhhagan/atmospy/issues>`_. Please 
 include the following information when you do:
 
 - a reproducible example that demonstrates the problem (use an example dataset where possible)

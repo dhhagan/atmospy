@@ -107,8 +107,19 @@ def load_dataset(name, cache=True, data_home=None, **kwargs):
     if name == "us-ozone":
         df["Timestamp GMT"] = pd.to_datetime(df["Timestamp GMT"])
         
+        # conver ozone from ppm to ppb
+        df["Sample Measurement"] *= 1e3
+        
+        # add a column for local time
+        df["Timestamp Local"] = df.apply(
+            lambda x: x["Timestamp GMT"] + pd.Timedelta(hours=x["GMT Offset"]), axis=1)
+        
     if name == "us-bc":
         df["Timestamp GMT"] = pd.to_datetime(df["Timestamp GMT"])
+        
+        # add a column for local time
+        df["Timestamp Local"] = df.apply(
+            lambda x: x["Timestamp GMT"] + pd.Timedelta(hours=x["GMT Offset"]), axis=1)
         
     if name == "air-sensors-pm":
         df["timestamp"] = pd.to_datetime(df["timestamp"])
