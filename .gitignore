@@ -1,4 +1,5 @@
 *.ipynb
+!docs/_tutorial/*.ipynb
 
 *.DS_Store
 
