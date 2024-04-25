@@ -9,6 +9,9 @@ from .utils import (
     check_for_timestamp_col
 )
 
+# Turn off chained assignment warnings
+pd.options.mode.chained_assignment = None
+
 __all__ = ["dielplot", "calendarplot"]
 
 @mpl.ticker.FuncFormatter
@@ -30,8 +33,8 @@ def _yearplot(data, x, y, ax=None, agg="mean", cmap="crest",
         # warn
         data = data[data.index.year == years[0]]
         
-    data["Day of Week"] = data.index.weekday
-    data["Week of Year"] = data.index.isocalendar().week
+    data.loc[:, "Day of Week"] = data.index.weekday
+    data.loc[:, "Week of Year"] = data.index.isocalendar().week
     
     # compute pivoted data
     pivot = data.pivot_table(
@@ -122,8 +125,8 @@ def _monthplot(data, x, y, ax=None, agg="mean", height=3, aspect=1,
         data = data[data.index.month == months[0]]
         
     # add pivot columns
-    data["Day of Month"] = data.index.day
-    data["Hour of Day"] = data.index.hour
+    data.loc[:, "Day of Month"] = data.index.day
+    data.loc[:, "Hour of Day"] = data.index.hour
     
     # compute the pivot data
     pivot = data.pivot_table(
@@ -195,6 +198,9 @@ def calendarplot(data, x, y, freq="day", agg="mean", vmin=None, vmax=None, cmap=
     Currently, you can only plot a single month or single year at a time depending on 
     configuration. To facet these, please set up a Seaborn FacetGrid and call the 
     calendarplot separately.
+    
+    This function is heavily influenced by the `calplot <https://calplot.readthedocs.io/en/latest/>`_ 
+    python library.
     
     Parameters
     ----------

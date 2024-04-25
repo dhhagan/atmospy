@@ -8,17 +8,17 @@
 ![Apache 2.0 licensed](https://img.shields.io/github/license/dhhagan/atmospy)
 
 
-`atmospy` is a Python visualization library based on matplotlib and seaborn. 
+**atmospy** is a Python visualization library based on matplotlib and seaborn. 
 
 ## Documentation
 
-Coming soon.
+Documentation for **atmospy** can be found [here](https://dhhagan.github.io/atmospy/index.html).
 
 ## Dependencies
 
 ### Supported Python versions
 
-`atmospy` supports Python 3.8+.
+**atmospy** supports Python 3.8 through Python 3.11.
 
 ### Mandatory dependencies
 
@@ -30,16 +30,29 @@ Coming soon.
 
 ## Installation
 
-The latest stable release can by installed by installing directly from Github:
+The latest release can be installed directly from PyPi:
 
 ```sh
-$ pip install git+https://github.com/dhhagan/atmospy.git
+$ pip install atmospy
+```
+
+You can also install pre-releases from GitHub:
+
+```sh
+$ pip install atmospy --pre
+```
+
+If you would like to install from a specific branch or release, you can do so directly from GitHub:
+
+
+```sh
+$ pip install git+https://github.com/dhhagan/atmospy.git@<tag-or-version>
 ```
 
 ## Testing
 
 ## Development
 
-`atmospy` development takes place on GitHub: https://github.com/dhhagan/atmospy
+**atmospy** development takes place on GitHub: https://github.com/dhhagan/atmospy
 
 Please submit bugs that you encounter to the [issue tracker](https://github.com/dhhagan/atmospy/issues) with a reproducible example that clearly demonstrates the problem.

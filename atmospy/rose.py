@@ -80,7 +80,7 @@ def pollutionroseplot(data=None, *, ws=None, wd=None, pollutant=None,
     bins = np.asarray(bins)
     
     # setup the color palette
-    cp = sns.color_palette(palette, n_colors=bins.shape[0])
+    cp = sns.color_palette(palette, n_colors=bins.shape[0]-1)
     
     # convert the number of segments into the wind bins
     wd_segments = np.linspace(0, 360, segments+1)
@@ -105,9 +105,9 @@ def pollutionroseplot(data=None, *, ws=None, wd=None, pollutant=None,
         return list_of_labels
     
     def _compute_bar_dims(thetas):
-        thetas = (thetas[:-1] + thetas[1:])/2.
+        thetas = (thetas[:-1] + thetas[1:]) / 2.
         
-        midpoints = [math.radians(theta) for theta in (thetas*np.pi/180. - np.pi/thetas.shape[0])]
+        midpoints = [math.radians(theta) for theta in thetas]
         width = math.radians(360./thetas.shape[0])
         
         return midpoints, width
@@ -140,7 +140,7 @@ def pollutionroseplot(data=None, *, ws=None, wd=None, pollutant=None,
         .unstack(level="_cp")
         .fillna(0.)
         .sort_index(axis=1)
-        .applymap(lambda x: 100 * data.shape[0])
+        .applymap(lambda x: 100 * x / data.shape[0])
     )
     
     # compute the bar dims
