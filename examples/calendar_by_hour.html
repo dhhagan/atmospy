@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Anscombe’s quartet &#8212; atmospy 0.1.0a5 documentation</title>
+    <title>Ozone by Year &#8212; atmospy 0.1.0a6 documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -28,7 +28,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=0.1.0a5" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=0.1.0a6" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b">
@@ -42,11 +42,11 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script src="../_static/design-tabs.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/anscombes_quartet';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/calendar_by_hour';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Diurnal Ozone" href="dielplot.html" />
-    <link rel="prev" title="Example gallery" href="index.html" />
+    <link rel="prev" title="Ozone by Year" href="calendar_by_day.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -94,7 +94,7 @@
   
   
   
-    <p class="title logo__title">atmospy 0.1.0a5 documentation</p>
+    <p class="title logo__title">atmospy 0.1.0a6 documentation</p>
   
 </a>
     
@@ -253,9 +253,14 @@
     <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
   <div class="bd-toc-item navbar-nav">
     <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="calendar_by_day.html">
+   Ozone by Year
+  </a>
+ </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Anscombe’s quartet
+   Ozone by Year
   </a>
  </li>
  <li class="toctree-l1">
@@ -318,22 +323,33 @@
           
           <article class="bd-article" role="main">
             
-  <section id="anscombe-s-quartet">
-<span id="anscombes-quartet"></span><h1>Anscombe’s quartet<a class="headerlink" href="#anscombe-s-quartet" title="Permalink to this heading">#</a></h1>
-<img alt="../_images/anscombes_quartet.png" src="../_images/anscombes_quartet.png" />
-<p><strong>atmospy components used:</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_theme</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;ticks&quot;</span><span class="p">)</span>
+  <section id="ozone-by-year">
+<span id="calendar-by-hour"></span><h1>Ozone by Year<a class="headerlink" href="#ozone-by-year" title="Permalink to this heading">#</a></h1>
+<img alt="../_images/calendar_by_hour.png" src="../_images/calendar_by_hour.png" />
+<p><strong>atmospy components used:</strong> <a class="reference internal" href="../generated/atmospy.set_theme.html#atmospy.set_theme" title="atmospy.set_theme"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_theme()</span></code></a>, <a class="reference internal" href="../generated/atmospy.load_dataset.html#atmospy.load_dataset" title="atmospy.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset()</span></code></a>, <a class="reference internal" href="../generated/atmospy.calendarplot.html#atmospy.calendarplot" title="atmospy.calendarplot"><code class="xref py py-func docutils literal notranslate"><span class="pre">calendarplot()</span></code></a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">atmospy</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">atmospy</span><span class="o">.</span><span class="n">set_theme</span><span class="p">()</span>
 
-<span class="c1"># Load the example dataset for Anscombe&#39;s quartet</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;anscombe&quot;</span><span class="p">)</span>
+<span class="c1"># Load the example dataset</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;us-ozone&quot;</span><span class="p">)</span>
 
-<span class="c1"># Show the results of a linear regression within each dataset</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">lmplot</span><span class="p">(</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span>
-    <span class="n">col_wrap</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">&quot;muted&quot;</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">scatter_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
-<span class="p">)</span>
+<span class="c1"># Select a single location</span>
+<span class="n">single_site_ozone</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="p">]</span>
+
+<span class="n">atmospy</span><span class="o">.</span><span class="n">calendarplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">single_site_ozone</span><span class="p">,</span> 
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> 
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">,</span> 
+    <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;hour&quot;</span><span class="p">,</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Day of Month&quot;</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;flare&quot;</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Ozone in [Month]&quot;</span><span class="p">,</span>
+<span class="p">);</span>
 </pre></div>
 </div>
 </section>

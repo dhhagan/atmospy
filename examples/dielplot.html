@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Diurnal Ozone &#8212; atmospy 0.1.0a5 documentation</title>
+    <title>Diurnal Ozone &#8212; atmospy 0.1.0a6 documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -28,7 +28,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=0.1.0a5" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=0.1.0a6" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b">
@@ -46,7 +46,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pollution Rose" href="pollution_rose.html" />
-    <link rel="prev" title="Anscombe’s quartet" href="anscombes_quartet.html" />
+    <link rel="prev" title="Ozone by Year" href="calendar_by_hour.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -94,7 +94,7 @@
   
   
   
-    <p class="title logo__title">atmospy 0.1.0a5 documentation</p>
+    <p class="title logo__title">atmospy 0.1.0a6 documentation</p>
   
 </a>
     
@@ -254,8 +254,13 @@
   <div class="bd-toc-item navbar-nav">
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="anscombes_quartet.html">
-   Anscombe’s quartet
+  <a class="reference internal" href="calendar_by_day.html">
+   Ozone by Year
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="calendar_by_hour.html">
+   Ozone by Year
   </a>
  </li>
  <li class="toctree-l1 current active">
@@ -334,17 +339,13 @@
     <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 <span class="p">]</span>
 
-<span class="c1"># Adjust the timestamp so that it is in local time</span>
-<span class="n">single_site_ozone</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">single_site_ozone</span><span class="p">[</span><span class="s2">&quot;Timestamp GMT&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-    <span class="k">lambda</span> <span class="n">ts</span><span class="p">:</span> <span class="n">ts</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=-</span><span class="mi">7</span><span class="p">)</span>
-<span class="p">)</span>
-
 <span class="c1"># Plot the diel trend</span>
 <span class="n">atmospy</span><span class="o">.</span><span class="n">dielplot</span><span class="p">(</span>
     <span class="n">single_site_ozone</span><span class="p">,</span>
     <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span>
     <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;$O_3 \; [ppm]$&quot;</span><span class="p">,</span>
-    <span class="n">plot_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="s2">&quot;g&quot;</span><span class="p">}</span>
+    <span class="n">plot_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="s2">&quot;g&quot;</span><span class="p">},</span>
+    <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>

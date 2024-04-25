@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>atmospy.load_dataset &#8212; atmospy 0.1.0a6 documentation</title>
+    <title>Ozone by Year &#8212; atmospy 0.1.0a6 documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -42,11 +42,11 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script src="../_static/design-tabs.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/atmospy.load_dataset';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/calendar_by_day';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="atmospy.get_dataset_names" href="atmospy.get_dataset_names.html" />
-    <link rel="prev" title="atmospy.set_theme" href="atmospy.set_theme.html" />
+    <link rel="next" title="Ozone by Year" href="calendar_by_hour.html" />
+    <link rel="prev" title="Example gallery" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -112,8 +112,8 @@
  </a>
 </li>
 
-<li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="../examples/index.html">
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="index.html">
   Gallery
  </a>
 </li>
@@ -124,7 +124,7 @@
  </a>
 </li>
 
-<li class="toctree-l1 current active nav-item">
+<li class="toctree-l1 nav-item">
  <a class="reference internal nav-link" href="../api.html">
   API
  </a>
@@ -201,8 +201,8 @@
  </a>
 </li>
 
-<li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="../examples/index.html">
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="index.html">
   Gallery
  </a>
 </li>
@@ -213,7 +213,7 @@
  </a>
 </li>
 
-<li class="toctree-l1 current active nav-item">
+<li class="toctree-l1 nav-item">
  <a class="reference internal nav-link" href="../api.html">
   API
  </a>
@@ -252,48 +252,30 @@
   <div class="sidebar-start-items sidebar-primary__section">
     <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
   <div class="bd-toc-item navbar-nav">
-    <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="atmospy.set_theme.html">
-   atmospy.set_theme
-  </a>
- </li>
-</ul>
-<ul class="current nav bd-sidenav">
+    <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   atmospy.load_dataset
+   Ozone by Year
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="atmospy.get_dataset_names.html">
-   atmospy.get_dataset_names
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="atmospy.regplot.html">
-   atmospy.regplot
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="atmospy.calendarplot.html">
-   atmospy.calendarplot
+  <a class="reference internal" href="calendar_by_hour.html">
+   Ozone by Year
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="atmospy.dielplot.html">
-   atmospy.dielplot
+  <a class="reference internal" href="dielplot.html">
+   Diurnal Ozone
   </a>
  </li>
-</ul>
-<ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="atmospy.pollutionroseplot.html">
-   atmospy.pollutionroseplot
+  <a class="reference internal" href="pollution_rose.html">
+   Pollution Rose
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="regression.html">
+   Regression Plot
   </a>
  </li>
 </ul>
@@ -319,27 +301,6 @@
           
 <div class="toc-item">
   
-<div class="tocsection onthispage">
-    <i class="fas fa-list"></i> On this page
-</div>
-<nav id="bd-toc-nav" class="page-toc">
-    <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#atmospy.load_dataset">
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     load_dataset()
-    </span>
-   </code>
-  </a>
- </li>
-</ul>
-
-</nav>
-</div>
-
-<div class="toc-item">
-  
 </div>
 
 <div class="toc-item">
@@ -362,43 +323,33 @@
           
           <article class="bd-article" role="main">
             
-  <section id="atmospy-load-dataset">
-<h1>atmospy.load_dataset<a class="headerlink" href="#atmospy-load-dataset" title="Permalink to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="atmospy.load_dataset">
-<span class="sig-prename descclassname"><span class="pre">atmospy.</span></span><span class="sig-name descname"><span class="pre">load_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_home</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#atmospy.load_dataset" title="Permalink to this definition">#</a></dt>
-<dd><p>Load an example dataset from the online repository (requires internet).</p>
-<p>This function provides quick access to a number of example datasets that 
-can be used to either explore the plotting functionality of atmospy or 
-to report issues without needing to upload your own data.</p>
-<p>This function also handles some basic data pre-processing to ensure they 
-are ready-to-go.</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The name of the dataset. Dataset names can be found on 
-<a class="reference external" href="https://github.com/dhhagan/atmospy-data">https://github.com/dhhagan/atmospy-data</a> or by running 
-the <code class="docutils literal notranslate"><span class="pre">get_dataset_names</span></code> function.</p>
-</dd>
-<dt><strong>cache</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the dataset will be loaded from local cache if 
-available and it will save to local cache if it needs to 
-be downloaded, by default True</p>
-</dd>
-<dt><strong>data_home</strong><span class="classifier">str, optional</span></dt><dd><p>The directory to store the cached data; if not set, 
-it will be determined for your operating system using the 
-<code class="docutils literal notranslate"><span class="pre">get_data_home</span></code> function, by default None</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl>
-<dt><strong>df</strong><span class="classifier"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a></span></dt><dd><p>Tabular data.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
+  <section id="ozone-by-year">
+<span id="calendar-by-day"></span><h1>Ozone by Year<a class="headerlink" href="#ozone-by-year" title="Permalink to this heading">#</a></h1>
+<img alt="../_images/calendar_by_day.png" src="../_images/calendar_by_day.png" />
+<p><strong>atmospy components used:</strong> <a class="reference internal" href="../generated/atmospy.set_theme.html#atmospy.set_theme" title="atmospy.set_theme"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_theme()</span></code></a>, <a class="reference internal" href="../generated/atmospy.load_dataset.html#atmospy.load_dataset" title="atmospy.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset()</span></code></a>, <a class="reference internal" href="../generated/atmospy.calendarplot.html#atmospy.calendarplot" title="atmospy.calendarplot"><code class="xref py py-func docutils literal notranslate"><span class="pre">calendarplot()</span></code></a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">atmospy</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">atmospy</span><span class="o">.</span><span class="n">set_theme</span><span class="p">()</span>
 
+<span class="c1"># Load the example dataset</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;us-ozone&quot;</span><span class="p">)</span>
+
+<span class="c1"># Select a single location</span>
+<span class="n">single_site_ozone</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="p">]</span>
+
+<span class="n">atmospy</span><span class="o">.</span><span class="n">calendarplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">single_site_ozone</span><span class="p">,</span> 
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> 
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">,</span> 
+    <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;day&quot;</span><span class="p">,</span>
+    <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span>
+    <span class="n">linewidths</span><span class="o">=</span><span class="mf">.1</span>
+<span class="p">);</span>
+</pre></div>
+</div>
 </section>
 
 

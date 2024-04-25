@@ -13,13 +13,23 @@ atmospy: air quality data visualization
 
    .. grid-item::
 
-      .. image:: example_thumbs/anscombes_quartet_thumb.png
-         :target: ./examples/anscombes_quartet.html
+      .. image:: example_thumbs/dielplot_thumb.png
+         :target: ./examples/dielplot.html
 
    .. grid-item::
       
       .. image:: example_thumbs/regression_thumb.png
          :target: ./examples/regression.html
+
+   .. grid-item::
+      
+      .. image:: example_thumbs/calendar_by_hour_thumb.png
+         :target: ./examples/calendar_by_hour.html
+
+   .. grid-item::
+      
+      .. image:: example_thumbs/calendar_by_day_thumb.png
+         :target: ./examples/calendar_by_day.html
 
 
 

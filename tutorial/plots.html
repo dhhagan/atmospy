@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Plotting Functions &#8212; atmospy 0.1.0a5 documentation</title>
+    <title>Plotting Functions &#8212; atmospy 0.1.0a6 documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -28,7 +28,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=0.1.0a5" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=0.1.0a6" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b">
@@ -94,7 +94,7 @@
   
   
   
-    <p class="title logo__title">atmospy 0.1.0a5 documentation</p>
+    <p class="title logo__title">atmospy 0.1.0a6 documentation</p>
   
 </a>
     
@@ -300,19 +300,53 @@
 </div>
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#comparing-data-from-multiple-sensors">
-   Comparing Data from Multiple Sensors
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Plotting Functions
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#comparing-data-from-multiple-sensors">
+     Comparing Data from Multiple Sensors
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#evaluating-trends">
+     Evaluating Trends
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#visualizing-hourly-data-by-month">
+       Visualizing hourly data by month
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#visualizing-daily-data-over-the-course-of-a-year">
+       Visualizing daily data over the course of a year
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#visualizing-data-completeness">
+       Visualizing data completeness
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#visualizing-diel-trends">
+       Visualizing diel trends
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#identifying-sources">
+     Identifying Sources
+    </a>
+   </li>
+  </ul>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#evaluating-trends">
-   Evaluating Trends
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#identifying-sources">
-   Identifying Sources
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#facets-and-other-fun-things">
+   Facets and other Fun Things
   </a>
  </li>
 </ul>
@@ -394,7 +428,8 @@ you can turn that functionality off by setting <code class="docutils literal not
 you can send along most configuration options as keyword arguments to
 <code class="docutils literal notranslate"><span class="pre">atmospy.regplot</span></code>. For example, if you wanted to change what is shown
 on the marginal axes, you can:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Reference&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sensor A&quot;</span><span class="p">,</span> <span class="n">marginal_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;bins&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span> <span class="s2">&quot;fill&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">});</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Reference&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sensor A&quot;</span><span class="p">,</span>
+                <span class="n">marginal_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;bins&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span> <span class="s2">&quot;fill&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">});</span>
 </pre></div>
 </div>
 <img alt="../_images/plots_7_0.png" src="../_images/plots_7_0.png" />
@@ -414,36 +449,221 @@ as well:</p>
 </section>
 <section id="evaluating-trends">
 <h2>Evaluating Trends<a class="headerlink" href="#evaluating-trends" title="Permalink to this heading">#</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bc</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;us-bc&quot;</span><span class="p">)</span>
+<p>While we often look at timeseries data to visualize trends, it can be
+difficult to easily detect trends with large - or long-running -
+datasets. Often, it can be easier to look at hourly or daily averages.
+The <code class="docutils literal notranslate"><span class="pre">calendarplot</span></code> function makes it easy to visualize hourly data by
+month or daily data by year.</p>
+<section id="visualizing-hourly-data-by-month">
+<h3>Visualizing hourly data by month<a class="headerlink" href="#visualizing-hourly-data-by-month" title="Permalink to this heading">#</a></h3>
+<p>Some pollutants - such as ozone - have known diurnal patterns due to the
+photochemical processing of precursor pollutants during the day. Others,
+such as carbon monoxide and other combustion-related pollutants, may
+show strong patterns associated with traffic patterns if near a source.
+Visualizing hourly data can make it easy to identify trends.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ozone</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;us-ozone&quot;</span><span class="p">)</span>
 
-<span class="c1"># Select just a single location</span>
-<span class="n">single_bc</span> <span class="o">=</span> <span class="n">bc</span><span class="p">[</span><span class="n">bc</span><span class="p">[</span><span class="s2">&quot;Location UUID&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">bc</span><span class="p">[</span><span class="s2">&quot;Location UUID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span>
-
-<span class="n">atmospy</span><span class="o">.</span><span class="n">calendarplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">single_bc</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp GMT&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">)</span>
+<span class="c1"># we only want to use a single site for now</span>
+<span class="n">single_site</span> <span class="o">=</span> <span class="n">ozone</span><span class="p">[</span><span class="n">ozone</span><span class="p">[</span><span class="s2">&quot;Location UUID&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">ozone</span><span class="p">[</span><span class="s2">&quot;Location UUID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">atmospy</span><span class="o">/</span><span class="n">atmospy</span><span class="o">/</span><span class="n">atmospy</span><span class="o">/</span><span class="n">trends</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">69</span><span class="p">:</span> <span class="ne">UserWarning</span><span class="p">:</span> <span class="n">FixedFormatter</span> <span class="n">should</span> <span class="n">only</span> <span class="n">be</span> <span class="n">used</span> <span class="n">together</span> <span class="k">with</span> <span class="n">FixedLocator</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">calendarplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">single_site</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">,</span>
+    <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;hour&quot;</span><span class="p">,</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/plots_14_0.png" src="../_images/plots_14_0.png" />
+<p>The figure above shows the time of day on the y-axis and the day of
+month on the x-axis. By looking across the figure from left-to-right,
+you can quickly see that ozone - for the most part - is higher between
+12-6PM than during the early morning. However, the figure above - using
+the defaults - doesn’t look super appealing, so let’s go ahead and
+modify it a bit to make it larger, explicitly set the min and max
+values, and chage to a different color palette:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">calendarplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">single_site</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">,</span>
+    <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;hour&quot;</span><span class="p">,</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Day of Month&quot;</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;flare&quot;</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Ozone in [Month]&quot;</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/plots_16_0.png" src="../_images/plots_16_0.png" />
+<p>Much better! By default, we aggregate data by the <code class="docutils literal notranslate"><span class="pre">mean</span></code> value. We can
+also change that up to plot by another aggregate, such as the <code class="docutils literal notranslate"><span class="pre">max</span></code>:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">calendarplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">single_site</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">,</span>
+    <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;hour&quot;</span><span class="p">,</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Day of Month&quot;</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;flare&quot;</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Peak Ozone in [Month]&quot;</span><span class="p">,</span>
+    <span class="n">agg</span><span class="o">=</span><span class="s2">&quot;max&quot;</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/plots_18_0.png" src="../_images/plots_18_0.png" />
+<p>In this instance, there isn’t much of a difference as the data is
+reported hourly, so the mean and max will be the same (oops). With a
+more highly time-resolved dataset, this would look a bit different.</p>
+</section>
+<section id="visualizing-daily-data-over-the-course-of-a-year">
+<h3>Visualizing daily data over the course of a year<a class="headerlink" href="#visualizing-daily-data-over-the-course-of-a-year" title="Permalink to this heading">#</a></h3>
+<p>We can also visualize daily data over the course of the year - be
+default, we plot the daily average for the pollutant of choice:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">calendarplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">single_site</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">,</span>
+    <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;day&quot;</span><span class="p">,</span>
+    <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="c1"># xlabel=&quot;Day of Month&quot;,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span>
+    <span class="n">linewidths</span><span class="o">=</span><span class="mf">.1</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">atmospy</span><span class="o">/</span><span class="n">atmospy</span><span class="o">/</span><span class="n">atmospy</span><span class="o">/</span><span class="n">trends</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">72</span><span class="p">:</span> <span class="ne">UserWarning</span><span class="p">:</span> <span class="n">FixedFormatter</span> <span class="n">should</span> <span class="n">only</span> <span class="n">be</span> <span class="n">used</span> <span class="n">together</span> <span class="k">with</span> <span class="n">FixedLocator</span>
   <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">([</span>
 </pre></div>
 </div>
-<img alt="../_images/plots_13_1.png" src="../_images/plots_13_1.png" />
+<img alt="../_images/plots_21_1.png" src="../_images/plots_21_1.png" />
+<p>You end up with a nice visualization of long-term data that looks a lot
+like a GitHub contribution graph. It would be even better if we chose a
+dataset that is complete!</p>
+</section>
+<section id="visualizing-data-completeness">
+<h3>Visualizing data completeness<a class="headerlink" href="#visualizing-data-completeness" title="Permalink to this heading">#</a></h3>
+<p>While we mostly plot the trend in pollutant concentration, we can easily
+adapt the same figures to plot data completeness by simply switching the
+<code class="docutils literal notranslate"><span class="pre">agg</span></code> argument from <code class="docutils literal notranslate"><span class="pre">mean</span></code> to <code class="docutils literal notranslate"><span class="pre">count</span></code>:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">calendarplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">single_site</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">,</span>
+    <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;hour&quot;</span><span class="p">,</span>
+    <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Day of Month&quot;</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;flare&quot;</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Ozone Data Completeness in [Month]&quot;</span><span class="p">,</span>
+    <span class="n">agg</span><span class="o">=</span><span class="s2">&quot;count&quot;</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/plots_24_0.png" src="../_images/plots_24_0.png" />
+</section>
+<section id="visualizing-diel-trends">
+<h3>Visualizing diel trends<a class="headerlink" href="#visualizing-diel-trends" title="Permalink to this heading">#</a></h3>
+<p>A diel cycle is a pattern that recurs every 24h. Often, we see diel
+trends with pollutants that are driven by daytime chemistry such as
+ozone or are associated with traffic patterns such as carbon monoxide,
+nitrogen oxides, and other combustion tracers. We can easily visualize
+the diel trend using the <code class="docutils literal notranslate"><span class="pre">atmospy.dielplot</span></code> function:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">dielplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">single_site</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/plots_26_0.png" src="../_images/plots_26_0.png" />
+<p>By default, we plot the mean value as a solid line and the interquartile
+range as the shaded region. We can also customize the figure to adjust
+the axis, add a title, and otherwise configure the plot via keyword
+arguments:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">dielplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">single_site</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Diel Trend in Ozone&quot;</span><span class="p">,</span>
+    <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;$O_3\;[ppb]$&quot;</span><span class="p">,</span>
+    <span class="n">plot_kws</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;lw&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/plots_28_0.png" src="../_images/plots_28_0.png" />
+</section>
 </section>
 <section id="identifying-sources">
 <h2>Identifying Sources<a class="headerlink" href="#identifying-sources" title="Permalink to this heading">#</a></h2>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">met</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;air-sensors-met&quot;</span><span class="p">)</span>
+<p>Understanding from which direction a pollutant originated is a common
+question in air pollution work. A pollution rose - a variant of the more
+common wind rose - is one way to visualize this. A pollution rose is a
+polar plot that visualizes the originating direction and intensity of a
+specific pollutant. In atmospy, you can use the
+<code class="docutils literal notranslate"><span class="pre">atmospy.pollutionroseplot</span></code> to visualize this:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load an example dataset with MET info</span>
+<span class="n">met</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;air-sensors-met&quot;</span><span class="p">)</span>
 
-<span class="n">atmospy</span><span class="o">.</span><span class="n">pollutionroseplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">met</span><span class="p">,</span> <span class="n">ws</span><span class="o">=</span><span class="s2">&quot;ws&quot;</span><span class="p">,</span> <span class="n">wd</span><span class="o">=</span><span class="s2">&quot;wd&quot;</span><span class="p">,</span> <span class="n">pollutant</span><span class="o">=</span><span class="s2">&quot;pm25&quot;</span><span class="p">)</span>
+<span class="n">atmospy</span><span class="o">.</span><span class="n">pollutionroseplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">met</span><span class="p">,</span> <span class="n">ws</span><span class="o">=</span><span class="s2">&quot;ws&quot;</span><span class="p">,</span> <span class="n">wd</span><span class="o">=</span><span class="s2">&quot;wd&quot;</span><span class="p">,</span> <span class="n">pollutant</span><span class="o">=</span><span class="s2">&quot;pm25&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
-<img alt="../_images/plots_15_0.png" src="../_images/plots_15_0.png" />
-<ul class="simple">
-<li><p>Comparing data</p></li>
-<li><p>evaluating trends</p></li>
-<li><p>diel</p></li>
-<li><p>calendar</p></li>
-<li><p>where is it coming from?</p></li>
-</ul>
+<img alt="../_images/plots_30_0.png" src="../_images/plots_30_0.png" />
+<p>Data for the pollutant of choice are grouped by both the range of
+pollutant (as set by <code class="docutils literal notranslate"><span class="pre">bins</span></code>) and by wind direction (as set by
+<code class="docutils literal notranslate"><span class="pre">segments</span></code>). To ensure that data is not included when the wind speed
+is calm (as set by <code class="docutils literal notranslate"><span class="pre">calm</span></code>), we first remove that data and indicate on
+the figure above using the blank center point at the middle of the
+figure - we assign calm periods evenly across all directions. In the
+figure above, something like a few percent of data records are
+registered as <em>calm</em>.</p>
+<p>This is important because wind direction data during calm winds isn’t
+really relevant and/or statistically significant depending on the
+instrument used to measure the wind speed and wind direction.</p>
+<p>In the figure above, the longer the bar, the more data records that are
+associated with it - in other words, that is the direction from which
+most data came. The color of a bar indicates the pollutant
+concentration. In the figure above, most of the PM2.5 is coming from the
+south-west and south-east. With the pollutant bin sizes set so large,
+it’s hard to see a pollution differential, so let’s go ahead and modify
+that:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">pollutionroseplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">met</span><span class="p">,</span>
+    <span class="n">ws</span><span class="o">=</span><span class="s2">&quot;ws&quot;</span><span class="p">,</span> <span class="n">wd</span><span class="o">=</span><span class="s2">&quot;wd&quot;</span><span class="p">,</span> <span class="n">pollutant</span><span class="o">=</span><span class="s2">&quot;pm25&quot;</span><span class="p">,</span>
+    <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
+    <span class="n">segments</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;$µgm^{-3}$&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;$PM_</span><span class="si">{2.5}</span><span class="s2">$ by Direction at an Unknown Location&quot;</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/plots_32_0.png" src="../_images/plots_32_0.png" />
+<p>The above figure has quite a bit more resolution along both the theta
+and radii as we modified the <code class="docutils literal notranslate"><span class="pre">bins</span></code> and <code class="docutils literal notranslate"><span class="pre">segments</span></code> parameters. You
+can define <code class="docutils literal notranslate"><span class="pre">bins</span></code> to be any array-like structure so long as they’re
+numeric and the function will always add <code class="docutils literal notranslate"><span class="pre">inf</span></code> at the end if you
+didn’t include it so that there is always a catch-all bin for values
+higher than the max specified. You can manually define this list to be
+whatever resolution or chunkiness you’d like, or, you can create an
+evenly-spaced array using numpy: <code class="docutils literal notranslate"><span class="pre">np.linspace(0,</span> <span class="pre">100,</span> <span class="pre">10)</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">segments</span></code> parameter is a bit different - you define an integer
+number of segments to divide the 360 degrees into and the code will
+automatically handle it.</p>
+<p>Above, we went ahead and showed some of the additional configuration
+options that you can include such as the <code class="docutils literal notranslate"><span class="pre">suffix</span></code>, which labels the
+legend, and the <code class="docutils literal notranslate"><span class="pre">title</span></code> which adds a title to the figure.</p>
 </section>
+</section>
+<section id="facets-and-other-fun-things">
+<h1>Facets and other Fun Things<a class="headerlink" href="#facets-and-other-fun-things" title="Permalink to this heading">#</a></h1>
+<p>Now that you’ve seen how to use the individual plots above, we’re going
+to go over some of the advanced features that are available by
+leveraging seaborn’s great grid functionality.</p>
 </section>
 
 
