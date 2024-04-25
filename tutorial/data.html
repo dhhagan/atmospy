@@ -6,47 +6,47 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>The one-and-only atmospy tutorial &#8212; atmospy 0.1.0a5 documentation</title>
+    <title>Acquiring and Working with Data &#8212; atmospy 0.1.0a5 documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
-<link href="_static/styles/pydata-sphinx-theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
+  <link href="../_static/styles/theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=9b1a4fa89bdd0e95b23b" rel="stylesheet">
 
   
   <link rel="stylesheet"
-    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=0.1.0a5" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=0.1.0a5" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b">
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b">
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/design-tabs.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorial';</script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Acquiring and Working with Data" href="tutorial/data.html" />
-    <link rel="prev" title="Regression Plot" href="examples/regression.html" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorial/data';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Plotting Functions" href="plots.html" />
+    <link rel="prev" title="The one-and-only atmospy tutorial" href="../tutorial.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -67,7 +67,7 @@
     <div class="search-button__overlay"></div>
     <div class="search-button__search-container">
       
-<form class="bd-search d-flex align-items-center" action="search.html" method="get">
+<form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
@@ -86,7 +86,7 @@
   
 
 
-<a class="navbar-brand logo" href="index.html">
+<a class="navbar-brand logo" href="../index.html">
   
   
   
@@ -107,25 +107,25 @@
       <div class="navbar-center-item">
         <ul id="navbar-main-elements" class="navbar-nav">
     <li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="installing.html">
+ <a class="reference internal nav-link" href="../installing.html">
   Installing
  </a>
 </li>
 
 <li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="examples/index.html">
+ <a class="reference internal nav-link" href="../examples/index.html">
   Gallery
  </a>
 </li>
 
 <li class="toctree-l1 current active nav-item">
- <a class="current reference internal nav-link" href="#">
+ <a class="reference internal nav-link" href="../tutorial.html">
   Tutorial
  </a>
 </li>
 
 <li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="api.html">
+ <a class="reference internal nav-link" href="../api.html">
   API
  </a>
 </li>
@@ -196,25 +196,25 @@
       <div class="navbar-center-item">
         <ul id="navbar-main-elements" class="navbar-nav">
     <li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="installing.html">
+ <a class="reference internal nav-link" href="../installing.html">
   Installing
  </a>
 </li>
 
 <li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="examples/index.html">
+ <a class="reference internal nav-link" href="../examples/index.html">
   Gallery
  </a>
 </li>
 
 <li class="toctree-l1 current active nav-item">
- <a class="current reference internal nav-link" href="#">
+ <a class="reference internal nav-link" href="../tutorial.html">
   Tutorial
  </a>
 </li>
 
 <li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="api.html">
+ <a class="reference internal nav-link" href="../api.html">
   API
  </a>
 </li>
@@ -252,23 +252,23 @@
   <div class="sidebar-start-items sidebar-primary__section">
     <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
   <div class="bd-toc-item navbar-nav">
-    <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="tutorial/data.html">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Acquiring and Working with Data
   </a>
  </li>
 </ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="tutorial/plots.html">
+  <a class="reference internal" href="plots.html">
    Plotting Functions
   </a>
  </li>
 </ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="tutorial/aesthetics.html">
+  <a class="reference internal" href="aesthetics.html">
    Figure Aesthetics
   </a>
  </li>
@@ -301,23 +301,13 @@
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#an-introduction-to-atmospy">
-   An Introduction to atmospy
+  <a class="reference internal nav-link" href="#where-can-i-find-air-quality-data">
+   Where can I find air quality data?
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#acquiring-and-working-with-data">
-   Acquiring and Working with Data
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#plotting-functions">
-   Plotting Functions
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#figure-aesthetics">
-   Figure Aesthetics
+  <a class="reference internal nav-link" href="#munging-air-quality-data-in-python">
+   Munging Air Quality Data in Python
   </a>
  </li>
 </ul>
@@ -349,45 +339,16 @@
           
           <article class="bd-article" role="main">
             
-  <section id="the-one-and-only-atmospy-tutorial">
-<span id="tutorial"></span><h1>The one-and-only atmospy tutorial<a class="headerlink" href="#the-one-and-only-atmospy-tutorial" title="Permalink to this heading">#</a></h1>
-<section id="an-introduction-to-atmospy">
-<h2>An Introduction to atmospy<a class="headerlink" href="#an-introduction-to-atmospy" title="Permalink to this heading">#</a></h2>
-<div class="toctree-wrapper compound">
-</div>
+  <section id="acquiring-and-working-with-data">
+<span id="data"></span><h1>Acquiring and Working with Data<a class="headerlink" href="#acquiring-and-working-with-data" title="Permalink to this heading">#</a></h1>
+<p>Seaborn is a library for making statistical graphics in Python. It builds on top of <a class="reference external" href="https://matplotlib.org/">matplotlib</a> and integrates closely with <a class="reference external" href="https://pandas.pydata.org/">pandas</a> data structures.</p>
+<p>Seaborn helps you explore and understand your data. Its plotting functions operate on dataframes and arrays containing whole datasets and internally perform the necessary semantic mapping and statistical aggregation to produce informative plots. Its dataset-oriented, declarative API lets you focus on what the different elements of your plots mean, rather than on the details of how to draw them.</p>
+<p>Here’s an example of what seaborn can do:</p>
+<section id="where-can-i-find-air-quality-data">
+<h2>Where can I find air quality data?<a class="headerlink" href="#where-can-i-find-air-quality-data" title="Permalink to this heading">#</a></h2>
 </section>
-<section id="acquiring-and-working-with-data">
-<h2>Acquiring and Working with Data<a class="headerlink" href="#acquiring-and-working-with-data" title="Permalink to this heading">#</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorial/data.html">Acquiring and Working with Data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/data.html#where-can-i-find-air-quality-data">Where can I find air quality data?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/data.html#munging-air-quality-data-in-python">Munging Air Quality Data in Python</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
-<section id="plotting-functions">
-<h2>Plotting Functions<a class="headerlink" href="#plotting-functions" title="Permalink to this heading">#</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorial/plots.html">Plotting Functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/plots.html#comparing-data-from-multiple-sensors">Comparing Data from Multiple Sensors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/plots.html#evaluating-trends">Evaluating Trends</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial/plots.html#identifying-sources">Identifying Sources</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
-<section id="figure-aesthetics">
-<h2>Figure Aesthetics<a class="headerlink" href="#figure-aesthetics" title="Permalink to this heading">#</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorial/aesthetics.html">Figure Aesthetics</a></li>
-</ul>
-</div>
+<section id="munging-air-quality-data-in-python">
+<h2>Munging Air Quality Data in Python<a class="headerlink" href="#munging-air-quality-data-in-python" title="Permalink to this heading">#</a></h2>
 </section>
 </section>
 
@@ -405,7 +366,7 @@
   
     
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b"></script>
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b"></script>
 
   <footer class="bd-footer"><div class="bd-footer__inner container">
   
