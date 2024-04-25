@@ -2,7 +2,7 @@
 Diurnal Ozone
 =============
 
-_thumb: .4, .4
+_thumb: .8, .8
 """
 import atmospy
 import pandas as pd

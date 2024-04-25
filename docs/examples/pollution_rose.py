@@ -2,7 +2,7 @@
 Pollution Rose
 ==============
 
-_thumb: .6, .2
+_thumb: .8, .8
 """
 import atmospy
 atmospy.set_theme()
