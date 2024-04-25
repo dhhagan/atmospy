@@ -14,7 +14,7 @@ DATASET_SOURCE = "https://raw.githubusercontent.com/dhhagan/atmospy-data/main"
 DATASET_NAMES_URL = f"{DATASET_SOURCE}/dataset_names.txt"
 
 def get_dataset_names():
-    """List the avaiable sample datasets.
+    """List the available example datasets.
     
     Requires an internet connection.
     """
@@ -47,22 +47,33 @@ def get_data_home(data_home=None):
     return data_home
 
 def load_dataset(name, cache=True, data_home=None, **kwargs):
-    """Load an example dataset from the online repository.
+    """Load an example dataset from the online repository (requires internet).
     
-    TODO: Add proper docs.
+    This function provides quick access to a number of example datasets that 
+    can be used to either explore the plotting functionality of atmospy or 
+    to report issues without needing to upload your own data.
+    
+    This function also handles some basic data pre-processing to ensure they 
+    are ready-to-go.
 
     Parameters
     ----------
-    name : _type_
-        _description_
+    name : str
+        The name of the dataset. Dataset names can be found on 
+        https://github.com/dhhagan/atmospy-data or by running 
+        the `get_dataset_names` function.
     cache : bool, optional
-        _description_, by default True
-    data_home : _type_, optional
-        _description_, by default None
+        If `True`, the dataset will be loaded from local cache if 
+        available and it will save to local cache if it needs to 
+        be downloaded, by default True
+    data_home : str, optional
+        The directory to store the cached data; if not set, 
+        it will be determined for your operating system using the 
+        `get_data_home` function, by default None
         
     Returns
     -------
-    df : :classL`pandas.DataFrame`
+    df : :class:`pandas.DataFrame`
         Tabular data.
     
     """

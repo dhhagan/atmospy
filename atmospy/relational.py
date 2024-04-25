@@ -13,27 +13,58 @@ from .utils import (
 __all__ = ["regplot", ]
 
 def regplot(data, x, y, fit_reg=True, color=None, marker="o", ylim=None, **kwargs):
-    """Plot data and a linear regression best fit line between the two variables.
+    """Plot data and a best-fit line (OLS) between two variables.
     
-    This function builds on Seaborn's `jointplot` and most kwargs can be passed 
-    straight through to the `jointplot` for customization.
+    This figure is intended to convey the relationship between two variables. Often,
+    this may be an air sensor and a reference sensor. It can also be two different 
+    variables where you are trying to understand the relationship. This function 
+    is a straight pass-through to Seaborn's `jointplot` with a few additions such 
+    as a unity line and explicitly listing the fit parameters of a linear model 
+    (Ordinary Least Squares).
+    
+    Since it is directly passed through to Seaborn's `jointplot`, it is incredibly 
+    customizable and powerful. Please see the Seaborn docs for more details.
 
     Parameters
     ----------
-    data : pd.DataFrame
-        Input data structure.
-    x : str
-        Variable that corresponds to the x data in `data`.
-    y : str
-        _description_
+    data : :class:`pandas.DataFrame`
+        Tabular data as a pandas DataFrame. This should be a wide-form dataset 
+        where the x and y keys are columns in the DataFrame.
+    x : key in `data`
+        Variable that corresponds to the data plotted on the x axis.
+    y : key in `data`.
+        Variable that corresponds to the data plotted on the y axis.
     fit_reg : bool, optional
-        _description_, by default True
-    color : _type_, optional
-        _description_, by default None
+        If `True`, a linear regression model will be fit to the data 
+        and fit parameters listed in the legend, by default True
+    color : str, optional
+        A single color to map to the data; if None, the next 
+        color in the color cycle will be used, by default None
     marker : str, optional
-        _description_, by default "o"
-    ylim : _type_, optional
-        _description_, by default None
+        A single marker style to use to plot the data, by default "o"
+    ylim : tuple of floats, optional
+        Set the limits of the figure on both axes using the 
+        ylim (the plot is forced to be squared); if left as None, 
+        defaults will be determined from the underlying data, by default None
+    kwargs : dict or None, optional
+        Additional keyword arguments are passed directly to the underlying 
+        :class:`seaborn.jointplot` call.
+        
+    Returns
+    -------
+    :class:`seaborn.JointGrid`
+        An object with multiple subplots including the 
+        joint (primary) and marginal (top and right) axes.
+        
+        
+    Examples
+    --------
+    Using defaults, plot the relationship between a reference particle monitor 
+    and an air sensor:
+    
+    >>> df = atmospy.load_dataset("air-sensors-pm")
+    >>> atmospy.regplot(df, x="Reference", y="Sensor A")
+    
     """
     check_for_numeric_cols(data, [x, y])
     
@@ -93,7 +124,7 @@ def regplot(data, x, y, fit_reg=True, color=None, marker="o", ylim=None, **kwarg
         res = linregress(xdata, ydata)
         
         # build the label
-        label = f"y = {res.slope:.2f}"
+        label = f"y = {res.slope:.2f}x"
         if res.intercept < 0:
             label += f" - {res.intercept:.2f}"
         else:
