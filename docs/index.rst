@@ -58,6 +58,14 @@ atmospy: air quality data visualization
       can (and should) use it. To view the source code or report a bug, please visit the 
       `GitHub repository <https://github.com/dhhagan/atmospy>`_.
 
+      .. note::
+
+         This library was recently revamped and released and may contain bugs. Expect frequent updates 
+         throughout 2024.
+
+         If you have example datasets that you are interested in donating to be incorporated for general 
+         use, please open a GitHub issue and we will be in touch!
+
    
    .. grid-item-card:: Contents
       :columns: 12 12 4 4

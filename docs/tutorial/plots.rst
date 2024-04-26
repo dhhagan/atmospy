@@ -220,7 +220,7 @@ default, we plot the daily average for the pollutant of choice:
 
 .. parsed-literal::
 
-    /Users/dhhagan/Documents/github/atmospy/atmospy/atmospy/trends.py:72: UserWarning: FixedFormatter should only be used together with FixedLocator
+    /Users/dhhagan/Documents/github/atmospy/atmospy/atmospy/trends.py:75: UserWarning: FixedFormatter should only be used together with FixedLocator
       ax.xaxis.set_ticklabels([
 
 
@@ -653,7 +653,7 @@ nice figure:
         bbox_to_anchor=(.535, 0.2), 
         handlelength=1, 
         handleheight=1
-    )
+    );
 
 
 
@@ -779,7 +779,7 @@ created:
         # let's adjust the aspect ratio for funsies
         aspect=1.25
     )
-    g.map_dataframe(atmospy.dielplot, x="Timestamp Local", y="value")
+    g.map_dataframe(atmospy.dielplot, x="Timestamp Local", y="value");
 
 
 
@@ -906,7 +906,7 @@ Let’s set up the ``FacetGrid`` and plot the diel trend by location:
     g.map_dataframe(atmospy.dielplot, x="Timestamp Local", y="value")
     
     # update the y-axis limit to force to zero
-    g.set(ylim=(0, None))
+    g.set(ylim=(0, None));
 
 
 
@@ -934,7 +934,7 @@ locations together:
     g.set(ylim=(0, None), ylabel='Black Carbon')
     
     # update the titles to take up less space
-    g.set_titles("{row_name} | Weekend = {col_name}")
+    g.set_titles("{row_name} | Weekend = {col_name}");
 
 
 
@@ -944,5 +944,49 @@ locations together:
 ``FacetGrid`` and the ``calendarplot``
 --------------------------------------
 
-Coming soon!
+To complete our introduction to faceting ``atmospy``, we will go over
+the ``calendarplot`` function. We don’t advise faceting by unique
+sensors or location - those would likely be better off as individual
+figures. However, since both variants of the plot (e.g., by month or by
+year) only plot a single unit of time, we can facet on this. In other
+words, we can plot multiple months at a time and view the
+hourly-averaged data. Let’s take ozone as an example:
+
+.. code:: ipython3
+
+    ozone = atmospy.load_dataset("us-ozone")
+    
+    # we only want to use a single site for now
+    single_site = ozone[ozone["Location UUID"] == ozone["Location UUID"].unique()[0]]
+    
+    # add the month name to facet on
+    single_site.loc[:, "Month"] = single_site["Timestamp Local"].dt.month_name()
+    
+    # set up the facetgrid
+    g = sns.FacetGrid(
+        data=single_site,
+        col="Month",
+        col_wrap=3,
+        height=4
+    )
+    
+    # map the dataframe to the grid
+    g.map_dataframe(
+        atmospy.calendarplot,
+        x="Timestamp Local", y="Sample Measurement",
+        freq="hour", cmap="YlGn", units='ppb',
+        linewidths=0.1,
+        cbar=False, faceted=True
+    )
+    
+    # update the labels
+    g.set(xlabel="Day of Month", ylabel="Time of Day");
+
+
+
+.. image:: plots_files/plots_53_0.png
+
+
+For now, we will avoid showing the yearly plot in a faceted manner while
+we work on finding a suitable dataset.
 

@@ -20,12 +20,15 @@ def custom_month_formatter(x, pos):
 
 def _yearplot(data, x, y, ax=None, agg="mean", cmap="crest", 
               height=2, aspect=5, vmin=None, vmax=None,
-              linecolor="white", linewidths=0, cbar=True, cbar_kws=None, units=""):
+              linecolor="white", linewidths=0, cbar=True, cbar_kws=None, 
+              units="", faceted=False, **kwargs):
     """Plot a full year of time series data on a heatmap by month.
     """
     if ax is None:
         ax = plt.gca()
-        ax.figure.set_size_inches(height*aspect, height)
+        
+        if not faceted:
+            ax.figure.set_size_inches(height*aspect, height)
         
     # if more than 1Y of data was provided, limit to 1Y
     years = np.unique(data.index.year)
@@ -111,12 +114,15 @@ def _yearplot(data, x, y, ax=None, agg="mean", cmap="crest",
 
 def _monthplot(data, x, y, ax=None, agg="mean", height=3, aspect=1, 
                vmin=None, vmax=None, cmap="crest", linewidths=0.1,
-               linecolor="white", cbar=True, cbar_kws=None, units=None):
+               linecolor="white", cbar=True, cbar_kws=None, 
+               units=None, faceted=False, **kwargs):
     """Plot a full month of time series data on a heatmap by hour.
     """
     if ax is None:
         ax = plt.gca()
-        ax.figure.set_size_inches(height*aspect, height)
+        
+        if not faceted:
+            ax.figure.set_size_inches(height*aspect, height)
         
     # if more than 1mo of data was provided, limit to 1mo
     months = np.unique(data.index.month)
@@ -186,7 +192,8 @@ def _monthplot(data, x, y, ax=None, agg="mean", height=3, aspect=1,
 
 def calendarplot(data, x, y, freq="day", agg="mean", vmin=None, vmax=None, cmap="crest", 
                  ax=None, linecolor="white", linewidths=0, cbar=True, cbar_kws=None,
-                 xlabel=None, ylabel=None, title=None, units="", height=2, aspect=5.0):
+                 xlabel=None, ylabel=None, title=None, units="", height=2, 
+                 aspect=5.0, faceted=False, **kwargs):
     """Visualize data as a heatmap on a monthly or annual basis.
     
     Calendar plots can be a useful way to visualize trends in data over longer periods 
@@ -242,6 +249,8 @@ def calendarplot(data, x, y, freq="day", agg="mean", vmin=None, vmax=None, cmap=
         The figure height in inches, by default 2
     aspect : float, optional
         The aspect ratio of the figure, by default 5.0
+    faceted : bool optional
+        Set to `True` if combining with a FacetGrid, optional
     
     Returns
     -------
@@ -281,14 +290,14 @@ def calendarplot(data, x, y, freq="day", agg="mean", vmin=None, vmax=None, cmap=
             df, x, y,
             agg=agg, height=height, aspect=aspect,
             vmin=vmin, vmax=vmax, linewidths=linewidths, linecolor=linecolor,
-            cbar=cbar, cbar_kws=cbar_kws, units=units, cmap=cmap
+            cbar=cbar, cbar_kws=cbar_kws, units=units, cmap=cmap, faceted=faceted, **kwargs
         )
     elif freq == "hour":
         ax = _monthplot(
             df, x, y,
             agg=agg, height=height, aspect=aspect,
             vmin=vmin, vmax=vmax, linewidths=linewidths, linecolor=linecolor,
-            cbar=cbar, cbar_kws=cbar_kws, units=units, cmap=cmap
+            cbar=cbar, cbar_kws=cbar_kws, units=units, cmap=cmap, faceted=faceted, **kwargs
         )
     
     ax.set_aspect("equal")
