@@ -380,8 +380,7 @@ numeric. ``pollutionroseplot`` will always add ``inf`` (infinity) at the
 end if you didn’t include it so that there is always a catch-all bin for
 values higher than the max specified. You can manually define this list
 to be whatever resolution or chunkiness you’d like, or, you can create
-an evenly-spaced array using ``NumPy <https://numpy.org/>``\ \_:
-``np.linspace(0, 100, 10)``.
+an evenly-spaced array using NumPy: ``np.linspace(0, 100, 10)``.
 
 The ``segments`` parameter is a bit different - you define an integer
 number of segments to divide the 360 degrees into and the code will
