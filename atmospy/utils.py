@@ -126,6 +126,9 @@ def load_dataset(name, cache=True, data_home=None, **kwargs):
     
     if name == "air-sensors-met":
         df["timestamp_local"] = pd.to_datetime(df["timestamp_local"])
+        
+        # only keep data after april
+        df = df[df["timestamp_local"] >= "2023-05-01"].copy()
     
     return df
 

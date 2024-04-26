@@ -213,7 +213,6 @@ default, we plot the daily average for the pollutant of choice:
         y="Sample Measurement", 
         freq="day",
         cbar=False,
-        # xlabel="Day of Month",
         height=2.5,
         linewidths=.1
     );
@@ -221,7 +220,7 @@ default, we plot the daily average for the pollutant of choice:
 
 .. parsed-literal::
 
-    /Users/dhhagan/Documents/github/atmospy/atmospy/atmospy/trends.py:72: UserWarning: FixedFormatter should only be used together with FixedLocator
+    /Users/dhhagan/Documents/github/atmospy/atmospy/atmospy/trends.py:75: UserWarning: FixedFormatter should only be used together with FixedLocator
       ax.xaxis.set_ticklabels([
 
 
@@ -389,4 +388,605 @@ Now that you’ve seen how to use the individual plots above, we’re going
 to go over some of the advanced features that are available by
 leveraging seaborn’s great grid functionality.
 
+Often, it can be useful to draw multiple versions of the same figure
+with slight differences in what’s being plotted. For example, you may
+want to plot a pollution rose, but plot each month of data separately.
+Or, you may want to plot a diel profile, but show the results for
+weekdays vs weekends on separate plots so that you can easily see the
+difference caused by traffic patterns.
+
+To do so, we can use seaborn’s ``FacetGrid``. Seaborn has a great
+tutorial on how to use ``FacetGrid``\ ’s
+`here <https://seaborn.pydata.org/tutorial/axis_grids.html>`__ that we
+advise you read. Next, we’ll go over several examples that showcase some
+of the cool things you can do with ``atmospy`` and ``seaborn`` together.
+
+``FacetGrid`` and the ``pollutionroseplot``
+-------------------------------------------
+
+Using the example dataset (``air-sensors-met``), let’s plot the
+pollution rose separetely for each month (the dataset contains data for
+April through November). To do so, we will use the ``FacetGrid``
+function from ``seaborn``. First, we will add a column that will serve
+as the dimension of the figure. In this case, we want to extract the
+month:
+
+.. code:: ipython3
+
+    # load the example dataset
+    met = atmospy.load_dataset("air-sensors-met")
+    
+    # add a column that extracts the month from the timestamp_local column
+    met.loc[:, "Month"] = met["timestamp_local"].dt.month_name()
+    
+    # print the first 5 records
+    met.head()
+
+
+
+
+.. raw:: html
+
+    <div>
+    <style scoped>
+        .dataframe tbody tr th:only-of-type {
+            vertical-align: middle;
+        }
+    
+        .dataframe tbody tr th {
+            vertical-align: top;
+        }
+    
+        .dataframe thead th {
+            text-align: right;
+        }
+    </style>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>timestamp_local</th>
+          <th>wd</th>
+          <th>ws</th>
+          <th>pm1</th>
+          <th>pm25</th>
+          <th>pm10</th>
+          <th>temp</th>
+          <th>rh</th>
+          <th>Month</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>4</th>
+          <td>2023-05-01 00:00:00</td>
+          <td>229.296667</td>
+          <td>0.862333</td>
+          <td>2.189933</td>
+          <td>2.370022</td>
+          <td>5.517010</td>
+          <td>14.603333</td>
+          <td>53.111667</td>
+          <td>May</td>
+        </tr>
+        <tr>
+          <th>5</th>
+          <td>2023-05-01 01:00:00</td>
+          <td>233.001667</td>
+          <td>0.911500</td>
+          <td>2.360152</td>
+          <td>2.516538</td>
+          <td>4.623340</td>
+          <td>13.715000</td>
+          <td>54.445000</td>
+          <td>May</td>
+        </tr>
+        <tr>
+          <th>6</th>
+          <td>2023-05-01 02:00:00</td>
+          <td>230.731667</td>
+          <td>0.930667</td>
+          <td>2.499550</td>
+          <td>2.682507</td>
+          <td>4.816372</td>
+          <td>13.310000</td>
+          <td>58.595000</td>
+          <td>May</td>
+        </tr>
+        <tr>
+          <th>7</th>
+          <td>2023-05-01 03:00:00</td>
+          <td>218.756667</td>
+          <td>0.892167</td>
+          <td>2.629282</td>
+          <td>2.806970</td>
+          <td>4.851060</td>
+          <td>13.125000</td>
+          <td>59.406667</td>
+          <td>May</td>
+        </tr>
+        <tr>
+          <th>8</th>
+          <td>2023-05-01 04:00:00</td>
+          <td>206.043333</td>
+          <td>0.791333</td>
+          <td>2.974715</td>
+          <td>3.184287</td>
+          <td>5.859437</td>
+          <td>12.210000</td>
+          <td>62.248333</td>
+          <td>May</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+
+
+As we can see above, we now have a column with the month name. In order
+to use the ``FacetGrid`` properly, we need to convert our wide-form
+dataframe into a long-form dataframe. For a much better explanation of
+the difference than I can provide, please read through the seaborn
+explanation
+`here <https://seaborn.pydata.org/tutorial/data_structure.html#long-form-vs-wide-form-data>`__.
+
+We can easily convert our dataframe to long-form by using the Pandas
+``melt`` function:
+
+.. code:: ipython3
+
+    met_long_form = met.melt(id_vars=["timestamp_local", "Month", "ws", "wd"], value_vars=["pm25"])
+    
+    # print the first 5 records
+    met_long_form.head()
+
+
+
+
+.. raw:: html
+
+    <div>
+    <style scoped>
+        .dataframe tbody tr th:only-of-type {
+            vertical-align: middle;
+        }
+    
+        .dataframe tbody tr th {
+            vertical-align: top;
+        }
+    
+        .dataframe thead th {
+            text-align: right;
+        }
+    </style>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>timestamp_local</th>
+          <th>Month</th>
+          <th>ws</th>
+          <th>wd</th>
+          <th>variable</th>
+          <th>value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>0</th>
+          <td>2023-05-01 00:00:00</td>
+          <td>May</td>
+          <td>0.862333</td>
+          <td>229.296667</td>
+          <td>pm25</td>
+          <td>2.370022</td>
+        </tr>
+        <tr>
+          <th>1</th>
+          <td>2023-05-01 01:00:00</td>
+          <td>May</td>
+          <td>0.911500</td>
+          <td>233.001667</td>
+          <td>pm25</td>
+          <td>2.516538</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td>2023-05-01 02:00:00</td>
+          <td>May</td>
+          <td>0.930667</td>
+          <td>230.731667</td>
+          <td>pm25</td>
+          <td>2.682507</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td>2023-05-01 03:00:00</td>
+          <td>May</td>
+          <td>0.892167</td>
+          <td>218.756667</td>
+          <td>pm25</td>
+          <td>2.806970</td>
+        </tr>
+        <tr>
+          <th>4</th>
+          <td>2023-05-01 04:00:00</td>
+          <td>May</td>
+          <td>0.791333</td>
+          <td>206.043333</td>
+          <td>pm25</td>
+          <td>3.184287</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+
+
+Next, we will set up our ``FacetGrid`` and tell it to use the ``Month``
+column as the dimension and to wrap every 3 so that it all fits into one
+nice figure:
+
+.. code:: ipython3
+
+    # set up the FacetGrid
+    g = sns.FacetGrid(
+        data=met_long_form, 
+        col="Month", 
+        col_wrap=3,
+        subplot_kws={"projection": "polar"},
+        despine=False
+    )
+    
+    # map the dataframe using the pollutionroseplot function
+    g.map_dataframe(
+        atmospy.pollutionroseplot, 
+        ws="ws", wd="wd", pollutant="value", 
+        faceted=True, 
+        segments=20, 
+        suffix="$µgm^{-3}$"
+    )
+    
+    # add the legend and place it where it looks nice
+    g.add_legend(
+        title="$PM_{2.5}$", 
+        bbox_to_anchor=(.535, 0.2), 
+        handlelength=1, 
+        handleheight=1
+    );
+
+
+
+.. image:: plots_files/plots_40_0.png
+
+
+Not bad for 3 lines of code (yes, they are split across more than 3
+lines for readability, but still - 3 lines!)!
+
+``FacetGrid`` and the ``dielplot``
+----------------------------------
+
+Next, we’re going to go ahead and explore what we can do with the
+``dielplot`` on a ``FacetGrid``. Like above, we can simply plot a
+slightly different subset of the data in each column - let’s go ahead
+and walk through an example. Let’s plot the diel profile for black
+carbon on weekdays versus weekends.
+
+First, we need to load our example dataset and modify it a bit to
+provide the information we want to facet by:
+
+.. code:: ipython3
+
+    # load the data
+    bc = atmospy.load_dataset("us-bc")
+    
+    # select just one random location for now
+    bc_single_site = bc[bc["Local Site Name"] == bc["Local Site Name"].unique()[0]]
+    
+    # create a column that sets a bool if the date is a weekend
+    bc_single_site.loc[:, "Is Weekend"] = bc_single_site["Timestamp Local"].dt.day_name().isin(["Saturday", "Sunday"])
+    
+    # convert to long-form for faceting
+    bc_long_form = bc_single_site.melt(
+        id_vars=["Timestamp Local", "Is Weekend"], 
+        value_vars=["Sample Measurement"]
+    )
+    
+    # print the first 5 records
+    bc_long_form.head()
+
+
+
+
+.. raw:: html
+
+    <div>
+    <style scoped>
+        .dataframe tbody tr th:only-of-type {
+            vertical-align: middle;
+        }
+    
+        .dataframe tbody tr th {
+            vertical-align: top;
+        }
+    
+        .dataframe thead th {
+            text-align: right;
+        }
+    </style>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>Timestamp Local</th>
+          <th>Is Weekend</th>
+          <th>variable</th>
+          <th>value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>0</th>
+          <td>2023-01-01 00:00:00</td>
+          <td>True</td>
+          <td>Sample Measurement</td>
+          <td>2.76</td>
+        </tr>
+        <tr>
+          <th>1</th>
+          <td>2023-01-01 01:00:00</td>
+          <td>True</td>
+          <td>Sample Measurement</td>
+          <td>2.55</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td>2023-01-01 02:00:00</td>
+          <td>True</td>
+          <td>Sample Measurement</td>
+          <td>3.18</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td>2023-01-01 03:00:00</td>
+          <td>True</td>
+          <td>Sample Measurement</td>
+          <td>1.64</td>
+        </tr>
+        <tr>
+          <th>4</th>
+          <td>2023-01-01 04:00:00</td>
+          <td>True</td>
+          <td>Sample Measurement</td>
+          <td>1.79</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+
+
+Now that we have our data prepared, we can set up a ``FacetGrid`` like
+above and define the column to facet by as the new column we just
+created:
+
+.. code:: ipython3
+
+    g = sns.FacetGrid(
+        data=bc_long_form,
+        col="Is Weekend",
+        
+        # let's adjust the aspect ratio for funsies
+        aspect=1.25
+    )
+    g.map_dataframe(atmospy.dielplot, x="Timestamp Local", y="value");
+
+
+
+.. image:: plots_files/plots_45_0.png
+
+
+While this isn’t the greatest example, we can see there is difference
+between weekday’s and weekend’s in the early morning, though the IQR
+band is quite wide. At some point, we will add some better example
+datasets so that these figures are more impressive. For now, they work!
+
+Now, what if we had two locations that we wanted to compare? Let’s go
+ahead and pull data for two sites and show the difference by site rather
+than by weekday/weekend:
+
+.. code:: ipython3
+
+    # load the data
+    bc = atmospy.load_dataset("us-bc")
+    
+    # select just one random location for now
+    bc_multi_site = bc[bc["Local Site Name"].isin(bc["Local Site Name"].unique()[0:2])]
+    
+    # create a column that sets a bool if the date is a weekend
+    bc_multi_site.loc[:, "Is Weekend"] = bc_multi_site["Timestamp Local"].dt.day_name().isin(["Saturday", "Sunday"])
+    
+    # convert to long-form for faceting
+    bc_long_form = bc_multi_site.melt(
+        id_vars=["Timestamp Local", "Is Weekend", "Local Site Name"], 
+        value_vars=["Sample Measurement"]
+    )
+    
+    # print the first 5 records
+    bc_long_form.head()
+
+
+
+
+.. raw:: html
+
+    <div>
+    <style scoped>
+        .dataframe tbody tr th:only-of-type {
+            vertical-align: middle;
+        }
+    
+        .dataframe tbody tr th {
+            vertical-align: top;
+        }
+    
+        .dataframe thead th {
+            text-align: right;
+        }
+    </style>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>Timestamp Local</th>
+          <th>Is Weekend</th>
+          <th>Local Site Name</th>
+          <th>variable</th>
+          <th>value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>0</th>
+          <td>2023-01-01 00:00:00</td>
+          <td>True</td>
+          <td>I-25</td>
+          <td>Sample Measurement</td>
+          <td>2.76</td>
+        </tr>
+        <tr>
+          <th>1</th>
+          <td>2023-01-01 01:00:00</td>
+          <td>True</td>
+          <td>I-25</td>
+          <td>Sample Measurement</td>
+          <td>2.55</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td>2023-01-01 02:00:00</td>
+          <td>True</td>
+          <td>I-25</td>
+          <td>Sample Measurement</td>
+          <td>3.18</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td>2023-01-01 03:00:00</td>
+          <td>True</td>
+          <td>I-25</td>
+          <td>Sample Measurement</td>
+          <td>1.64</td>
+        </tr>
+        <tr>
+          <th>4</th>
+          <td>2023-01-01 04:00:00</td>
+          <td>True</td>
+          <td>I-25</td>
+          <td>Sample Measurement</td>
+          <td>1.79</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+
+
+Let’s set up the ``FacetGrid`` and plot the diel trend by location:
+
+.. code:: ipython3
+
+    g = sns.FacetGrid(
+        bc_long_form,
+        row="Local Site Name",
+        hue="Local Site Name",
+        aspect=1.25,
+    )
+    
+    g.map_dataframe(atmospy.dielplot, x="Timestamp Local", y="value")
+    
+    # update the y-axis limit to force to zero
+    g.set(ylim=(0, None));
+
+
+
+.. image:: plots_files/plots_49_0.png
+
+
+Rather than plotting on the column, we plotted different locations on
+the row, which sets up the next figure nicely - let’s go ahead and use
+the same data set, but plot by weekday/weekend AND two different
+locations together:
+
+.. code:: ipython3
+
+    g = sns.FacetGrid(
+        bc_long_form,
+        row="Local Site Name",
+        col="Is Weekend",
+        hue="Local Site Name",
+        aspect=1.25,
+    )
+    
+    g.map_dataframe(atmospy.dielplot, x="Timestamp Local", y="value")
+    
+    # update the y-axis limit to force to zero
+    g.set(ylim=(0, None), ylabel='Black Carbon')
+    
+    # update the titles to take up less space
+    g.set_titles("{row_name} | Weekend = {col_name}");
+
+
+
+.. image:: plots_files/plots_51_0.png
+
+
+``FacetGrid`` and the ``calendarplot``
+--------------------------------------
+
+To complete our introduction to faceting ``atmospy``, we will go over
+the ``calendarplot`` function. We don’t advise faceting by unique
+sensors or location - those would likely be better off as individual
+figures. However, since both variants of the plot (e.g., by month or by
+year) only plot a single unit of time, we can facet on this. In other
+words, we can plot multiple months at a time and view the
+hourly-averaged data. Let’s take ozone as an example:
+
+.. code:: ipython3
+
+    ozone = atmospy.load_dataset("us-ozone")
+    
+    # we only want to use a single site for now
+    single_site = ozone[ozone["Location UUID"] == ozone["Location UUID"].unique()[0]]
+    
+    # add the month name to facet on
+    single_site.loc[:, "Month"] = single_site["Timestamp Local"].dt.month_name()
+    
+    # set up the facetgrid
+    g = sns.FacetGrid(
+        data=single_site,
+        col="Month",
+        col_wrap=3,
+        height=4
+    )
+    
+    # map the dataframe to the grid
+    g.map_dataframe(
+        atmospy.calendarplot,
+        x="Timestamp Local", y="Sample Measurement",
+        freq="hour", cmap="YlGn", units='ppb',
+        linewidths=0.1,
+        cbar=False, faceted=True
+    )
+    
+    # update the labels
+    g.set(xlabel="Day of Month", ylabel="Time of Day");
+
+
+
+.. image:: plots_files/plots_53_0.png
+
+
+For now, we will avoid showing the yearly plot in a faceted manner while
+we work on finding a suitable dataset.
 

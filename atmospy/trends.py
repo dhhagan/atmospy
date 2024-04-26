@@ -20,12 +20,15 @@ def custom_month_formatter(x, pos):
 
 def _yearplot(data, x, y, ax=None, agg="mean", cmap="crest", 
               height=2, aspect=5, vmin=None, vmax=None,
-              linecolor="white", linewidths=0, cbar=True, cbar_kws=None, units=""):
+              linecolor="white", linewidths=0, cbar=True, cbar_kws=None, 
+              units="", faceted=False, **kwargs):
     """Plot a full year of time series data on a heatmap by month.
     """
     if ax is None:
         ax = plt.gca()
-        ax.figure.set_size_inches(height*aspect, height)
+        
+        if not faceted:
+            ax.figure.set_size_inches(height*aspect, height)
         
     # if more than 1Y of data was provided, limit to 1Y
     years = np.unique(data.index.year)
@@ -111,12 +114,15 @@ def _yearplot(data, x, y, ax=None, agg="mean", cmap="crest",
 
 def _monthplot(data, x, y, ax=None, agg="mean", height=3, aspect=1, 
                vmin=None, vmax=None, cmap="crest", linewidths=0.1,
-               linecolor="white", cbar=True, cbar_kws=None, units=None):
+               linecolor="white", cbar=True, cbar_kws=None, 
+               units=None, faceted=False, **kwargs):
     """Plot a full month of time series data on a heatmap by hour.
     """
     if ax is None:
         ax = plt.gca()
-        ax.figure.set_size_inches(height*aspect, height)
+        
+        if not faceted:
+            ax.figure.set_size_inches(height*aspect, height)
         
     # if more than 1mo of data was provided, limit to 1mo
     months = np.unique(data.index.month)
@@ -186,7 +192,8 @@ def _monthplot(data, x, y, ax=None, agg="mean", height=3, aspect=1,
 
 def calendarplot(data, x, y, freq="day", agg="mean", vmin=None, vmax=None, cmap="crest", 
                  ax=None, linecolor="white", linewidths=0, cbar=True, cbar_kws=None,
-                 xlabel=None, ylabel=None, title=None, units="", height=2, aspect=5.0):
+                 xlabel=None, ylabel=None, title=None, units="", height=2, 
+                 aspect=5.0, faceted=False, **kwargs):
     """Visualize data as a heatmap on a monthly or annual basis.
     
     Calendar plots can be a useful way to visualize trends in data over longer periods 
@@ -242,6 +249,8 @@ def calendarplot(data, x, y, freq="day", agg="mean", vmin=None, vmax=None, cmap=
         The figure height in inches, by default 2
     aspect : float, optional
         The aspect ratio of the figure, by default 5.0
+    faceted : bool optional
+        Set to `True` if combining with a FacetGrid, optional
     
     Returns
     -------
@@ -281,14 +290,14 @@ def calendarplot(data, x, y, freq="day", agg="mean", vmin=None, vmax=None, cmap=
             df, x, y,
             agg=agg, height=height, aspect=aspect,
             vmin=vmin, vmax=vmax, linewidths=linewidths, linecolor=linecolor,
-            cbar=cbar, cbar_kws=cbar_kws, units=units, cmap=cmap
+            cbar=cbar, cbar_kws=cbar_kws, units=units, cmap=cmap, faceted=faceted, **kwargs
         )
     elif freq == "hour":
         ax = _monthplot(
             df, x, y,
             agg=agg, height=height, aspect=aspect,
             vmin=vmin, vmax=vmax, linewidths=linewidths, linecolor=linecolor,
-            cbar=cbar, cbar_kws=cbar_kws, units=units, cmap=cmap
+            cbar=cbar, cbar_kws=cbar_kws, units=units, cmap=cmap, faceted=faceted, **kwargs
         )
     
     ax.set_aspect("equal")
@@ -309,8 +318,8 @@ def calendarplot(data, x, y, freq="day", agg="mean", vmin=None, vmax=None, cmap=
     return ax
 
 
-def dielplot(data, x, y, ax=None, ylim=None, xlabel=None, 
-             ylabel=None, title=None, plot_kws=None, **kwargs):
+def dielplot(data=None, *, x=None, y=None, ax=None, ylim=None, xlabel=None, 
+             ylabel=None, title=None, color=None, show_iqr=True, plot_kws=None, **kwargs):
     """Plot the diel (e.g., diurnal) trend for a pollutant.
     
     Diel plots can be incredibly useful for understanding daily 
@@ -334,6 +343,10 @@ def dielplot(data, x, y, ax=None, ylim=None, xlabel=None,
         The label for the y-axis, by default None
     title : str, optional
         The title for the plot, by default None
+    color : str, optional
+        Specify the color to use in the figure
+    shoq_iqr : bool, optional
+        If True, plot the interquartile range as a shaded region, default True
     plot_kws : dict or None, optional
         Additional keyword arguments are passed directly to the underlying plot call
         , by default None
@@ -349,7 +362,7 @@ def dielplot(data, x, y, ax=None, ylim=None, xlabel=None,
     Plot a simple heatmap for the entire year.
 
     >>> df = atmospy.load_dataset("us-bc")
-    >>> atmospy.dielplot(df, x="Timestamp GMT", y="Sample Measurement")
+    >>> atmospy.dielplot(data=df, x="Timestamp GMT", y="Sample Measurement")
     
     """
     default_plot_kws = {
@@ -362,6 +375,8 @@ def dielplot(data, x, y, ax=None, ylim=None, xlabel=None,
     
     # 
     plot_kws = {} if plot_kws is None else dict(default_plot_kws, **plot_kws)
+    if color is not None:
+        plot_kws.update(dict(c=color))
     
     # copy over only the needed data
     _data = data[[x, y]].copy(deep=True)
@@ -375,23 +390,27 @@ def dielplot(data, x, y, ax=None, ylim=None, xlabel=None,
     # compute the diel statistics
     stats = _data.groupby([_data.index.hour, _data.index.minute], as_index=False).describe()
     
+    # append the first record so the first and last records are identical
+    stats.loc[len(stats.index)] = stats.loc[0]
+    
     # build an index we can use to make the figure
     index = stats.index.values
-    freq = int(60 / (index.size / 24))
+    freq = int(60 / ((index.size - 1) / 24))
     figure_index = pd.date_range(start='2020-01-01', periods=index.size, freq=f"{freq}min")
     
     # plot the diel average
     ax.plot(figure_index, stats[y]['mean'], **plot_kws)
     
     # add the IQR as a shaded region
-    ax.fill_between(
-        figure_index,
-        y1=stats[y]['25%'],
-        y2=stats[y]['75%'],
-        alpha=0.25,
-        lw=2,
-        color=plt.gca().lines[-1].get_color()
-    )
+    if show_iqr:
+        ax.fill_between(
+            figure_index,
+            y1=stats[y]['25%'],
+            y2=stats[y]['75%'],
+            alpha=0.25,
+            lw=2,
+            color=plt.gca().lines[-1].get_color()
+        )
     
     # adjust plot parameters
     xticks = ax.get_xticks()

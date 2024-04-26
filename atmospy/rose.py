@@ -8,6 +8,9 @@ from .utils import (
     check_for_numeric_cols,
 )
 
+# Turn off chained assignment warnings
+pd.options.mode.chained_assignment = None
+
 __all__ = ["pollutionroseplot"]
 
 def pollutionroseplot(data=None, *, ws=None, wd=None, pollutant=None, 

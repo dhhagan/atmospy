@@ -5,8 +5,8 @@
 .. _calendar_by_day:
 
 
-Ozone by Year
-=============
+Daily Average Ozone
+===================
 
 
 

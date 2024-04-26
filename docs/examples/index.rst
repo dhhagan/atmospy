@@ -80,11 +80,15 @@ Example gallery
 
    ./calendar_by_hour
 
+   ./diel_by_weekend_weekday
+
    ./dielplot
 
    ./pollution_rose
 
    ./regression
+
+   ./rose_by_month
 
 
 
@@ -110,6 +114,19 @@ Example gallery
     <img src=../_static/calendar_by_hour_thumb.png>
     <span class='thumb-label'>
     <p>calendarplot</p>
+    </span>
+    </a>
+    </div>
+
+
+
+.. raw:: html
+
+    <div class='thumb align-center'>
+    <a href=./diel_by_weekend_weekday.html>
+    <img src=../_static/diel_by_weekend_weekday_thumb.png>
+    <span class='thumb-label'>
+    <p></p>
     </span>
     </a>
     </div>
@@ -149,6 +166,19 @@ Example gallery
     <img src=../_static/regression_thumb.png>
     <span class='thumb-label'>
     <p>regplot</p>
+    </span>
+    </a>
+    </div>
+
+
+
+.. raw:: html
+
+    <div class='thumb align-center'>
+    <a href=./rose_by_month.html>
+    <img src=../_static/rose_by_month_thumb.png>
+    <span class='thumb-label'>
+    <p></p>
     </span>
     </a>
     </div>

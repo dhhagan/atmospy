@@ -5,8 +5,8 @@
 .. _pollution_rose:
 
 
-Pollution Rose
-==============
+PM2.5 by Direction
+==================
 
 
 

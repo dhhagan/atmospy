@@ -1,6 +1,6 @@
 """
-Ozone by Year
-=============
+Daily Average Ozone
+===================
 
 _thumb: .8, .8
 """

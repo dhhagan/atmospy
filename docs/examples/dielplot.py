@@ -1,6 +1,6 @@
 """
-Diurnal Ozone
-=============
+Diel Ozone Trends
+=================
 
 _thumb: .8, .8
 """
