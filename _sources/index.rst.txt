@@ -28,8 +28,13 @@ atmospy: air quality data visualization
 
    .. grid-item::
       
-      .. image:: example_thumbs/calendar_by_day_thumb.png
-         :target: ./examples/calendar_by_day.html
+      .. image:: example_thumbs/diel_by_weekend_weekday_thumb.png
+         :target: ./examples/diel_by_weekend_weekday.html
+
+   .. grid-item::
+      
+      .. image:: example_thumbs/rose_by_month_thumb.png
+         :target: ./examples/rose_by_month.html
 
 
 
@@ -52,6 +57,14 @@ atmospy: air quality data visualization
       *atmospy* is open-sourced and is not specific to any sensor or sensor company. Any and all 
       can (and should) use it. To view the source code or report a bug, please visit the 
       `GitHub repository <https://github.com/dhhagan/atmospy>`_.
+
+      .. note::
+
+         This library was recently revamped and released and may contain bugs. Expect frequent updates 
+         throughout 2024.
+
+         If you have example datasets that you are interested in donating to be incorporated for general 
+         use, please open a GitHub issue and we will be in touch!
 
    
    .. grid-item-card:: Contents

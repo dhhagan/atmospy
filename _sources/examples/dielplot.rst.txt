@@ -5,8 +5,8 @@
 .. _dielplot:
 
 
-Diurnal Ozone
-=============
+Diel Ozone Trends
+=================
 
 
 

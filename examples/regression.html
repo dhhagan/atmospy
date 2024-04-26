@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Regression Plot &#8212; atmospy 0.1.0a6 documentation</title>
+    <title>Compare Two Sensors &#8212; atmospy 0.1.0 documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -28,7 +28,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=0.1.0a6" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=0.1.0" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b">
@@ -45,8 +45,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'examples/regression';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="The one-and-only atmospy tutorial" href="../tutorial.html" />
-    <link rel="prev" title="Pollution Rose" href="pollution_rose.html" />
+    <link rel="next" title="PM2.5 Pollution Rose by Month" href="rose_by_month.html" />
+    <link rel="prev" title="PM2.5 by Direction" href="pollution_rose.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -94,7 +94,7 @@
   
   
   
-    <p class="title logo__title">atmospy 0.1.0a6 documentation</p>
+    <p class="title logo__title">atmospy 0.1.0 documentation</p>
   
 </a>
     
@@ -255,27 +255,37 @@
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="calendar_by_day.html">
-   Ozone by Year
+   Daily Average Ozone
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="calendar_by_hour.html">
-   Ozone by Year
+   Hourly Averaged Ozone
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="diel_by_weekend_weekday.html">
+   Diel Trends by Weekend vs Weekday
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="dielplot.html">
-   Diurnal Ozone
+   Diel Ozone Trends
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="pollution_rose.html">
-   Pollution Rose
+   PM2.5 by Direction
   </a>
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Regression Plot
+   Compare Two Sensors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="rose_by_month.html">
+   PM2.5 Pollution Rose by Month
   </a>
  </li>
 </ul>
@@ -323,8 +333,8 @@
           
           <article class="bd-article" role="main">
             
-  <section id="regression-plot">
-<span id="regression"></span><h1>Regression Plot<a class="headerlink" href="#regression-plot" title="Permalink to this heading">#</a></h1>
+  <section id="compare-two-sensors">
+<span id="regression"></span><h1>Compare Two Sensors<a class="headerlink" href="#compare-two-sensors" title="Permalink to this heading">#</a></h1>
 <img alt="../_images/regression.png" src="../_images/regression.png" />
 <p><strong>atmospy components used:</strong> <a class="reference internal" href="../generated/atmospy.set_theme.html#atmospy.set_theme" title="atmospy.set_theme"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_theme()</span></code></a>, <a class="reference internal" href="../generated/atmospy.load_dataset.html#atmospy.load_dataset" title="atmospy.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset()</span></code></a>, <a class="reference internal" href="../generated/atmospy.regplot.html#atmospy.regplot" title="atmospy.regplot"><code class="xref py py-func docutils literal notranslate"><span class="pre">regplot()</span></code></a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">atmospy</span>

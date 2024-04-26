@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Plotting Functions &#8212; atmospy 0.1.0a6 documentation</title>
+    <title>Plotting Functions &#8212; atmospy 0.1.0 documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -28,7 +28,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=0.1.0a6" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=0.1.0" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=9b1a4fa89bdd0e95b23b">
@@ -94,7 +94,7 @@
   
   
   
-    <p class="title logo__title">atmospy 0.1.0a6 documentation</p>
+    <p class="title logo__title">atmospy 0.1.0 documentation</p>
   
 </a>
     
@@ -348,6 +348,53 @@
   <a class="reference internal nav-link" href="#facets-and-other-fun-things">
    Facets and other Fun Things
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#facetgrid-and-the-pollutionroseplot">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       FacetGrid
+      </span>
+     </code>
+     and the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       pollutionroseplot
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#facetgrid-and-the-dielplot">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       FacetGrid
+      </span>
+     </code>
+     and the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       dielplot
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#facetgrid-and-the-calendarplot">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       FacetGrid
+      </span>
+     </code>
+     and the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       calendarplot
+      </span>
+     </code>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -528,13 +575,12 @@ default, we plot the daily average for the pollutant of choice:</p>
     <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">,</span>
     <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;day&quot;</span><span class="p">,</span>
     <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="c1"># xlabel=&quot;Day of Month&quot;,</span>
     <span class="n">height</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span>
     <span class="n">linewidths</span><span class="o">=</span><span class="mf">.1</span>
 <span class="p">);</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">atmospy</span><span class="o">/</span><span class="n">atmospy</span><span class="o">/</span><span class="n">atmospy</span><span class="o">/</span><span class="n">trends</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">72</span><span class="p">:</span> <span class="ne">UserWarning</span><span class="p">:</span> <span class="n">FixedFormatter</span> <span class="n">should</span> <span class="n">only</span> <span class="n">be</span> <span class="n">used</span> <span class="n">together</span> <span class="k">with</span> <span class="n">FixedLocator</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">atmospy</span><span class="o">/</span><span class="n">atmospy</span><span class="o">/</span><span class="n">atmospy</span><span class="o">/</span><span class="n">trends</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">75</span><span class="p">:</span> <span class="ne">UserWarning</span><span class="p">:</span> <span class="n">FixedFormatter</span> <span class="n">should</span> <span class="n">only</span> <span class="n">be</span> <span class="n">used</span> <span class="n">together</span> <span class="k">with</span> <span class="n">FixedLocator</span>
   <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">([</span>
 </pre></div>
 </div>
@@ -664,6 +710,527 @@ legend, and the <code class="docutils literal notranslate"><span class="pre">tit
 <p>Now that you’ve seen how to use the individual plots above, we’re going
 to go over some of the advanced features that are available by
 leveraging seaborn’s great grid functionality.</p>
+<p>Often, it can be useful to draw multiple versions of the same figure
+with slight differences in what’s being plotted. For example, you may
+want to plot a pollution rose, but plot each month of data separately.
+Or, you may want to plot a diel profile, but show the results for
+weekdays vs weekends on separate plots so that you can easily see the
+difference caused by traffic patterns.</p>
+<p>To do so, we can use seaborn’s <code class="docutils literal notranslate"><span class="pre">FacetGrid</span></code>. Seaborn has a great
+tutorial on how to use <code class="docutils literal notranslate"><span class="pre">FacetGrid</span></code>’s
+<a class="reference external" href="https://seaborn.pydata.org/tutorial/axis_grids.html">here</a> that we
+advise you read. Next, we’ll go over several examples that showcase some
+of the cool things you can do with <code class="docutils literal notranslate"><span class="pre">atmospy</span></code> and <code class="docutils literal notranslate"><span class="pre">seaborn</span></code> together.</p>
+<section id="facetgrid-and-the-pollutionroseplot">
+<h2><code class="docutils literal notranslate"><span class="pre">FacetGrid</span></code> and the <code class="docutils literal notranslate"><span class="pre">pollutionroseplot</span></code><a class="headerlink" href="#facetgrid-and-the-pollutionroseplot" title="Permalink to this heading">#</a></h2>
+<p>Using the example dataset (<code class="docutils literal notranslate"><span class="pre">air-sensors-met</span></code>), let’s plot the
+pollution rose separetely for each month (the dataset contains data for
+April through November). To do so, we will use the <code class="docutils literal notranslate"><span class="pre">FacetGrid</span></code>
+function from <code class="docutils literal notranslate"><span class="pre">seaborn</span></code>. First, we will add a column that will serve
+as the dimension of the figure. In this case, we want to extract the
+month:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load the example dataset</span>
+<span class="n">met</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;air-sensors-met&quot;</span><span class="p">)</span>
+
+<span class="c1"># add a column that extracts the month from the timestamp_local column</span>
+<span class="n">met</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;Month&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">met</span><span class="p">[</span><span class="s2">&quot;timestamp_local&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month_name</span><span class="p">()</span>
+
+<span class="c1"># print the first 5 records</span>
+<span class="n">met</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>timestamp_local</th>
+      <th>wd</th>
+      <th>ws</th>
+      <th>pm1</th>
+      <th>pm25</th>
+      <th>pm10</th>
+      <th>temp</th>
+      <th>rh</th>
+      <th>Month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>4</th>
+      <td>2023-05-01 00:00:00</td>
+      <td>229.296667</td>
+      <td>0.862333</td>
+      <td>2.189933</td>
+      <td>2.370022</td>
+      <td>5.517010</td>
+      <td>14.603333</td>
+      <td>53.111667</td>
+      <td>May</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>2023-05-01 01:00:00</td>
+      <td>233.001667</td>
+      <td>0.911500</td>
+      <td>2.360152</td>
+      <td>2.516538</td>
+      <td>4.623340</td>
+      <td>13.715000</td>
+      <td>54.445000</td>
+      <td>May</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>2023-05-01 02:00:00</td>
+      <td>230.731667</td>
+      <td>0.930667</td>
+      <td>2.499550</td>
+      <td>2.682507</td>
+      <td>4.816372</td>
+      <td>13.310000</td>
+      <td>58.595000</td>
+      <td>May</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>2023-05-01 03:00:00</td>
+      <td>218.756667</td>
+      <td>0.892167</td>
+      <td>2.629282</td>
+      <td>2.806970</td>
+      <td>4.851060</td>
+      <td>13.125000</td>
+      <td>59.406667</td>
+      <td>May</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>2023-05-01 04:00:00</td>
+      <td>206.043333</td>
+      <td>0.791333</td>
+      <td>2.974715</td>
+      <td>3.184287</td>
+      <td>5.859437</td>
+      <td>12.210000</td>
+      <td>62.248333</td>
+      <td>May</td>
+    </tr>
+  </tbody>
+</table>
+</div><p>As we can see above, we now have a column with the month name. In order
+to use the <code class="docutils literal notranslate"><span class="pre">FacetGrid</span></code> properly, we need to convert our wide-form
+dataframe into a long-form dataframe. For a much better explanation of
+the difference than I can provide, please read through the seaborn
+explanation
+<a class="reference external" href="https://seaborn.pydata.org/tutorial/data_structure.html#long-form-vs-wide-form-data">here</a>.</p>
+<p>We can easily convert our dataframe to long-form by using the Pandas
+<code class="docutils literal notranslate"><span class="pre">melt</span></code> function:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">met_long_form</span> <span class="o">=</span> <span class="n">met</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;timestamp_local&quot;</span><span class="p">,</span> <span class="s2">&quot;Month&quot;</span><span class="p">,</span> <span class="s2">&quot;ws&quot;</span><span class="p">,</span> <span class="s2">&quot;wd&quot;</span><span class="p">],</span> <span class="n">value_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pm25&quot;</span><span class="p">])</span>
+
+<span class="c1"># print the first 5 records</span>
+<span class="n">met_long_form</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>timestamp_local</th>
+      <th>Month</th>
+      <th>ws</th>
+      <th>wd</th>
+      <th>variable</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2023-05-01 00:00:00</td>
+      <td>May</td>
+      <td>0.862333</td>
+      <td>229.296667</td>
+      <td>pm25</td>
+      <td>2.370022</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2023-05-01 01:00:00</td>
+      <td>May</td>
+      <td>0.911500</td>
+      <td>233.001667</td>
+      <td>pm25</td>
+      <td>2.516538</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2023-05-01 02:00:00</td>
+      <td>May</td>
+      <td>0.930667</td>
+      <td>230.731667</td>
+      <td>pm25</td>
+      <td>2.682507</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2023-05-01 03:00:00</td>
+      <td>May</td>
+      <td>0.892167</td>
+      <td>218.756667</td>
+      <td>pm25</td>
+      <td>2.806970</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2023-05-01 04:00:00</td>
+      <td>May</td>
+      <td>0.791333</td>
+      <td>206.043333</td>
+      <td>pm25</td>
+      <td>3.184287</td>
+    </tr>
+  </tbody>
+</table>
+</div><p>Next, we will set up our <code class="docutils literal notranslate"><span class="pre">FacetGrid</span></code> and tell it to use the <code class="docutils literal notranslate"><span class="pre">Month</span></code>
+column as the dimension and to wrap every 3 so that it all fits into one
+nice figure:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set up the FacetGrid</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">met_long_form</span><span class="p">,</span>
+    <span class="n">col</span><span class="o">=</span><span class="s2">&quot;Month&quot;</span><span class="p">,</span>
+    <span class="n">col_wrap</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">subplot_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;projection&quot;</span><span class="p">:</span> <span class="s2">&quot;polar&quot;</span><span class="p">},</span>
+    <span class="n">despine</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="c1"># map the dataframe using the pollutionroseplot function</span>
+<span class="n">g</span><span class="o">.</span><span class="n">map_dataframe</span><span class="p">(</span>
+    <span class="n">atmospy</span><span class="o">.</span><span class="n">pollutionroseplot</span><span class="p">,</span>
+    <span class="n">ws</span><span class="o">=</span><span class="s2">&quot;ws&quot;</span><span class="p">,</span> <span class="n">wd</span><span class="o">=</span><span class="s2">&quot;wd&quot;</span><span class="p">,</span> <span class="n">pollutant</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span>
+    <span class="n">faceted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">segments</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;$µgm^{-3}$&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># add the legend and place it where it looks nice</span>
+<span class="n">g</span><span class="o">.</span><span class="n">add_legend</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;$PM_</span><span class="si">{2.5}</span><span class="s2">$&quot;</span><span class="p">,</span>
+    <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">.535</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span>
+    <span class="n">handlelength</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">handleheight</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/plots_40_0.png" src="../_images/plots_40_0.png" />
+<p>Not bad for 3 lines of code (yes, they are split across more than 3
+lines for readability, but still - 3 lines!)!</p>
+</section>
+<section id="facetgrid-and-the-dielplot">
+<h2><code class="docutils literal notranslate"><span class="pre">FacetGrid</span></code> and the <code class="docutils literal notranslate"><span class="pre">dielplot</span></code><a class="headerlink" href="#facetgrid-and-the-dielplot" title="Permalink to this heading">#</a></h2>
+<p>Next, we’re going to go ahead and explore what we can do with the
+<code class="docutils literal notranslate"><span class="pre">dielplot</span></code> on a <code class="docutils literal notranslate"><span class="pre">FacetGrid</span></code>. Like above, we can simply plot a
+slightly different subset of the data in each column - let’s go ahead
+and walk through an example. Let’s plot the diel profile for black
+carbon on weekdays versus weekends.</p>
+<p>First, we need to load our example dataset and modify it a bit to
+provide the information we want to facet by:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load the data</span>
+<span class="n">bc</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;us-bc&quot;</span><span class="p">)</span>
+
+<span class="c1"># select just one random location for now</span>
+<span class="n">bc_single_site</span> <span class="o">=</span> <span class="n">bc</span><span class="p">[</span><span class="n">bc</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">bc</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span>
+
+<span class="c1"># create a column that sets a bool if the date is a weekend</span>
+<span class="n">bc_single_site</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;Is Weekend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bc_single_site</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day_name</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Saturday&quot;</span><span class="p">,</span> <span class="s2">&quot;Sunday&quot;</span><span class="p">])</span>
+
+<span class="c1"># convert to long-form for faceting</span>
+<span class="n">bc_long_form</span> <span class="o">=</span> <span class="n">bc_single_site</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span>
+    <span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="s2">&quot;Is Weekend&quot;</span><span class="p">],</span>
+    <span class="n">value_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># print the first 5 records</span>
+<span class="n">bc_long_form</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Timestamp Local</th>
+      <th>Is Weekend</th>
+      <th>variable</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2023-01-01 00:00:00</td>
+      <td>True</td>
+      <td>Sample Measurement</td>
+      <td>2.76</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2023-01-01 01:00:00</td>
+      <td>True</td>
+      <td>Sample Measurement</td>
+      <td>2.55</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2023-01-01 02:00:00</td>
+      <td>True</td>
+      <td>Sample Measurement</td>
+      <td>3.18</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2023-01-01 03:00:00</td>
+      <td>True</td>
+      <td>Sample Measurement</td>
+      <td>1.64</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2023-01-01 04:00:00</td>
+      <td>True</td>
+      <td>Sample Measurement</td>
+      <td>1.79</td>
+    </tr>
+  </tbody>
+</table>
+</div><p>Now that we have our data prepared, we can set up a <code class="docutils literal notranslate"><span class="pre">FacetGrid</span></code> like
+above and define the column to facet by as the new column we just
+created:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">bc_long_form</span><span class="p">,</span>
+    <span class="n">col</span><span class="o">=</span><span class="s2">&quot;Is Weekend&quot;</span><span class="p">,</span>
+
+    <span class="c1"># let&#39;s adjust the aspect ratio for funsies</span>
+    <span class="n">aspect</span><span class="o">=</span><span class="mf">1.25</span>
+<span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">map_dataframe</span><span class="p">(</span><span class="n">atmospy</span><span class="o">.</span><span class="n">dielplot</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/plots_45_0.png" src="../_images/plots_45_0.png" />
+<p>While this isn’t the greatest example, we can see there is difference
+between weekday’s and weekend’s in the early morning, though the IQR
+band is quite wide. At some point, we will add some better example
+datasets so that these figures are more impressive. For now, they work!</p>
+<p>Now, what if we had two locations that we wanted to compare? Let’s go
+ahead and pull data for two sites and show the difference by site rather
+than by weekday/weekend:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load the data</span>
+<span class="n">bc</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;us-bc&quot;</span><span class="p">)</span>
+
+<span class="c1"># select just one random location for now</span>
+<span class="n">bc_multi_site</span> <span class="o">=</span> <span class="n">bc</span><span class="p">[</span><span class="n">bc</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">bc</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])]</span>
+
+<span class="c1"># create a column that sets a bool if the date is a weekend</span>
+<span class="n">bc_multi_site</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;Is Weekend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bc_multi_site</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day_name</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Saturday&quot;</span><span class="p">,</span> <span class="s2">&quot;Sunday&quot;</span><span class="p">])</span>
+
+<span class="c1"># convert to long-form for faceting</span>
+<span class="n">bc_long_form</span> <span class="o">=</span> <span class="n">bc_multi_site</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span>
+    <span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="s2">&quot;Is Weekend&quot;</span><span class="p">,</span> <span class="s2">&quot;Local Site Name&quot;</span><span class="p">],</span>
+    <span class="n">value_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># print the first 5 records</span>
+<span class="n">bc_long_form</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Timestamp Local</th>
+      <th>Is Weekend</th>
+      <th>Local Site Name</th>
+      <th>variable</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2023-01-01 00:00:00</td>
+      <td>True</td>
+      <td>I-25</td>
+      <td>Sample Measurement</td>
+      <td>2.76</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2023-01-01 01:00:00</td>
+      <td>True</td>
+      <td>I-25</td>
+      <td>Sample Measurement</td>
+      <td>2.55</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2023-01-01 02:00:00</td>
+      <td>True</td>
+      <td>I-25</td>
+      <td>Sample Measurement</td>
+      <td>3.18</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2023-01-01 03:00:00</td>
+      <td>True</td>
+      <td>I-25</td>
+      <td>Sample Measurement</td>
+      <td>1.64</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2023-01-01 04:00:00</td>
+      <td>True</td>
+      <td>I-25</td>
+      <td>Sample Measurement</td>
+      <td>1.79</td>
+    </tr>
+  </tbody>
+</table>
+</div><p>Let’s set up the <code class="docutils literal notranslate"><span class="pre">FacetGrid</span></code> and plot the diel trend by location:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span>
+    <span class="n">bc_long_form</span><span class="p">,</span>
+    <span class="n">row</span><span class="o">=</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">,</span>
+    <span class="n">aspect</span><span class="o">=</span><span class="mf">1.25</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">map_dataframe</span><span class="p">(</span><span class="n">atmospy</span><span class="o">.</span><span class="n">dielplot</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+
+<span class="c1"># update the y-axis limit to force to zero</span>
+<span class="n">g</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">));</span>
+</pre></div>
+</div>
+<img alt="../_images/plots_49_0.png" src="../_images/plots_49_0.png" />
+<p>Rather than plotting on the column, we plotted different locations on
+the row, which sets up the next figure nicely - let’s go ahead and use
+the same data set, but plot by weekday/weekend AND two different
+locations together:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span>
+    <span class="n">bc_long_form</span><span class="p">,</span>
+    <span class="n">row</span><span class="o">=</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">,</span>
+    <span class="n">col</span><span class="o">=</span><span class="s2">&quot;Is Weekend&quot;</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">,</span>
+    <span class="n">aspect</span><span class="o">=</span><span class="mf">1.25</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">map_dataframe</span><span class="p">(</span><span class="n">atmospy</span><span class="o">.</span><span class="n">dielplot</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+
+<span class="c1"># update the y-axis limit to force to zero</span>
+<span class="n">g</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Black Carbon&#39;</span><span class="p">)</span>
+
+<span class="c1"># update the titles to take up less space</span>
+<span class="n">g</span><span class="o">.</span><span class="n">set_titles</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{row_name}</span><span class="s2"> | Weekend = </span><span class="si">{col_name}</span><span class="s2">&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/plots_51_0.png" src="../_images/plots_51_0.png" />
+</section>
+<section id="facetgrid-and-the-calendarplot">
+<h2><code class="docutils literal notranslate"><span class="pre">FacetGrid</span></code> and the <code class="docutils literal notranslate"><span class="pre">calendarplot</span></code><a class="headerlink" href="#facetgrid-and-the-calendarplot" title="Permalink to this heading">#</a></h2>
+<p>To complete our introduction to faceting <code class="docutils literal notranslate"><span class="pre">atmospy</span></code>, we will go over
+the <code class="docutils literal notranslate"><span class="pre">calendarplot</span></code> function. We don’t advise faceting by unique
+sensors or location - those would likely be better off as individual
+figures. However, since both variants of the plot (e.g., by month or by
+year) only plot a single unit of time, we can facet on this. In other
+words, we can plot multiple months at a time and view the
+hourly-averaged data. Let’s take ozone as an example:</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ozone</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;us-ozone&quot;</span><span class="p">)</span>
+
+<span class="c1"># we only want to use a single site for now</span>
+<span class="n">single_site</span> <span class="o">=</span> <span class="n">ozone</span><span class="p">[</span><span class="n">ozone</span><span class="p">[</span><span class="s2">&quot;Location UUID&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">ozone</span><span class="p">[</span><span class="s2">&quot;Location UUID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span>
+
+<span class="c1"># add the month name to facet on</span>
+<span class="n">single_site</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;Month&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">single_site</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month_name</span><span class="p">()</span>
+
+<span class="c1"># set up the facetgrid</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">single_site</span><span class="p">,</span>
+    <span class="n">col</span><span class="o">=</span><span class="s2">&quot;Month&quot;</span><span class="p">,</span>
+    <span class="n">col_wrap</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">4</span>
+<span class="p">)</span>
+
+<span class="c1"># map the dataframe to the grid</span>
+<span class="n">g</span><span class="o">.</span><span class="n">map_dataframe</span><span class="p">(</span>
+    <span class="n">atmospy</span><span class="o">.</span><span class="n">calendarplot</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">,</span>
+    <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;hour&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;YlGn&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ppb&#39;</span><span class="p">,</span>
+    <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">faceted</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="c1"># update the labels</span>
+<span class="n">g</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Day of Month&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Time of Day&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../_images/plots_53_0.png" src="../_images/plots_53_0.png" />
+<p>For now, we will avoid showing the yearly plot in a faceted manner while
+we work on finding a suitable dataset.</p>
+</section>
 </section>
 
 

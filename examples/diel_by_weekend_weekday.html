@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>PM2.5 by Direction &#8212; atmospy 0.1.0 documentation</title>
+    <title>Diel Trends by Weekend vs Weekday &#8212; atmospy 0.1.0 documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -42,11 +42,11 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script src="../_static/design-tabs.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/pollution_rose';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/diel_by_weekend_weekday';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Compare Two Sensors" href="regression.html" />
-    <link rel="prev" title="Diel Ozone Trends" href="dielplot.html" />
+    <link rel="next" title="Diel Ozone Trends" href="dielplot.html" />
+    <link rel="prev" title="Hourly Averaged Ozone" href="calendar_by_hour.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -263,8 +263,8 @@
    Hourly Averaged Ozone
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="diel_by_weekend_weekday.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Diel Trends by Weekend vs Weekday
   </a>
  </li>
@@ -273,8 +273,8 @@
    Diel Ozone Trends
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="pollution_rose.html">
    PM2.5 by Direction
   </a>
  </li>
@@ -333,22 +333,44 @@
           
           <article class="bd-article" role="main">
             
-  <section id="pm2-5-by-direction">
-<span id="pollution-rose"></span><h1>PM2.5 by Direction<a class="headerlink" href="#pm2-5-by-direction" title="Permalink to this heading">#</a></h1>
-<img alt="../_images/pollution_rose.png" src="../_images/pollution_rose.png" />
-<p><strong>atmospy components used:</strong> <a class="reference internal" href="../generated/atmospy.set_theme.html#atmospy.set_theme" title="atmospy.set_theme"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_theme()</span></code></a>, <a class="reference internal" href="../generated/atmospy.load_dataset.html#atmospy.load_dataset" title="atmospy.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset()</span></code></a>, <a class="reference internal" href="../generated/atmospy.pollutionroseplot.html#atmospy.pollutionroseplot" title="atmospy.pollutionroseplot"><code class="xref py py-func docutils literal notranslate"><span class="pre">pollutionroseplot()</span></code></a></p>
+  <section id="diel-trends-by-weekend-vs-weekday">
+<span id="diel-by-weekend-weekday"></span><h1>Diel Trends by Weekend vs Weekday<a class="headerlink" href="#diel-trends-by-weekend-vs-weekday" title="Permalink to this heading">#</a></h1>
+<img alt="../_images/diel_by_weekend_weekday.png" src="../_images/diel_by_weekend_weekday.png" />
+<p><strong>atmospy components used:</strong> <a class="reference internal" href="../generated/atmospy.set_theme.html#atmospy.set_theme" title="atmospy.set_theme"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_theme()</span></code></a>, <a class="reference internal" href="../generated/atmospy.load_dataset.html#atmospy.load_dataset" title="atmospy.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset()</span></code></a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">atmospy</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
 <span class="n">atmospy</span><span class="o">.</span><span class="n">set_theme</span><span class="p">()</span>
 
-<span class="c1"># Load the example dataset</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;air-sensors-met&quot;</span><span class="p">)</span>
+<span class="c1"># load the data</span>
+<span class="n">bc</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;us-bc&quot;</span><span class="p">)</span>
 
-<span class="c1"># Plot a pollution rose example for PM2.5</span>
-<span class="n">atmospy</span><span class="o">.</span><span class="n">pollutionroseplot</span><span class="p">(</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">wd</span><span class="o">=</span><span class="s2">&quot;wd&quot;</span><span class="p">,</span> <span class="n">ws</span><span class="o">=</span><span class="s2">&quot;ws&quot;</span><span class="p">,</span> <span class="n">pollutant</span><span class="o">=</span><span class="s2">&quot;pm25&quot;</span><span class="p">,</span>
-    <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;$µgm^{-3}$&quot;</span><span class="p">,</span> <span class="n">segments</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">calm</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-    <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+<span class="c1"># select just one random location for now</span>
+<span class="n">bc_multi_site</span> <span class="o">=</span> <span class="n">bc</span><span class="p">[</span><span class="n">bc</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">bc</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])]</span>
+
+<span class="c1"># create a column that sets a bool if the date is a weekend</span>
+<span class="n">bc_multi_site</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;Is Weekend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bc_multi_site</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day_name</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Saturday&quot;</span><span class="p">,</span> <span class="s2">&quot;Sunday&quot;</span><span class="p">])</span>
+
+<span class="c1"># convert to long-form for faceting</span>
+<span class="n">bc_long_form</span> <span class="o">=</span> <span class="n">bc_multi_site</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span>
+    <span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="s2">&quot;Is Weekend&quot;</span><span class="p">,</span> <span class="s2">&quot;Local Site Name&quot;</span><span class="p">],</span> 
+    <span class="n">value_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">]</span>
 <span class="p">)</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span>
+    <span class="n">bc_long_form</span><span class="p">,</span>
+    <span class="n">row</span><span class="o">=</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">,</span>
+    <span class="n">col</span><span class="o">=</span><span class="s2">&quot;Is Weekend&quot;</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">,</span>
+    <span class="n">aspect</span><span class="o">=</span><span class="mf">1.25</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">g</span><span class="o">.</span><span class="n">map_dataframe</span><span class="p">(</span><span class="n">atmospy</span><span class="o">.</span><span class="n">dielplot</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
+
+<span class="c1"># update the y-axis limit to force to zero</span>
+<span class="n">g</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Black Carbon&#39;</span><span class="p">)</span>
+
+<span class="c1"># update the titles to take up less space</span>
+<span class="n">g</span><span class="o">.</span><span class="n">set_titles</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{row_name}</span><span class="s2"> | Weekend = </span><span class="si">{col_name}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
