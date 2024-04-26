@@ -9,7 +9,7 @@ Atmospy is a library for making useful, professional figures for atmospheric che
 quality professionals. It is built on top of `matplotlib <https://matplotlib.org/>`_, 
 `pandas <https://pandas.pydata.org/>`_, and `seaborn <https://seaborn.pydata.org>`_. Below, 
 we will walk through examples of how to use atmospy and how you can extend it with 
-seaborn and matplotlib.
+`seaborn <https://seaborn.pydata.org>`_ and `matplotlib <https://matplotlib.org/>`_.
 
 .. code:: ipython3
 
@@ -36,7 +36,7 @@ parameters on the figure itself:
     df = atmospy.load_dataset("air-sensors-pm")
     
     # plot the Reference measurement vs Sensor A using defaults
-    atmospy.regplot(df, x="Reference", y="Sensor A");
+    atmospy.regplot(df, x="Reference", y="Sensor A")
 
 
 
@@ -59,7 +59,7 @@ you can turn that functionality off by setting ``fit_reg=False``:
 
 .. code:: ipython3
 
-    atmospy.regplot(df, x="Reference", y="Sensor A", fit_reg=False);
+    atmospy.regplot(df, x="Reference", y="Sensor A", fit_reg=False)
 
 
 
@@ -74,7 +74,7 @@ on the marginal axes, you can:
 .. code:: ipython3
 
     atmospy.regplot(df, x="Reference", y="Sensor A", 
-                    marginal_kws={"bins": 25, "fill": False});
+                    marginal_kws={"bins": 25, "fill": False})
 
 
 
@@ -87,7 +87,7 @@ customizing as you’d like:
 .. code:: ipython3
 
     g = atmospy.regplot(df, x="Reference", y="Sensor A")
-    g.plot_marginals(sns.rugplot, color='r', height=-0.15, clip_on=False);
+    g.plot_marginals(sns.rugplot, color='r', height=-0.15, clip_on=False)
 
 
 
@@ -99,7 +99,7 @@ as well:
 
 .. code:: ipython3
 
-    atmospy.regplot(df, x="Reference", y="Sensor A", color='g', marker="^", alpha=.15);
+    atmospy.regplot(df, x="Reference", y="Sensor A", color='g', marker="^", alpha=.15)
 
 
 
@@ -138,7 +138,7 @@ Visualizing hourly data can make it easy to identify trends.
         x="Timestamp Local", 
         y="Sample Measurement", 
         freq="hour",
-    );
+    )
 
 
 
@@ -165,7 +165,7 @@ values, and chage to a different color palette:
         cmap="flare",
         vmin=0, vmax=80,
         title="Ozone in [Month]"
-    );
+    )
 
 
 
@@ -188,7 +188,7 @@ also change that up to plot by another aggregate, such as the ``max``:
         vmin=0, vmax=80,
         title="Peak Ozone in [Month]",
         agg="max"
-    );
+    )
 
 
 
@@ -215,7 +215,7 @@ default, we plot the daily average for the pollutant of choice:
         cbar=False,
         height=2.5,
         linewidths=.1
-    );
+    )
 
 
 .. parsed-literal::
@@ -252,7 +252,7 @@ adapt the same figures to plot data completeness by simply switching the
         vmin=0, vmax=1,
         title="Ozone Data Completeness in [Month]",
         agg="count"
-    );
+    )
 
 
 
@@ -298,7 +298,7 @@ arguments:
         plot_kws={
             "lw": 4,
         }
-    );
+    )
 
 
 
@@ -320,9 +320,12 @@ specific pollutant. In atmospy, you can use the
     # load an example dataset with MET info
     met = atmospy.load_dataset("air-sensors-met")
     
-    atmospy.pollutionroseplot(data=met, ws="ws", wd="wd", pollutant="pm25");
-
-
+    atmospy.pollutionroseplot(data=met,
+        ws="ws",
+        wd="wd",
+        pollutant="pm25"
+        calm=0.0,
+    )
 
 .. image:: plots_files/plots_30_0.png
 
@@ -355,11 +358,10 @@ that:
         ws="ws", wd="wd", pollutant="pm25",
         bins=[0, 8, 15, 25, 35, 50, 100],
         segments=32,
+        calm=0.0,
         suffix="$µgm^{-3}$",
         title="$PM_{2.5}$ by Direction at an Unknown Location"
-    );
-
-
+    )
 
 .. image:: plots_files/plots_32_0.png
 
@@ -367,11 +369,12 @@ that:
 The above figure has quite a bit more resolution along both the theta
 and radii as we modified the ``bins`` and ``segments`` parameters. You
 can define ``bins`` to be any array-like structure so long as they’re
-numeric and the function will always add ``inf`` at the end if you
-didn’t include it so that there is always a catch-all bin for values
-higher than the max specified. You can manually define this list to be
-whatever resolution or chunkiness you’d like, or, you can create an
-evenly-spaced array using numpy: ``np.linspace(0, 100, 10)``.
+numeric. ``pollutionroseplot`` will always add ``inf`` (infinity) at
+the end if you didn’t include it so that there is always a catch-all
+bin for values higher than the max specified. You can manually define
+this list to be whatever resolution or chunkiness you’d like, or, you
+can create an evenly-spaced array using `NumPy <https://numpy.org/>`_:
+``np.linspace(0, 100, 10)``.
 
 The ``segments`` parameter is a bit different - you define an integer
 number of segments to divide the 360 degrees into and the code will
@@ -653,7 +656,7 @@ nice figure:
         bbox_to_anchor=(.535, 0.2), 
         handlelength=1, 
         handleheight=1
-    );
+    )
 
 
 
@@ -779,7 +782,7 @@ created:
         # let's adjust the aspect ratio for funsies
         aspect=1.25
     )
-    g.map_dataframe(atmospy.dielplot, x="Timestamp Local", y="value");
+    g.map_dataframe(atmospy.dielplot, x="Timestamp Local", y="value")
 
 
 
@@ -906,7 +909,7 @@ Let’s set up the ``FacetGrid`` and plot the diel trend by location:
     g.map_dataframe(atmospy.dielplot, x="Timestamp Local", y="value")
     
     # update the y-axis limit to force to zero
-    g.set(ylim=(0, None));
+    g.set(ylim=(0, None))
 
 
 
@@ -934,7 +937,7 @@ locations together:
     g.set(ylim=(0, None), ylabel='Black Carbon')
     
     # update the titles to take up less space
-    g.set_titles("{row_name} | Weekend = {col_name}");
+    g.set_titles("{row_name} | Weekend = {col_name}")
 
 
 
@@ -980,7 +983,7 @@ hourly-averaged data. Let’s take ozone as an example:
     )
     
     # update the labels
-    g.set(xlabel="Day of Month", ylabel="Time of Day");
+    g.set(xlabel="Day of Month", ylabel="Time of Day")
 
 
 
