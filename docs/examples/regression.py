@@ -1,6 +1,6 @@
 """
-Regression Plot
-===============
+Compare Two Sensors
+===================
 
 _thumb: .4, .4
 """

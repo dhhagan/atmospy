@@ -5,8 +5,8 @@
 .. _calendar_by_hour:
 
 
-Ozone by Year
-=============
+Hourly Averaged Ozone
+=====================
 
 
 

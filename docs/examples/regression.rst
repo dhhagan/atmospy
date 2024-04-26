@@ -5,8 +5,8 @@
 .. _regression:
 
 
-Regression Plot
-===============
+Compare Two Sensors
+===================
 
 
 

@@ -28,8 +28,13 @@ atmospy: air quality data visualization
 
    .. grid-item::
       
-      .. image:: example_thumbs/calendar_by_day_thumb.png
-         :target: ./examples/calendar_by_day.html
+      .. image:: example_thumbs/diel_by_weekend_weekday_thumb.png
+         :target: ./examples/diel_by_weekend_weekday.html
+
+   .. grid-item::
+      
+      .. image:: example_thumbs/rose_by_month_thumb.png
+         :target: ./examples/rose_by_month.html
 
 
 

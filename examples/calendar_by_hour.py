@@ -1,6 +1,6 @@
 """
-Ozone by Year
-=============
+Hourly Averaged Ozone
+=====================
 
 _thumb: .8, .8
 """

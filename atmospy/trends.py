@@ -309,8 +309,8 @@ def calendarplot(data, x, y, freq="day", agg="mean", vmin=None, vmax=None, cmap=
     return ax
 
 
-def dielplot(data, x, y, ax=None, ylim=None, xlabel=None, 
-             ylabel=None, title=None, plot_kws=None, **kwargs):
+def dielplot(data=None, *, x=None, y=None, ax=None, ylim=None, xlabel=None, 
+             ylabel=None, title=None, color=None, show_iqr=True, plot_kws=None, **kwargs):
     """Plot the diel (e.g., diurnal) trend for a pollutant.
     
     Diel plots can be incredibly useful for understanding daily 
@@ -334,6 +334,10 @@ def dielplot(data, x, y, ax=None, ylim=None, xlabel=None,
         The label for the y-axis, by default None
     title : str, optional
         The title for the plot, by default None
+    color : str, optional
+        Specify the color to use in the figure
+    shoq_iqr : bool, optional
+        If True, plot the interquartile range as a shaded region, default True
     plot_kws : dict or None, optional
         Additional keyword arguments are passed directly to the underlying plot call
         , by default None
@@ -349,7 +353,7 @@ def dielplot(data, x, y, ax=None, ylim=None, xlabel=None,
     Plot a simple heatmap for the entire year.
 
     >>> df = atmospy.load_dataset("us-bc")
-    >>> atmospy.dielplot(df, x="Timestamp GMT", y="Sample Measurement")
+    >>> atmospy.dielplot(data=df, x="Timestamp GMT", y="Sample Measurement")
     
     """
     default_plot_kws = {
@@ -362,6 +366,8 @@ def dielplot(data, x, y, ax=None, ylim=None, xlabel=None,
     
     # 
     plot_kws = {} if plot_kws is None else dict(default_plot_kws, **plot_kws)
+    if color is not None:
+        plot_kws.update(dict(c=color))
     
     # copy over only the needed data
     _data = data[[x, y]].copy(deep=True)
@@ -375,23 +381,27 @@ def dielplot(data, x, y, ax=None, ylim=None, xlabel=None,
     # compute the diel statistics
     stats = _data.groupby([_data.index.hour, _data.index.minute], as_index=False).describe()
     
+    # append the first record so the first and last records are identical
+    stats.loc[len(stats.index)] = stats.loc[0]
+    
     # build an index we can use to make the figure
     index = stats.index.values
-    freq = int(60 / (index.size / 24))
+    freq = int(60 / ((index.size - 1) / 24))
     figure_index = pd.date_range(start='2020-01-01', periods=index.size, freq=f"{freq}min")
     
     # plot the diel average
     ax.plot(figure_index, stats[y]['mean'], **plot_kws)
     
     # add the IQR as a shaded region
-    ax.fill_between(
-        figure_index,
-        y1=stats[y]['25%'],
-        y2=stats[y]['75%'],
-        alpha=0.25,
-        lw=2,
-        color=plt.gca().lines[-1].get_color()
-    )
+    if show_iqr:
+        ax.fill_between(
+            figure_index,
+            y1=stats[y]['25%'],
+            y2=stats[y]['75%'],
+            alpha=0.25,
+            lw=2,
+            color=plt.gca().lines[-1].get_color()
+        )
     
     # adjust plot parameters
     xticks = ax.get_xticks()
