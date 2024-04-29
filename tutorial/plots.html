@@ -431,7 +431,7 @@
 quality professionals. It is built on top of <a class="reference external" href="https://matplotlib.org/">matplotlib</a>,
 <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, and <a class="reference external" href="https://seaborn.pydata.org">seaborn</a>. Below,
 we will walk through examples of how to use atmospy and how you can extend it with
-seaborn and matplotlib.</p>
+<a class="reference external" href="https://seaborn.pydata.org">seaborn</a> and <a class="reference external" href="https://matplotlib.org/">matplotlib</a>.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">atmospy</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -475,21 +475,22 @@ you can turn that functionality off by setting <code class="docutils literal not
 you can send along most configuration options as keyword arguments to
 <code class="docutils literal notranslate"><span class="pre">atmospy.regplot</span></code>. For example, if you wanted to change what is shown
 on the marginal axes, you can:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Reference&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sensor A&quot;</span><span class="p">,</span>
-                <span class="n">marginal_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;bins&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span> <span class="s2">&quot;fill&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">});</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Reference&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sensor A&quot;</span><span class="p">,</span> <span class="n">marginal_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;bins&quot;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span> <span class="s2">&quot;fill&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+<span class="p">);</span>
 </pre></div>
 </div>
 <img alt="../_images/plots_7_0.png" src="../_images/plots_7_0.png" />
 <p>A <code class="docutils literal notranslate"><span class="pre">JointGrid</span></code> object is returned, which allows you to continue
 customizing as you’d like:</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Reference&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sensor A&quot;</span><span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">plot_marginals</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">rugplot</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span>
+<span class="n">g</span><span class="o">.</span><span class="n">plot_marginals</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">rugplot</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=-</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">clip_on</span><span class="o">=</span><span class="kc">False</span><span class="p">);</span>
 </pre></div>
 </div>
 <img alt="../_images/plots_9_0.png" src="../_images/plots_9_0.png" />
 <p>You can easily edit the marker choice, color of marker, or anything else
 as well:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Reference&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sensor A&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;^&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">.15</span><span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Reference&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sensor A&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;^&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">);</span>
 </pre></div>
 </div>
 <img alt="../_images/plots_11_0.png" src="../_images/plots_11_0.png" />
@@ -538,8 +539,9 @@ values, and chage to a different color palette:</p>
     <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Day of Month&quot;</span><span class="p">,</span>
     <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
     <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;flare&quot;</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Ozone in [Month]&quot;</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Ozone in [Month]&quot;</span><span class="p">,</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -554,9 +556,10 @@ also change that up to plot by another aggregate, such as the <code class="docut
     <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Day of Month&quot;</span><span class="p">,</span>
     <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
     <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;flare&quot;</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
     <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Peak Ozone in [Month]&quot;</span><span class="p">,</span>
-    <span class="n">agg</span><span class="o">=</span><span class="s2">&quot;max&quot;</span>
+    <span class="n">agg</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -576,7 +579,7 @@ default, we plot the daily average for the pollutant of choice:</p>
     <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;day&quot;</span><span class="p">,</span>
     <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">height</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span>
-    <span class="n">linewidths</span><span class="o">=</span><span class="mf">.1</span>
+    <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -602,9 +605,10 @@ adapt the same figures to plot data completeness by simply switching the
     <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Day of Month&quot;</span><span class="p">,</span>
     <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
     <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;flare&quot;</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Ozone Data Completeness in [Month]&quot;</span><span class="p">,</span>
-    <span class="n">agg</span><span class="o">=</span><span class="s2">&quot;count&quot;</span>
+    <span class="n">agg</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -617,11 +621,7 @@ trends with pollutants that are driven by daytime chemistry such as
 ozone or are associated with traffic patterns such as carbon monoxide,
 nitrogen oxides, and other combustion tracers. We can easily visualize
 the diel trend using the <code class="docutils literal notranslate"><span class="pre">atmospy.dielplot</span></code> function:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">dielplot</span><span class="p">(</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">single_site</span><span class="p">,</span>
-    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span>
-    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span>
-<span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">dielplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">single_site</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="../_images/plots_26_0.png" src="../_images/plots_26_0.png" />
@@ -638,7 +638,7 @@ arguments:</p>
     <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;$O_3\;[ppb]$&quot;</span><span class="p">,</span>
     <span class="n">plot_kws</span><span class="o">=</span><span class="p">{</span>
         <span class="s2">&quot;lw&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-    <span class="p">}</span>
+    <span class="p">},</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -656,7 +656,13 @@ specific pollutant. In atmospy, you can use the
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># load an example dataset with MET info</span>
 <span class="n">met</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;air-sensors-met&quot;</span><span class="p">)</span>
 
-<span class="n">atmospy</span><span class="o">.</span><span class="n">pollutionroseplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">met</span><span class="p">,</span> <span class="n">ws</span><span class="o">=</span><span class="s2">&quot;ws&quot;</span><span class="p">,</span> <span class="n">wd</span><span class="o">=</span><span class="s2">&quot;wd&quot;</span><span class="p">,</span> <span class="n">pollutant</span><span class="o">=</span><span class="s2">&quot;pm25&quot;</span><span class="p">);</span>
+<span class="n">atmospy</span><span class="o">.</span><span class="n">pollutionroseplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">met</span><span class="p">,</span>
+    <span class="n">ws</span><span class="o">=</span><span class="s2">&quot;ws&quot;</span><span class="p">,</span>
+    <span class="n">wd</span><span class="o">=</span><span class="s2">&quot;wd&quot;</span><span class="p">,</span>
+    <span class="n">pollutant</span><span class="o">=</span><span class="s2">&quot;pm25&quot;</span><span class="p">,</span>
+    <span class="n">calm</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+<span class="p">);</span>
 </pre></div>
 </div>
 <img alt="../_images/plots_30_0.png" src="../_images/plots_30_0.png" />
@@ -680,11 +686,14 @@ it’s hard to see a pollution differential, so let’s go ahead and modify
 that:</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atmospy</span><span class="o">.</span><span class="n">pollutionroseplot</span><span class="p">(</span>
     <span class="n">data</span><span class="o">=</span><span class="n">met</span><span class="p">,</span>
-    <span class="n">ws</span><span class="o">=</span><span class="s2">&quot;ws&quot;</span><span class="p">,</span> <span class="n">wd</span><span class="o">=</span><span class="s2">&quot;wd&quot;</span><span class="p">,</span> <span class="n">pollutant</span><span class="o">=</span><span class="s2">&quot;pm25&quot;</span><span class="p">,</span>
+    <span class="n">ws</span><span class="o">=</span><span class="s2">&quot;ws&quot;</span><span class="p">,</span>
+    <span class="n">wd</span><span class="o">=</span><span class="s2">&quot;wd&quot;</span><span class="p">,</span>
+    <span class="n">pollutant</span><span class="o">=</span><span class="s2">&quot;pm25&quot;</span><span class="p">,</span>
     <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
     <span class="n">segments</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">calm</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
     <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;$µgm^{-3}$&quot;</span><span class="p">,</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;$PM_</span><span class="si">{2.5}</span><span class="s2">$ by Direction at an Unknown Location&quot;</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;$PM_</span><span class="si">{2.5}</span><span class="s2">$ by Direction at an Unknown Location&quot;</span><span class="p">,</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -692,11 +701,11 @@ that:</p>
 <p>The above figure has quite a bit more resolution along both the theta
 and radii as we modified the <code class="docutils literal notranslate"><span class="pre">bins</span></code> and <code class="docutils literal notranslate"><span class="pre">segments</span></code> parameters. You
 can define <code class="docutils literal notranslate"><span class="pre">bins</span></code> to be any array-like structure so long as they’re
-numeric and the function will always add <code class="docutils literal notranslate"><span class="pre">inf</span></code> at the end if you
-didn’t include it so that there is always a catch-all bin for values
-higher than the max specified. You can manually define this list to be
-whatever resolution or chunkiness you’d like, or, you can create an
-evenly-spaced array using numpy: <code class="docutils literal notranslate"><span class="pre">np.linspace(0,</span> <span class="pre">100,</span> <span class="pre">10)</span></code>.</p>
+numeric. <code class="docutils literal notranslate"><span class="pre">pollutionroseplot</span></code> will always add <code class="docutils literal notranslate"><span class="pre">inf</span></code> (infinity) at the
+end if you didn’t include it so that there is always a catch-all bin for
+values higher than the max specified. You can manually define this list
+to be whatever resolution or chunkiness you’d like, or, you can create
+an evenly-spaced array using NumPy: <code class="docutils literal notranslate"><span class="pre">np.linspace(0,</span> <span class="pre">100,</span> <span class="pre">10)</span></code>.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">segments</span></code> parameter is a bit different - you define an integer
 number of segments to divide the 360 degrees into and the code will
 automatically handle it.</p>
@@ -839,7 +848,9 @@ explanation
 <a class="reference external" href="https://seaborn.pydata.org/tutorial/data_structure.html#long-form-vs-wide-form-data">here</a>.</p>
 <p>We can easily convert our dataframe to long-form by using the Pandas
 <code class="docutils literal notranslate"><span class="pre">melt</span></code> function:</p>
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">met_long_form</span> <span class="o">=</span> <span class="n">met</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;timestamp_local&quot;</span><span class="p">,</span> <span class="s2">&quot;Month&quot;</span><span class="p">,</span> <span class="s2">&quot;ws&quot;</span><span class="p">,</span> <span class="s2">&quot;wd&quot;</span><span class="p">],</span> <span class="n">value_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pm25&quot;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">met_long_form</span> <span class="o">=</span> <span class="n">met</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span>
+    <span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;timestamp_local&quot;</span><span class="p">,</span> <span class="s2">&quot;Month&quot;</span><span class="p">,</span> <span class="s2">&quot;ws&quot;</span><span class="p">,</span> <span class="s2">&quot;wd&quot;</span><span class="p">],</span> <span class="n">value_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pm25&quot;</span><span class="p">]</span>
+<span class="p">)</span>
 
 <span class="c1"># print the first 5 records</span>
 <span class="n">met_long_form</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -928,24 +939,23 @@ nice figure:</p>
     <span class="n">col</span><span class="o">=</span><span class="s2">&quot;Month&quot;</span><span class="p">,</span>
     <span class="n">col_wrap</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
     <span class="n">subplot_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;projection&quot;</span><span class="p">:</span> <span class="s2">&quot;polar&quot;</span><span class="p">},</span>
-    <span class="n">despine</span><span class="o">=</span><span class="kc">False</span>
+    <span class="n">despine</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># map the dataframe using the pollutionroseplot function</span>
 <span class="n">g</span><span class="o">.</span><span class="n">map_dataframe</span><span class="p">(</span>
     <span class="n">atmospy</span><span class="o">.</span><span class="n">pollutionroseplot</span><span class="p">,</span>
-    <span class="n">ws</span><span class="o">=</span><span class="s2">&quot;ws&quot;</span><span class="p">,</span> <span class="n">wd</span><span class="o">=</span><span class="s2">&quot;wd&quot;</span><span class="p">,</span> <span class="n">pollutant</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span>
+    <span class="n">ws</span><span class="o">=</span><span class="s2">&quot;ws&quot;</span><span class="p">,</span>
+    <span class="n">wd</span><span class="o">=</span><span class="s2">&quot;wd&quot;</span><span class="p">,</span>
+    <span class="n">pollutant</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span>
     <span class="n">faceted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">segments</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-    <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;$µgm^{-3}$&quot;</span>
+    <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;$µgm^{-3}$&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># add the legend and place it where it looks nice</span>
 <span class="n">g</span><span class="o">.</span><span class="n">add_legend</span><span class="p">(</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;$PM_</span><span class="si">{2.5}</span><span class="s2">$&quot;</span><span class="p">,</span>
-    <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">.535</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span>
-    <span class="n">handlelength</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">handleheight</span><span class="o">=</span><span class="mi">1</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;$PM_</span><span class="si">{2.5}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.535</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span> <span class="n">handlelength</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">handleheight</span><span class="o">=</span><span class="mi">1</span>
 <span class="p">);</span>
 </pre></div>
 </div>
@@ -969,12 +979,13 @@ provide the information we want to facet by:</p>
 <span class="n">bc_single_site</span> <span class="o">=</span> <span class="n">bc</span><span class="p">[</span><span class="n">bc</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">bc</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]]</span>
 
 <span class="c1"># create a column that sets a bool if the date is a weekend</span>
-<span class="n">bc_single_site</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;Is Weekend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bc_single_site</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day_name</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Saturday&quot;</span><span class="p">,</span> <span class="s2">&quot;Sunday&quot;</span><span class="p">])</span>
+<span class="n">bc_single_site</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;Is Weekend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">bc_single_site</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day_name</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Saturday&quot;</span><span class="p">,</span> <span class="s2">&quot;Sunday&quot;</span><span class="p">])</span>
+<span class="p">)</span>
 
 <span class="c1"># convert to long-form for faceting</span>
 <span class="n">bc_long_form</span> <span class="o">=</span> <span class="n">bc_single_site</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span>
-    <span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="s2">&quot;Is Weekend&quot;</span><span class="p">],</span>
-    <span class="n">value_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">]</span>
+    <span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="s2">&quot;Is Weekend&quot;</span><span class="p">],</span> <span class="n">value_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">]</span>
 <span class="p">)</span>
 
 <span class="c1"># print the first 5 records</span>
@@ -1049,9 +1060,8 @@ created:</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span>
     <span class="n">data</span><span class="o">=</span><span class="n">bc_long_form</span><span class="p">,</span>
     <span class="n">col</span><span class="o">=</span><span class="s2">&quot;Is Weekend&quot;</span><span class="p">,</span>
-
     <span class="c1"># let&#39;s adjust the aspect ratio for funsies</span>
-    <span class="n">aspect</span><span class="o">=</span><span class="mf">1.25</span>
+    <span class="n">aspect</span><span class="o">=</span><span class="mf">1.25</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">g</span><span class="o">.</span><span class="n">map_dataframe</span><span class="p">(</span><span class="n">atmospy</span><span class="o">.</span><span class="n">dielplot</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">);</span>
 </pre></div>
@@ -1071,12 +1081,14 @@ than by weekday/weekend:</p>
 <span class="n">bc_multi_site</span> <span class="o">=</span> <span class="n">bc</span><span class="p">[</span><span class="n">bc</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">bc</span><span class="p">[</span><span class="s2">&quot;Local Site Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])]</span>
 
 <span class="c1"># create a column that sets a bool if the date is a weekend</span>
-<span class="n">bc_multi_site</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;Is Weekend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bc_multi_site</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day_name</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Saturday&quot;</span><span class="p">,</span> <span class="s2">&quot;Sunday&quot;</span><span class="p">])</span>
+<span class="n">bc_multi_site</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;Is Weekend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">bc_multi_site</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day_name</span><span class="p">()</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;Saturday&quot;</span><span class="p">,</span> <span class="s2">&quot;Sunday&quot;</span><span class="p">])</span>
+<span class="p">)</span>
 
 <span class="c1"># convert to long-form for faceting</span>
 <span class="n">bc_long_form</span> <span class="o">=</span> <span class="n">bc_multi_site</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span>
     <span class="n">id_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="s2">&quot;Is Weekend&quot;</span><span class="p">,</span> <span class="s2">&quot;Local Site Name&quot;</span><span class="p">],</span>
-    <span class="n">value_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">]</span>
+    <span class="n">value_vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">],</span>
 <span class="p">)</span>
 
 <span class="c1"># print the first 5 records</span>
@@ -1181,7 +1193,7 @@ locations together:</p>
 <span class="n">g</span><span class="o">.</span><span class="n">map_dataframe</span><span class="p">(</span><span class="n">atmospy</span><span class="o">.</span><span class="n">dielplot</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">)</span>
 
 <span class="c1"># update the y-axis limit to force to zero</span>
-<span class="n">g</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Black Carbon&#39;</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Black Carbon&quot;</span><span class="p">)</span>
 
 <span class="c1"># update the titles to take up less space</span>
 <span class="n">g</span><span class="o">.</span><span class="n">set_titles</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{row_name}</span><span class="s2"> | Weekend = </span><span class="si">{col_name}</span><span class="s2">&quot;</span><span class="p">);</span>
@@ -1207,20 +1219,19 @@ hourly-averaged data. Let’s take ozone as an example:</p>
 <span class="n">single_site</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s2">&quot;Month&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">single_site</span><span class="p">[</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month_name</span><span class="p">()</span>
 
 <span class="c1"># set up the facetgrid</span>
-<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">single_site</span><span class="p">,</span>
-    <span class="n">col</span><span class="o">=</span><span class="s2">&quot;Month&quot;</span><span class="p">,</span>
-    <span class="n">col_wrap</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-    <span class="n">height</span><span class="o">=</span><span class="mi">4</span>
-<span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">single_site</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;Month&quot;</span><span class="p">,</span> <span class="n">col_wrap</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
 <span class="c1"># map the dataframe to the grid</span>
 <span class="n">g</span><span class="o">.</span><span class="n">map_dataframe</span><span class="p">(</span>
     <span class="n">atmospy</span><span class="o">.</span><span class="n">calendarplot</span><span class="p">,</span>
-    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">,</span>
-    <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;hour&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;YlGn&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ppb&#39;</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Timestamp Local&quot;</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sample Measurement&quot;</span><span class="p">,</span>
+    <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;hour&quot;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;YlGn&quot;</span><span class="p">,</span>
+    <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ppb&quot;</span><span class="p">,</span>
     <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-    <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">faceted</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">faceted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># update the labels</span>

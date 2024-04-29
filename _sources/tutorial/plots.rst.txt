@@ -9,7 +9,7 @@ Atmospy is a library for making useful, professional figures for atmospheric che
 quality professionals. It is built on top of `matplotlib <https://matplotlib.org/>`_, 
 `pandas <https://pandas.pydata.org/>`_, and `seaborn <https://seaborn.pydata.org>`_. Below, 
 we will walk through examples of how to use atmospy and how you can extend it with 
-seaborn and matplotlib.
+`seaborn <https://seaborn.pydata.org>`_ and `matplotlib <https://matplotlib.org/>`_.
 
 .. code:: ipython3
 
@@ -73,8 +73,9 @@ on the marginal axes, you can:
 
 .. code:: ipython3
 
-    atmospy.regplot(df, x="Reference", y="Sensor A", 
-                    marginal_kws={"bins": 25, "fill": False});
+    atmospy.regplot(
+        df, x="Reference", y="Sensor A", marginal_kws={"bins": 25, "fill": False}
+    );
 
 
 
@@ -87,7 +88,7 @@ customizing as you’d like:
 .. code:: ipython3
 
     g = atmospy.regplot(df, x="Reference", y="Sensor A")
-    g.plot_marginals(sns.rugplot, color='r', height=-0.15, clip_on=False);
+    g.plot_marginals(sns.rugplot, color="r", height=-0.15, clip_on=False);
 
 
 
@@ -99,7 +100,7 @@ as well:
 
 .. code:: ipython3
 
-    atmospy.regplot(df, x="Reference", y="Sensor A", color='g', marker="^", alpha=.15);
+    atmospy.regplot(df, x="Reference", y="Sensor A", color="g", marker="^", alpha=0.15);
 
 
 
@@ -134,9 +135,9 @@ Visualizing hourly data can make it easy to identify trends.
 .. code:: ipython3
 
     atmospy.calendarplot(
-        data=single_site, 
-        x="Timestamp Local", 
-        y="Sample Measurement", 
+        data=single_site,
+        x="Timestamp Local",
+        y="Sample Measurement",
         freq="hour",
     );
 
@@ -156,15 +157,16 @@ values, and chage to a different color palette:
 .. code:: ipython3
 
     atmospy.calendarplot(
-        data=single_site, 
-        x="Timestamp Local", 
-        y="Sample Measurement", 
+        data=single_site,
+        x="Timestamp Local",
+        y="Sample Measurement",
         freq="hour",
         xlabel="Day of Month",
         height=4,
         cmap="flare",
-        vmin=0, vmax=80,
-        title="Ozone in [Month]"
+        vmin=0,
+        vmax=80,
+        title="Ozone in [Month]",
     );
 
 
@@ -178,16 +180,17 @@ also change that up to plot by another aggregate, such as the ``max``:
 .. code:: ipython3
 
     atmospy.calendarplot(
-        data=single_site, 
-        x="Timestamp Local", 
-        y="Sample Measurement", 
+        data=single_site,
+        x="Timestamp Local",
+        y="Sample Measurement",
         freq="hour",
         xlabel="Day of Month",
         height=4,
         cmap="flare",
-        vmin=0, vmax=80,
+        vmin=0,
+        vmax=80,
         title="Peak Ozone in [Month]",
-        agg="max"
+        agg="max",
     );
 
 
@@ -208,13 +211,13 @@ default, we plot the daily average for the pollutant of choice:
 .. code:: ipython3
 
     atmospy.calendarplot(
-        data=single_site, 
-        x="Timestamp Local", 
-        y="Sample Measurement", 
+        data=single_site,
+        x="Timestamp Local",
+        y="Sample Measurement",
         freq="day",
         cbar=False,
         height=2.5,
-        linewidths=.1
+        linewidths=0.1,
     );
 
 
@@ -242,16 +245,17 @@ adapt the same figures to plot data completeness by simply switching the
 .. code:: ipython3
 
     atmospy.calendarplot(
-        data=single_site, 
-        x="Timestamp Local", 
-        y="Sample Measurement", 
+        data=single_site,
+        x="Timestamp Local",
+        y="Sample Measurement",
         freq="hour",
         xlabel="Day of Month",
         height=4,
         cmap="flare",
-        vmin=0, vmax=1,
+        vmin=0,
+        vmax=1,
         title="Ozone Data Completeness in [Month]",
-        agg="count"
+        agg="count",
     );
 
 
@@ -270,11 +274,7 @@ the diel trend using the ``atmospy.dielplot`` function:
 
 .. code:: ipython3
 
-    atmospy.dielplot(
-        data=single_site,
-        x="Timestamp Local",
-        y="Sample Measurement"
-    )
+    atmospy.dielplot(data=single_site, x="Timestamp Local", y="Sample Measurement")
 
 
 
@@ -297,7 +297,7 @@ arguments:
         ylabel="$O_3\;[ppb]$",
         plot_kws={
             "lw": 4,
-        }
+        },
     );
 
 
@@ -320,7 +320,13 @@ specific pollutant. In atmospy, you can use the
     # load an example dataset with MET info
     met = atmospy.load_dataset("air-sensors-met")
     
-    atmospy.pollutionroseplot(data=met, ws="ws", wd="wd", pollutant="pm25");
+    atmospy.pollutionroseplot(
+        data=met,
+        ws="ws",
+        wd="wd",
+        pollutant="pm25",
+        calm=0.0,
+    );
 
 
 
@@ -352,11 +358,14 @@ that:
 
     atmospy.pollutionroseplot(
         data=met,
-        ws="ws", wd="wd", pollutant="pm25",
+        ws="ws",
+        wd="wd",
+        pollutant="pm25",
         bins=[0, 8, 15, 25, 35, 50, 100],
         segments=32,
+        calm=0.0,
         suffix="$µgm^{-3}$",
-        title="$PM_{2.5}$ by Direction at an Unknown Location"
+        title="$PM_{2.5}$ by Direction at an Unknown Location",
     );
 
 
@@ -367,11 +376,11 @@ that:
 The above figure has quite a bit more resolution along both the theta
 and radii as we modified the ``bins`` and ``segments`` parameters. You
 can define ``bins`` to be any array-like structure so long as they’re
-numeric and the function will always add ``inf`` at the end if you
-didn’t include it so that there is always a catch-all bin for values
-higher than the max specified. You can manually define this list to be
-whatever resolution or chunkiness you’d like, or, you can create an
-evenly-spaced array using numpy: ``np.linspace(0, 100, 10)``.
+numeric. ``pollutionroseplot`` will always add ``inf`` (infinity) at the
+end if you didn’t include it so that there is always a catch-all bin for
+values higher than the max specified. You can manually define this list
+to be whatever resolution or chunkiness you’d like, or, you can create
+an evenly-spaced array using NumPy: ``np.linspace(0, 100, 10)``.
 
 The ``segments`` parameter is a bit different - you define an integer
 number of segments to divide the 360 degrees into and the code will
@@ -535,7 +544,9 @@ We can easily convert our dataframe to long-form by using the Pandas
 
 .. code:: ipython3
 
-    met_long_form = met.melt(id_vars=["timestamp_local", "Month", "ws", "wd"], value_vars=["pm25"])
+    met_long_form = met.melt(
+        id_vars=["timestamp_local", "Month", "ws", "wd"], value_vars=["pm25"]
+    )
     
     # print the first 5 records
     met_long_form.head()
@@ -631,28 +642,27 @@ nice figure:
 
     # set up the FacetGrid
     g = sns.FacetGrid(
-        data=met_long_form, 
-        col="Month", 
+        data=met_long_form,
+        col="Month",
         col_wrap=3,
         subplot_kws={"projection": "polar"},
-        despine=False
+        despine=False,
     )
     
     # map the dataframe using the pollutionroseplot function
     g.map_dataframe(
-        atmospy.pollutionroseplot, 
-        ws="ws", wd="wd", pollutant="value", 
-        faceted=True, 
-        segments=20, 
-        suffix="$µgm^{-3}$"
+        atmospy.pollutionroseplot,
+        ws="ws",
+        wd="wd",
+        pollutant="value",
+        faceted=True,
+        segments=20,
+        suffix="$µgm^{-3}$",
     )
     
     # add the legend and place it where it looks nice
     g.add_legend(
-        title="$PM_{2.5}$", 
-        bbox_to_anchor=(.535, 0.2), 
-        handlelength=1, 
-        handleheight=1
+        title="$PM_{2.5}$", bbox_to_anchor=(0.535, 0.2), handlelength=1, handleheight=1
     );
 
 
@@ -684,12 +694,13 @@ provide the information we want to facet by:
     bc_single_site = bc[bc["Local Site Name"] == bc["Local Site Name"].unique()[0]]
     
     # create a column that sets a bool if the date is a weekend
-    bc_single_site.loc[:, "Is Weekend"] = bc_single_site["Timestamp Local"].dt.day_name().isin(["Saturday", "Sunday"])
+    bc_single_site.loc[:, "Is Weekend"] = (
+        bc_single_site["Timestamp Local"].dt.day_name().isin(["Saturday", "Sunday"])
+    )
     
     # convert to long-form for faceting
     bc_long_form = bc_single_site.melt(
-        id_vars=["Timestamp Local", "Is Weekend"], 
-        value_vars=["Sample Measurement"]
+        id_vars=["Timestamp Local", "Is Weekend"], value_vars=["Sample Measurement"]
     )
     
     # print the first 5 records
@@ -775,9 +786,8 @@ created:
     g = sns.FacetGrid(
         data=bc_long_form,
         col="Is Weekend",
-        
         # let's adjust the aspect ratio for funsies
-        aspect=1.25
+        aspect=1.25,
     )
     g.map_dataframe(atmospy.dielplot, x="Timestamp Local", y="value");
 
@@ -804,12 +814,14 @@ than by weekday/weekend:
     bc_multi_site = bc[bc["Local Site Name"].isin(bc["Local Site Name"].unique()[0:2])]
     
     # create a column that sets a bool if the date is a weekend
-    bc_multi_site.loc[:, "Is Weekend"] = bc_multi_site["Timestamp Local"].dt.day_name().isin(["Saturday", "Sunday"])
+    bc_multi_site.loc[:, "Is Weekend"] = (
+        bc_multi_site["Timestamp Local"].dt.day_name().isin(["Saturday", "Sunday"])
+    )
     
     # convert to long-form for faceting
     bc_long_form = bc_multi_site.melt(
-        id_vars=["Timestamp Local", "Is Weekend", "Local Site Name"], 
-        value_vars=["Sample Measurement"]
+        id_vars=["Timestamp Local", "Is Weekend", "Local Site Name"],
+        value_vars=["Sample Measurement"],
     )
     
     # print the first 5 records
@@ -931,7 +943,7 @@ locations together:
     g.map_dataframe(atmospy.dielplot, x="Timestamp Local", y="value")
     
     # update the y-axis limit to force to zero
-    g.set(ylim=(0, None), ylabel='Black Carbon')
+    g.set(ylim=(0, None), ylabel="Black Carbon")
     
     # update the titles to take up less space
     g.set_titles("{row_name} | Weekend = {col_name}");
@@ -963,20 +975,19 @@ hourly-averaged data. Let’s take ozone as an example:
     single_site.loc[:, "Month"] = single_site["Timestamp Local"].dt.month_name()
     
     # set up the facetgrid
-    g = sns.FacetGrid(
-        data=single_site,
-        col="Month",
-        col_wrap=3,
-        height=4
-    )
+    g = sns.FacetGrid(data=single_site, col="Month", col_wrap=3, height=4)
     
     # map the dataframe to the grid
     g.map_dataframe(
         atmospy.calendarplot,
-        x="Timestamp Local", y="Sample Measurement",
-        freq="hour", cmap="YlGn", units='ppb',
+        x="Timestamp Local",
+        y="Sample Measurement",
+        freq="hour",
+        cmap="YlGn",
+        units="ppb",
         linewidths=0.1,
-        cbar=False, faceted=True
+        cbar=False,
+        faceted=True,
     )
     
     # update the labels
