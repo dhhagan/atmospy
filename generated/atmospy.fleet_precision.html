@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>atmospy.regplot &#8212; atmospy 0.1.1 documentation</title>
+    <title>atmospy.fleet_precision &#8212; atmospy 0.1.1 documentation</title>
   <script>
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
@@ -42,11 +42,11 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script src="../_static/design-tabs.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/atmospy.regplot';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/atmospy.fleet_precision';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="atmospy.calendarplot" href="atmospy.calendarplot.html" />
-    <link rel="prev" title="atmospy.air_sensor_stats" href="atmospy.air_sensor_stats.html" />
+    <link rel="next" title="atmospy.air_sensor_stats" href="atmospy.air_sensor_stats.html" />
+    <link rel="prev" title="atmospy.get_dataset_names" href="atmospy.get_dataset_names.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -271,9 +271,9 @@
   </a>
  </li>
 </ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="atmospy.fleet_precision.html">
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    atmospy.fleet_precision
   </a>
  </li>
@@ -283,9 +283,9 @@
   </a>
  </li>
 </ul>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="atmospy.regplot.html">
    atmospy.regplot
   </a>
  </li>
@@ -337,10 +337,10 @@
 <nav id="bd-toc-nav" class="page-toc">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#atmospy.regplot">
+  <a class="reference internal nav-link" href="#atmospy.fleet_precision">
    <code class="docutils literal notranslate">
     <span class="pre">
-     regplot()
+     fleet_precision()
     </span>
    </code>
   </a>
@@ -374,62 +374,31 @@
           
           <article class="bd-article" role="main">
             
-  <section id="atmospy-regplot">
-<h1>atmospy.regplot<a class="headerlink" href="#atmospy-regplot" title="Permalink to this heading">#</a></h1>
+  <section id="atmospy-fleet-precision">
+<h1>atmospy.fleet_precision<a class="headerlink" href="#atmospy-fleet-precision" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="atmospy.regplot">
-<span class="sig-prename descclassname"><span class="pre">atmospy.</span></span><span class="sig-name descname"><span class="pre">regplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_reg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'o'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#atmospy.regplot" title="Permalink to this definition">#</a></dt>
-<dd><p>Plot data and a best-fit line (OLS) between two variables.</p>
-<p>This figure is intended to convey the relationship between two variables. Often,
-this may be an air sensor and a reference sensor. It can also be two different 
-variables where you are trying to understand the relationship. This function 
-is a straight pass-through to Seaborn’s <code class="docutils literal notranslate"><span class="pre">jointplot</span></code> with a few additions such 
-as a unity line and explicitly listing the fit parameters of a linear model 
-(Ordinary Least Squares).</p>
-<p>Since it is directly passed through to Seaborn’s <code class="docutils literal notranslate"><span class="pre">jointplot</span></code>, it is incredibly 
-customizable and powerful. Please see the Seaborn docs for more details.</p>
-<dl class="field-list">
+<dt class="sig sig-object py" id="atmospy.fleet_precision">
+<span class="sig-prename descclassname"><span class="pre">atmospy.</span></span><span class="sig-name descname"><span class="pre">fleet_precision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#atmospy.fleet_precision" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the precision across a fleet of at least three (3) devices.</p>
+<p>The math used here comes from the <a class="reference external" href="https://www.epa.gov/air-sensor-toolbox/air-sensor-performance-targets-and-testing-protocols">EPA’s Air Sensor Performance Targets 
+and Testing Protocols guidelines</a>.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl>
-<dt><strong>data</strong><span class="classifier"><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.2.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a></span></dt><dd><p>Tabular data as a pandas DataFrame. This should be a wide-form dataset 
-where the x and y keys are columns in the DataFrame.</p>
-</dd>
-<dt><strong>x</strong><span class="classifier">key in <code class="docutils literal notranslate"><span class="pre">data</span></code></span></dt><dd><p>Variable that corresponds to the data plotted on the x axis.</p>
-</dd>
-<dt><strong>y</strong><span class="classifier">key in <code class="docutils literal notranslate"><span class="pre">data</span></code>.</span></dt><dd><p>Variable that corresponds to the data plotted on the y axis.</p>
-</dd>
-<dt><strong>fit_reg</strong><span class="classifier">bool, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code>, a linear regression model will be fit to the data 
-and fit parameters listed in the legend, by default True</p>
-</dd>
-<dt><strong>color</strong><span class="classifier">str, optional</span></dt><dd><p>A single color to map to the data; if None, the next 
-color in the color cycle will be used, by default None</p>
-</dd>
-<dt><strong>marker</strong><span class="classifier">str, optional</span></dt><dd><p>A single marker style to use to plot the data, by default “o”</p>
-</dd>
-<dt><strong>ylim</strong><span class="classifier">tuple of floats, optional</span></dt><dd><p>Set the limits of the figure on both axes using the 
-ylim (the plot is forced to be squared); if left as None, 
-defaults will be determined from the underlying data, by default None</p>
-</dd>
-<dt><strong>kwargs</strong><span class="classifier">dict or None, optional</span></dt><dd><p>Additional keyword arguments are passed directly to the underlying 
-<code class="xref py py-class docutils literal notranslate"><span class="pre">seaborn.jointplot</span></code> call.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">pd.DataFrame</span></dt><dd><p>A dataframe containing a wide-form dataframe as a time series where the 
+index is a timestamp. Each column should represent the same pollutant 
+or other measure for a unique device, whether it is an air sensor 
+or other instrument.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><a class="reference external" href="https://seaborn.pydata.org/generated/seaborn.JointGrid.html#seaborn.JointGrid" title="(in seaborn v0.13.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">seaborn.JointGrid</span></code></a></dt><dd><p>An object with multiple subplots including the 
-joint (primary) and marginal (top and right) axes.</p>
+<dt><strong>stdev, cv</strong><span class="classifier">tuple(float, float)</span></dt><dd><p>Returns the standard deviation and coeficient of variation.</p>
 </dd>
 </dl>
 </dd>
 </dl>
-<p class="rubric">Examples</p>
-<p>Using defaults, plot the relationship between a reference particle monitor 
-and an air sensor:</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">atmospy</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;air-sensors-pm&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">atmospy</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;Reference&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Sensor A&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </section>
