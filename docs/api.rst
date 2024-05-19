@@ -26,6 +26,17 @@ Utility Functions
     load_dataset
     get_dataset_names
 
+
+Statistical Functions
+---------------------
+
+.. autosummary::
+    :toctree: generated/
+    :nosignatures:
+
+    fleet_precision
+    air_sensor_stats
+
 .. _function_api:
 
 Plotting Functions

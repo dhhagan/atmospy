@@ -11,6 +11,7 @@ from .rcmod import *
 from .relational import *
 from .trends import *
 from .rose import *
+from .stats import *
 
 # Capture the original matplotlib rcParams
 import matplotlib as mpl
