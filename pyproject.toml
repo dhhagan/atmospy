@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "atmospy"
-version = "0.1.1"
+version = "0.1.2"
 description = "Data analysis and visualization for air quality data."
 authors = ["David H Hagan <david.hagan@quant-aq.com>"]
 license = "Apache-2.0"
