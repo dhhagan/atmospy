@@ -5,7 +5,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        # 3.13 is intentionally absent: the >=3.9 floor forces the lock onto
+        # scipy 1.13.1 / numpy 2.0.2 (last releases supporting 3.9), neither of
+        # which ships a cp313 wheel, so Poetry tries to build scipy from source
+        # and fails on missing OpenBLAS. Metadata still permits 3.13 for pip
+        # users. Raising the floor to 3.11 would let CI cover it again.
+        python: ["3.9", "3.10", "3.11", "3.12"]
     name: Python ${{ matrix.python }} tests
     steps:
       - name: Checkout branch
