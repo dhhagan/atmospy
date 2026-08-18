@@ -138,12 +138,12 @@ def pollutionroseplot(data=None, *, ws=None, wd=None, pollutant=None,
                 labels=(wd_segments[:-1]+wd_segments[1:])/2.
             )
         )
-        .groupby(["_cp", "_wb"])
+        .groupby(["_cp", "_wb"], observed=False)
         .size()
         .unstack(level="_cp")
         .fillna(0.)
         .sort_index(axis=1)
-        .applymap(lambda x: 100 * x / data.shape[0])
+        .mul(100. / data.shape[0])
     )
     
     # compute the bar dims

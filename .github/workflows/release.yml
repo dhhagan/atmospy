@@ -14,11 +14,12 @@ jobs:
             - name: Setup python 
               uses: actions/setup-python@master
               with:
-                python-version: 3.8
+                python-version: "3.11"
             
             - name: Install poetry
               uses: snok/install-poetry@v1
               with:
+                version: 1.8.5
                 virtualenvs-create: true
             
             - name: Install dependencies

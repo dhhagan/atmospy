@@ -15,5 +15,4 @@ atmospy.regplot(
     df, x="Reference", y="Sensor A",
     ylim=(0, 60),
     color="g",
-    # title="Performance of Sensor A vs US EPA FEM Reference"
 )

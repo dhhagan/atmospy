@@ -12,9 +12,9 @@ def prep_diel_dataset(rs='1min'):
     
     # Adjust the timezone
     single_site_ozone.loc[:, 'Timestamp Local'] = single_site_ozone['Timestamp GMT'].apply(lambda x: x + pd.Timedelta(hours=-7))
-    
+
     # Resample to {rs}min
-    single_site_ozone = single_site_ozone.set_index("Timestamp Local").resample(rs).interpolate('linear').reset_index()
+    single_site_ozone = single_site_ozone.set_index("Timestamp Local").resample(rs).ffill().reset_index()
     
     # Adjust to ppb
     single_site_ozone['Sample Measurement'] *= 1e3

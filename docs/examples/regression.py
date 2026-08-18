@@ -17,3 +17,8 @@ atmospy.regplot(
     color="g",
     # title="Performance of Sensor A vs US EPA FEM Reference"
 )
+
+# print out the stats
+df = df.dropna(how='any', subset=["Reference", "Sensor A"])
+stats = atmospy.air_sensor_stats(actual=df["Reference"], predicted=df["Sensor A"])
+print (stats.asdict())

@@ -108,7 +108,7 @@ def air_sensor_stats(actual: np.ndarray, predicted: np.ndarray):
         raise ValueError("You cannot have NaN's present in your `predicted` array.")
     
     # fit the data to a linear model
-    fit = linregress(predicted, actual)
+    fit = linregress(actual, predicted)
     
     return SensorStatsResults(
         fit.slope,
