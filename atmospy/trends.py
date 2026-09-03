@@ -388,7 +388,7 @@ def dielplot(data=None, *, x=None, y=None, ax=None, ylim=None, xlabel=None,
         ax = plt.gca()
         
     # compute the diel statistics
-    stats = _data.groupby([_data.index.hour, _data.index.minute], as_index=False).describe()
+    stats = _data.groupby([_data.index.hour, _data.index.minute]).describe().reset_index(drop=True)
     
     # append the first record so the first and last records are identical
     stats.loc[len(stats.index)] = stats.loc[0]
