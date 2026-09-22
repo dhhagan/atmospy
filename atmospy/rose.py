@@ -8,9 +8,6 @@ from .utils import (
     check_for_numeric_cols,
 )
 
-# Turn off chained assignment warnings
-pd.options.mode.chained_assignment = None
-
 __all__ = ["pollutionroseplot"]
 
 def pollutionroseplot(data=None, *, ws=None, wd=None, pollutant=None, 
@@ -124,7 +121,7 @@ def pollutionroseplot(data=None, *, ws=None, wd=None, pollutant=None,
         data[data[ws] > calm]
         .assign(
             _cp=lambda x: pd.cut(
-                data[pollutant], 
+                x[pollutant],
                 bins=bins, 
                 right=True,
                 labels=_cat_pollutant_labels(bins, suffix)
@@ -132,7 +129,7 @@ def pollutionroseplot(data=None, *, ws=None, wd=None, pollutant=None,
         )
         .assign(
             _wb=lambda x: pd.cut(
-                data[wd],
+                x[wd],
                 bins=wd_segments,
                 right=True,
                 labels=(wd_segments[:-1]+wd_segments[1:])/2.

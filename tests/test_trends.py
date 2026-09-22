@@ -8,7 +8,7 @@ from atmospy import load_dataset
 def prep_diel_dataset(rs='1min'):
     df = load_dataset("us-ozone")
     
-    single_site_ozone = df[df['Local Site Name'] == df['Local Site Name'].unique()[0]]
+    single_site_ozone = df[df['Local Site Name'] == df['Local Site Name'].unique()[0]].copy()
     
     # Adjust the timezone
     single_site_ozone.loc[:, 'Timestamp Local'] = single_site_ozone['Timestamp GMT'].apply(lambda x: x + pd.Timedelta(hours=-7))

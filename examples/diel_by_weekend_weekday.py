@@ -12,7 +12,7 @@ atmospy.set_theme()
 bc = atmospy.load_dataset("us-bc")
 
 # select just one random location for now
-bc_multi_site = bc[bc["Local Site Name"].isin(bc["Local Site Name"].unique()[0:2])]
+bc_multi_site = bc[bc["Local Site Name"].isin(bc["Local Site Name"].unique()[0:2])].copy()
 
 # create a column that sets a bool if the date is a weekend
 bc_multi_site.loc[:, "Is Weekend"] = bc_multi_site["Timestamp Local"].dt.day_name().isin(["Saturday", "Sunday"])
