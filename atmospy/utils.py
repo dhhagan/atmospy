@@ -137,7 +137,7 @@ def load_dataset(name, cache=True, data_home=None, **kwargs):
     return df
 
 def remove_na(vec):
-    return
+    raise NotImplementedError("remove_na is not implemented yet.")
 
 def check_for_timestamp_col(data, col):
     """Make sure the column is a proper timestamp according to Pandas.

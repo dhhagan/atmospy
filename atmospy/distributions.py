@@ -1,9 +1,4 @@
-from .utils import (
-    remove_na,
-)
-from seaborn import (
-    FacetGrid,
-)
+"""Particle size distribution figures (not yet implemented)."""
 
 __all__ = ["psdplot", ]
 
@@ -15,21 +10,16 @@ def psdplot(
 ):
     """Plot a particle size distribution.
 
-    Parameters
-    ----------
-    data : _type_, optional
-        _description_, by default None
-    x : _type_, optional
-        _description_, by default None
-    y : _type_, optional
-        _description_, by default None
-    row : _type_, optional
-        _description_, by default None
-    col : _type_, optional
-        _description_, by default None
+    .. note::
+        This function is planned but not yet implemented.
     """
-    return
+    raise NotImplementedError("psdplot is not implemented yet.")
 
 
 def bananaplot():
-    return
+    """Plot a size-resolved time series (a "banana" plot).
+
+    .. note::
+        This function is planned but not yet implemented.
+    """
+    raise NotImplementedError("bananaplot is not implemented yet.")

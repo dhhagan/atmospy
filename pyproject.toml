@@ -69,3 +69,6 @@ only-include = ["atmospy", "tests", "examples"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "network: downloads the example datasets; skipped unless --run-network is given",
+]

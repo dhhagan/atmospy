@@ -73,4 +73,10 @@ Run the test suite with:
 $ uv run pytest
 ```
 
+By default this runs entirely offline on synthetic data. Tests that download the example datasets are skipped unless you opt in:
+
+```sh
+$ uv run pytest --run-network
+```
+
 Please submit bugs that you encounter to the [issue tracker](https://github.com/dhhagan/atmospy/issues) with a reproducible example that clearly demonstrates the problem.

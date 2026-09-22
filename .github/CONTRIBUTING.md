@@ -37,6 +37,8 @@ This creates `.venv`, installs atmospy in editable mode, and installs the test d
 uv run pytest
 ```
 
+The default run is fully offline and uses synthetic data from `tests/conftest.py`. Tests marked `network` download the example datasets and only run when you pass `--run-network`, which is what CI does.
+
 To build the documentation locally you also need the `docs` dependency group and [pandoc](https://pandoc.org):
 
 ```sh

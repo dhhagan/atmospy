@@ -1,82 +1,85 @@
 """Test the atmospy utility functions."""
-import tempfile
-from urllib.request import urlopen
-from http.client import HTTPException
-
-import pytest
 import pandas as pd
-from pandas.testing import (
-    assert_series_equal,
-    assert_frame_equal,
-)
+import pytest
+from pandas.testing import assert_frame_equal
+
 from atmospy.utils import (
+    check_for_numeric_cols,
+    check_for_timestamp_col,
+    get_data_home,
     get_dataset_names,
     load_dataset,
-    DATASET_NAMES_URL
+    remove_na,
 )
 
-def _network(t=None, url="https://github.com"):
-    """_summary_
 
-    Parameters
-    ----------
-    t : _type_, optional
-        _description_, by default None
-    url : str, optional
-        _description_, by default "https://github.com"
-    """
-    if t is None:
-        return lambda x: _network(x, url=url)
-    
-    def wrapper(*args, **kwargs):
-        try:
-            f = urlopen(url)
-        except (OSError, HTTPException):
-            pytest.skip("No internet connection.")
-        else:
-            f.close()
-            return t(*args, **kwargs)
-        
-    return wrapper
+def test_get_data_home_explicit_path(tmp_path):
+    target = tmp_path / "cache"
+
+    assert get_data_home(target) == str(target)
+    assert target.is_dir()
 
 
-def check_load_dataset(name):
-    dataset = load_dataset(name, cache=False)
-    assert isinstance(dataset, pd.DataFrame)
+def test_get_data_home_from_environment(tmp_path, monkeypatch):
+    target = tmp_path / "env-cache"
+    monkeypatch.setenv("ATMOSPY_DATA", str(target))
 
-def check_load_cached_dataset(name):
-    with tempfile.TemporaryDirectory() as tmpdir:
-        dataset = load_dataset(name, cache=True, data_home=tmpdir)
-        
-        cached_dataset = load_dataset(name, cache=True, data_home=tmpdir)
-        
-        assert_frame_equal(dataset, cached_dataset)
-        
-@_network(url=DATASET_NAMES_URL)
+    assert get_data_home() == str(target)
+    assert target.is_dir()
+
+
+def test_check_for_timestamp_col(hourly):
+    check_for_timestamp_col(hourly, "timestamp")
+
+    with pytest.raises(TypeError):
+        check_for_timestamp_col(hourly, "pm25")
+
+
+def test_check_for_numeric_cols(hourly):
+    check_for_numeric_cols(hourly, ["pm25", "ws", "wd"])
+
+    with pytest.raises(TypeError):
+        check_for_numeric_cols(hourly, ["pm25", "timestamp"])
+
+
+def test_load_dataset_rejects_non_string():
+    with pytest.raises(TypeError):
+        load_dataset(pd.DataFrame())
+
+
+def test_remove_na_not_implemented():
+    with pytest.raises(NotImplementedError):
+        remove_na([1.0, None])
+
+
+@pytest.mark.network
 def test_get_dataset_names():
     names = get_dataset_names()
+
     assert names
     assert "us-ozone" in names
-    
-@_network(url=DATASET_NAMES_URL)
+
+
+@pytest.mark.network
 def test_load_datasets():
     for name in get_dataset_names():
-        check_load_dataset(name)
-        
-@_network(url=DATASET_NAMES_URL)
-def test_load_cached_dataset_names():
+        df = load_dataset(name, cache=False)
+
+        assert isinstance(df, pd.DataFrame)
+        assert not df.empty
+
+
+@pytest.mark.network
+def test_load_cached_datasets(tmp_path):
     for name in get_dataset_names():
-        check_load_cached_dataset(name)
-        
-@_network(url=DATASET_NAMES_URL)
-def test_load_dataset_string_error():
-    name = "invalid_name"
+        df = load_dataset(name, cache=True, data_home=tmp_path)
+        cached = load_dataset(name, cache=True, data_home=tmp_path)
+
+        assert (tmp_path / f"{name}.csv").is_file()
+        assert_frame_equal(df, cached)
+
+
+@pytest.mark.network
+def test_load_dataset_rejects_unknown_name():
     with pytest.raises(ValueError):
-        load_dataset(name)
-        
-@_network(url=DATASET_NAMES_URL)
-def test_load_dataset_type_error():
-    name = pd.DataFrame()
-    
-    with pytest.raises(TypeError):
-        load_dataset(name)
+        load_dataset("invalid_name")

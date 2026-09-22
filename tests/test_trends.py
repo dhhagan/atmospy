@@ -1,31 +1,75 @@
 """Test the trend plots."""
-import pytest
-from atmospy import dielplot
-import pandas as pd
 import matplotlib as mpl
-from atmospy import load_dataset
+import numpy as np
+import pytest
 
-def prep_diel_dataset(rs='1min'):
-    df = load_dataset("us-ozone")
-    
-    single_site_ozone = df[df['Local Site Name'] == df['Local Site Name'].unique()[0]].copy()
-    
-    # Adjust the timezone
-    single_site_ozone.loc[:, 'Timestamp Local'] = single_site_ozone['Timestamp GMT'].apply(lambda x: x + pd.Timedelta(hours=-7))
+from atmospy import calendarplot, dielplot
 
-    # Resample to {rs}min
-    single_site_ozone = single_site_ozone.set_index("Timestamp Local").resample(rs).ffill().reset_index()
-    
-    # Adjust to ppb
-    single_site_ozone['Sample Measurement'] *= 1e3
-    
-    return single_site_ozone
 
-def test_dielplot_basics():
-    df = prep_diel_dataset('15min')
-    
+def test_dielplot_basics(hourly):
+    ax = dielplot(hourly, x="timestamp", y="pm25")
+
+    assert isinstance(ax, mpl.axes.Axes)
+
+    # 24 hourly points plus the wrapped-around first point
+    line = ax.lines[0]
+    assert line.get_xdata().size == 25
+
+    expected = hourly.groupby(hourly["timestamp"].dt.hour)["pm25"].mean().to_numpy()
+    np.testing.assert_allclose(line.get_ydata()[:24], expected)
+    assert line.get_ydata()[24] == line.get_ydata()[0]
+
+    # the IQR band is the only filled collection
+    assert len(ax.collections) == 1
+
+
+def test_dielplot_without_iqr(hourly):
+    ax = dielplot(hourly, x="timestamp", y="pm25", show_iqr=False)
+
+    assert len(ax.collections) == 0
+
+
+def test_dielplot_labels_and_limits(hourly):
     ax = dielplot(
-        df, x="Timestamp Local", y='Sample Measurement',
+        hourly, x="timestamp", y="pm25",
+        xlabel="Hour", ylabel="PM2.5", title="Diel", ylim=(0, 50),
     )
-    
-    assert isinstance(ax, mpl.axes._axes.Axes)
+
+    assert ax.get_xlabel() == "Hour"
+    assert ax.get_ylabel() == "PM2.5"
+    assert ax.get_title() == "Diel"
+    assert ax.get_ylim() == (0, 50)
+
+
+def test_dielplot_requires_timestamp_column(hourly):
+    with pytest.raises(TypeError):
+        dielplot(hourly, x="pm25", y="ws")
+
+
+def test_calendarplot_by_day(hourly):
+    ax = calendarplot(hourly, x="timestamp", y="pm25", freq="day", vmin=0, vmax=50)
+
+    assert isinstance(ax, mpl.axes.Axes)
+
+    mesh = ax.collections[0]
+    assert mesh.get_array().size == 7 * 52
+    assert mesh.get_clim() == (0, 50)
+
+
+def test_calendarplot_by_hour(hourly):
+    january = hourly[hourly["timestamp"].dt.month == 1]
+    ax = calendarplot(january, x="timestamp", y="pm25", freq="hour", title="Jan")
+
+    mesh = ax.collections[0]
+    assert mesh.get_array().size == 24 * 31
+    assert ax.get_title() == "Jan"
+
+
+def test_calendarplot_invalid_freq(hourly):
+    with pytest.raises(ValueError):
+        calendarplot(hourly, x="timestamp", y="pm25", freq="week")
+
+
+def test_calendarplot_requires_timestamp_column(hourly):
+    with pytest.raises(TypeError):
+        calendarplot(hourly, x="pm25", y="ws")
