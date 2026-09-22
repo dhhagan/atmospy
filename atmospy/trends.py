@@ -319,12 +319,15 @@ def calendarplot(data, x, y, freq="day", agg="mean", vmin=None, vmax=None, cmap=
     return ax
 
 
-def dielplot(data=None, *, x=None, y=None, ax=None, ylim=None, xlabel=None, 
+def dielplot(data=None, *, x=None, y=None, freq="1h", ax=None, ylim=None, xlabel=None,
              ylabel=None, title=None, color=None, show_iqr=True, plot_kws=None, **kwargs):
     """Plot the diel (e.g., diurnal) trend for a pollutant.
-    
-    Diel plots can be incredibly useful for understanding daily 
-    patterns of air pollutants.
+
+    Diel plots can be incredibly useful for understanding daily
+    patterns of air pollutants. Every observation is assigned to a
+    time-of-day bin of width `freq`, and the mean and interquartile
+    range across all days are plotted for each bin. Data need not be
+    evenly spaced; bins with no observations are left as gaps.
 
     Parameters
     ----------
@@ -334,6 +337,9 @@ def dielplot(data=None, *, x=None, y=None, ax=None, ylim=None, xlabel=None,
         Variable that corresponds to the timestamp in `data`.
     y : key in `data`
         Variable that corresponds to the pollutant of interest.
+    freq : str or pandas offset, optional
+        The width of each time-of-day bin. Must divide evenly into
+        24 hours (e.g., "1h", "30min", "15min"), by default "1h"
     ax : :class:`matplotlib.axes._axes.Axes`, optional
         An axis to plot on; if not defined, one will be created, by default None
     ylim : tuple of floats, optional
@@ -346,91 +352,117 @@ def dielplot(data=None, *, x=None, y=None, ax=None, ylim=None, xlabel=None,
         The title for the plot, by default None
     color : str, optional
         Specify the color to use in the figure
-    shoq_iqr : bool, optional
+    show_iqr : bool, optional
         If True, plot the interquartile range as a shaded region, default True
     plot_kws : dict or None, optional
-        Additional keyword arguments are passed directly to the underlying plot call
-        , by default None
-        
+        Additional keyword arguments are passed directly to the underlying
+        plot call, by default None
+
     Returns
     -------
     :class:`matplotlib.axes._axes.Axes`
 
-        
+
     Examples
     --------
-    
-    Plot a simple heatmap for the entire year.
 
-    >>> df = atmospy.load_dataset("us-bc")
-    >>> atmospy.dielplot(data=df, x="Timestamp GMT", y="Sample Measurement")
-    
+    Plot the diel trend of ozone at hourly resolution.
+
+    >>> df = atmospy.load_dataset("us-ozone")
+    >>> atmospy.dielplot(data=df, x="Timestamp Local", y="Sample Measurement")
+
+    Use finer bins if your data supports it.
+
+    >>> atmospy.dielplot(data=df, x="Timestamp Local", y="Sample Measurement", freq="15min")
+
     """
     default_plot_kws = {
         "lw": 3,
     }
-    
+
     # complete some initial data quality checks
     check_for_timestamp_col(data, x)
     check_for_numeric_cols(data, [y])
-    
-    # 
-    plot_kws = {} if plot_kws is None else dict(default_plot_kws, **plot_kws)
+
+    # validate the bin width: it must be a fixed duration that divides a day evenly
+    try:
+        step = pd.Timedelta(pd.tseries.frequencies.to_offset(freq))
+    except (ValueError, TypeError):
+        raise ValueError(
+            f"`freq` must be a fixed duration such as '1h' or '15min'; got {freq!r}."
+        ) from None
+
+    day = pd.Timedelta(hours=24)
+    if not pd.Timedelta(0) < step < day or day % step != pd.Timedelta(0):
+        raise ValueError(
+            f"`freq` must be shorter than 24 hours and divide evenly into it; got {freq!r}."
+        )
+
+    # merge the user's plot kwargs over the defaults
+    plot_kws = dict(default_plot_kws, **(plot_kws or {}))
     if color is not None:
-        plot_kws.update(dict(c=color))
-    
-    # copy over only the needed data
-    _data = data[[x, y]].copy(deep=True)
-    _data = _data.set_index(x)
-    
-    # 
+        plot_kws["c"] = color
+
     # figure setup
     if ax is None:
         ax = plt.gca()
-        
-    # compute the diel statistics
-    stats = _data.groupby([_data.index.hour, _data.index.minute], as_index=False).describe()
-    
-    # append the first record so the first and last records are identical
-    stats.loc[len(stats.index)] = stats.loc[0]
-    
-    # build an index we can use to make the figure
-    index = stats.index.values
-    freq = int(60 / ((index.size - 1) / 24))
-    figure_index = pd.date_range(start='2020-01-01', periods=index.size, freq=f"{freq}min")
-    
+
+    # assign each observation to a time-of-day bin
+    timestamps = data[x]
+    floored = timestamps.dt.floor(step)
+    time_of_day = floored - floored.dt.normalize()
+
+    _data = pd.DataFrame({"time_of_day": time_of_day.values, y: data[y].values})
+
+    # compute the diel statistics per bin
+    grouped = _data.groupby("time_of_day")[y]
+    stats = pd.DataFrame({
+        "mean": grouped.mean(),
+        "q25": grouped.quantile(0.25),
+        "q75": grouped.quantile(0.75),
+    })
+
+    # make sure every bin is present so gaps show as gaps, then wrap the
+    # first bin around to 24:00 so the first and last points are identical
+    bins = pd.timedelta_range(start=0, end=day, freq=step, closed="left")
+    stats = stats.reindex(bins)
+    stats.loc[day] = stats.iloc[0]
+
+    # build a datetime index on an arbitrary day so matplotlib can format the axis
+    origin = pd.Timestamp("2020-01-01")
+    figure_index = origin + stats.index
+
     # plot the diel average
-    ax.plot(figure_index, stats[y]['mean'], **plot_kws)
-    
+    ax.plot(figure_index, stats["mean"], **plot_kws)
+
     # add the IQR as a shaded region
     if show_iqr:
         ax.fill_between(
             figure_index,
-            y1=stats[y]['25%'],
-            y2=stats[y]['75%'],
+            y1=stats["q25"],
+            y2=stats["q75"],
             alpha=0.25,
             lw=2,
-            color=plt.gca().lines[-1].get_color()
+            color=ax.lines[-1].get_color()
         )
-    
+
     # adjust plot parameters
-    xticks = ax.get_xticks()
-    ax.set_xticks(np.linspace(xticks[0], xticks[-1], 5))
-    ax.set(xlim=(xticks[0], xticks[-1]))
+    ax.set_xlim(origin, origin + day)
+    ax.xaxis.set_major_locator(mpl.dates.HourLocator(byhour=[0, 6, 12, 18]))
     ax.xaxis.set_major_formatter(mpl.dates.DateFormatter("%I:%M\n%p"))
     ax.xaxis.set_minor_locator(mpl.dates.HourLocator(interval=1))
 
     # add optional labels
     if xlabel:
         ax.set_xlabel(xlabel)
-    
+
     if ylabel:
         ax.set_ylabel(ylabel)
-    
+
     if title:
         ax.set_title(title)
-        
+
     if ylim:
         ax.set_ylim(ylim)
-    
+
     return ax

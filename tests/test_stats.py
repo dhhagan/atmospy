@@ -26,7 +26,8 @@ def test_fleet_precision_known_value():
     stdev, cv = fleet_precision(df)
 
     assert stdev == pytest.approx(np.sqrt(4.0 / 5.0))
-    assert cv == pytest.approx(np.sqrt(4.0 / 5.0) / 2.5)
+    # EPA Eq. 4: CV is SD over the deployment-averaged concentration, in percent
+    assert cv == pytest.approx(100.0 * np.sqrt(4.0 / 5.0) / 2.5)
 
 
 def test_fleet_precision_drops_incomplete_records():
@@ -38,7 +39,7 @@ def test_fleet_precision_on_synthetic_fleet(sensors):
     stdev, cv = fleet_precision(sensors[["Sensor A", "Sensor B", "Sensor C"]])
 
     assert stdev > 0.0
-    assert 0.0 < cv < 1.0
+    assert 0.0 < cv < 100.0
 
 
 def test_air_sensor_stats_rejects_nan():
@@ -61,8 +62,22 @@ def test_air_sensor_stats_exact_linear_relationship():
     assert res.pearson_r2 == pytest.approx(1.0)
     assert res.mae == pytest.approx(np.mean(np.abs(predicted - actual)))
     assert res.rmse == pytest.approx(np.sqrt(np.mean((predicted - actual) ** 2)))
-    assert res.nrmse > 0.0
     assert res.nobs == 10
+
+
+def test_air_sensor_stats_nrmse_is_normalized_by_reference_mean():
+    # EPA Eq. 6: NRMSE = RMSE / mean(reference) * 100. With the sensor reading
+    # exactly double the reference, the two candidate denominators differ by 2x,
+    # so this pins the reference mean as the correct one.
+    actual = np.array([2.0, 4.0, 6.0, 8.0])
+    predicted = 2.0 * actual
+
+    res = air_sensor_stats(actual, predicted)
+
+    expected_rmse = np.sqrt(np.mean((predicted - actual) ** 2))
+    assert res.rmse == pytest.approx(expected_rmse)
+    assert res.nrmse == pytest.approx(100.0 * expected_rmse / actual.mean())
+    assert res.nrmse != pytest.approx(100.0 * expected_rmse / predicted.mean())
 
 
 def test_air_sensor_stats_asdict(sensors):
