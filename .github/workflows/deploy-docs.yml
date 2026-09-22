@@ -2,41 +2,35 @@ name: docs/gh-pages
 on: [workflow_dispatch]
 
 jobs:
-    build-docs:
-        name: Build the docs and push to github pages
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout branch
-              uses: actions/checkout@v2
+  build-docs:
+    name: Build the docs and push to github pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
 
-            - name: Setup Python
-              uses: actions/setup-python@master
-              with:
-                python-version: "3.11"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.11"
+          enable-cache: true
 
-            - name: Install poetry
-              uses: snok/install-poetry@v1
-              with:
-                virtualenvs-create: true
+      - name: Install dependencies
+        run: uv sync --locked --group docs
 
-            - name: Install dependencies
-              run: poetry install --no-interaction
+      - name: Install pandoc
+        run: sudo apt-get install -y pandoc
 
-            - name: Install pandoc
-              run: sudo apt-get install pandoc
-            
-            - name: build docs
-              run: |
-                source $(poetry env info --path)/bin/activate
-                cd docs
-                make clean
-                make notebooks html
-                cd ..
+      - name: Build docs
+        run: |
+          cd docs
+          uv run make clean
+          uv run make notebooks html
 
-            - name: deploy to gh-pages
-              uses: Cecilapp/GitHub-Pages-deploy@v3
-              env:
-                GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-              with:
-                email: david.hagan@quant-aq.com
-                build_dir: docs/_build/html
+      - name: Deploy to gh-pages
+        uses: Cecilapp/GitHub-Pages-deploy@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          email: david.hagan@quant-aq.com
+          build_dir: docs/_build/html

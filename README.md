@@ -18,7 +18,7 @@ Documentation for **atmospy** can be found [here](https://dhhagan.github.io/atmo
 
 ### Supported Python versions
 
-**atmospy** supports Python 3.8 through Python 3.11.
+**atmospy** supports Python 3.10 and newer.
 
 ### Mandatory dependencies
 
@@ -49,10 +49,28 @@ If you would like to install from a specific branch or release, you can do so di
 $ pip install git+https://github.com/dhhagan/atmospy.git@<tag-or-version>
 ```
 
-## Testing
-
 ## Development
 
 **atmospy** development takes place on GitHub: https://github.com/dhhagan/atmospy
+
+The project is managed with [uv](https://docs.astral.sh/uv/). To set up a development environment, clone the repository and run:
+
+```sh
+$ uv sync
+```
+
+This creates a virtual environment in `.venv` and installs **atmospy** in editable mode along with the test dependencies. To build the documentation locally, include the docs dependency group as well:
+
+```sh
+$ uv sync --group docs
+```
+
+### Testing
+
+Run the test suite with:
+
+```sh
+$ uv run pytest
+```
 
 Please submit bugs that you encounter to the [issue tracker](https://github.com/dhhagan/atmospy/issues) with a reproducible example that clearly demonstrates the problem.
