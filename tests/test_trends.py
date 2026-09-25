@@ -1,4 +1,6 @@
 """Test the trend plots."""
+import warnings
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -152,14 +154,123 @@ def test_dielplot_requires_timestamp_column(hourly):
         dielplot(hourly, x="pm25", y="ws")
 
 
+def _year_frame(year, value=1.0):
+    t = pd.date_range(f"{year}-01-01", f"{year}-12-31 23:00", freq="h")
+    return pd.DataFrame({"timestamp": t, "pm25": value})
+
+
 def test_calendarplot_by_day(hourly):
     ax = calendarplot(hourly, x="timestamp", y="pm25", freq="day", vmin=0, vmax=50)
 
     assert isinstance(ax, mpl.axes.Axes)
 
     mesh = ax.collections[0]
-    assert mesh.get_array().size == 7 * 52
+    # 2023 starts on a Sunday, so the grid needs 53 Monday-based week columns
+    assert mesh.get_array().size == 7 * 53
     assert mesh.get_clim() == (0, 50)
+
+
+@pytest.mark.parametrize("year, n_days", [(2020, 366), (2023, 365), (2024, 366), (2021, 365)])
+def test_calendarplot_by_day_keeps_every_day(year, n_days):
+    # 2020 ends in ISO week 53; 2023 starts on a Sunday that ISO assigns to 2022;
+    # 2024 starts on a Monday; 2021 starts on a Friday.
+    ax = calendarplot(_year_frame(year), x="timestamp", y="pm25", freq="day")
+
+    mesh = ax.collections[0]
+    assert np.ma.count(mesh.get_array()) == n_days
+
+
+def test_calendarplot_by_day_places_days_by_weekday():
+    # Jan 1 2023 is a Sunday: it must be alone in the first column, bottom row
+    ax = calendarplot(_year_frame(2023), x="timestamp", y="pm25", freq="day")
+
+    grid = np.ma.getmaskarray(ax.collections[0].get_array()).reshape(7, -1)
+    first_column_present = ~grid[:, 0]
+    assert first_column_present.tolist() == [True, False, False, False, False, False, False]
+    assert ax.get_ylabel() == "2023"
+
+
+def test_calendarplot_by_day_month_labels_align_with_months():
+    ax = calendarplot(_year_frame(2023), x="timestamp", y="pm25", freq="day")
+
+    labels = [t.get_text() for t in ax.get_xticklabels()]
+    assert labels == ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+    centers = ax.xaxis.get_majorticklocs()
+    assert np.all(np.diff(centers) > 0)
+    # The grid starts on Mon Dec 26 2022. Jan runs from Sun Jan 1 (day 6) to
+    # Feb 1 (day 37), so its label sits at the midpoint of those in week units.
+    assert centers[0] == pytest.approx((6 / 7 + 37 / 7) / 2)
+
+    boundaries = ax.xaxis.get_minorticklocs()
+    assert len(boundaries) == 13
+    assert boundaries[0] == pytest.approx(6 / 7)  # Sun Jan 1 is 6 days after Mon Dec 26
+
+
+@pytest.mark.parametrize("freq", ["day", "hour"])
+def test_calendarplot_single_period_emits_no_warnings(freq):
+    df = _year_frame(2023)
+    if freq == "hour":
+        df = df[df["timestamp"].dt.month == 3]
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        calendarplot(df, x="timestamp", y="pm25", freq=freq)
+
+
+def test_calendarplot_by_day_warns_on_multiple_years():
+    df = pd.concat([_year_frame(2022), _year_frame(2023), _year_frame(2024)])
+
+    with pytest.warns(UserWarning, match=r"plotting 2022 and ignoring 2023, 2024"):
+        ax = calendarplot(df, x="timestamp", y="pm25", freq="day")
+
+    assert ax.get_ylabel() == "2022"
+
+
+def test_calendarplot_by_hour_warns_on_multiple_months():
+    df = _year_frame(2023)
+    df = df[df["timestamp"].dt.month.isin([3, 4])]
+
+    with pytest.warns(UserWarning, match=r"plotting 2023-03 and ignoring 2023-04"):
+        ax = calendarplot(df, x="timestamp", y="pm25", freq="hour")
+
+    assert ax.collections[0].get_array().size == 24 * 31
+
+
+def test_calendarplot_by_hour_distinguishes_same_month_in_different_years():
+    df = pd.concat([_year_frame(2022), _year_frame(2023)])
+    df = df[df["timestamp"].dt.month == 1]
+
+    with pytest.warns(UserWarning, match=r"plotting 2022-01 and ignoring 2023-01"):
+        ax = calendarplot(df, x="timestamp", y="pm25", freq="hour")
+
+    assert np.ma.count(ax.collections[0].get_array()) == 24 * 31
+
+
+@pytest.mark.parametrize("freq", ["day", "hour"])
+def test_calendarplot_draws_on_given_axes(freq):
+    df = _year_frame(2023)
+    if freq == "hour":
+        df = df[df["timestamp"].dt.month == 3]
+
+    _, (ax1, ax2) = plt.subplots(2, 1)
+    plt.sca(ax2)
+
+    ax = calendarplot(df, x="timestamp", y="pm25", freq=freq, ax=ax1, cbar=False)
+
+    assert ax is ax1
+    assert len(ax1.collections) == 1
+    assert len(ax2.collections) == 0
+
+
+def test_calendarplot_by_day_tz_aware():
+    df = _year_frame(2023)
+    df["timestamp"] = df["timestamp"].dt.tz_localize("Etc/GMT+5")
+
+    ax = calendarplot(df, x="timestamp", y="pm25", freq="day")
+
+    assert np.ma.count(ax.collections[0].get_array()) == 365
 
 
 def test_calendarplot_by_hour(hourly):
@@ -169,6 +280,64 @@ def test_calendarplot_by_hour(hourly):
     mesh = ax.collections[0]
     assert mesh.get_array().size == 24 * 31
     assert ax.get_title() == "Jan"
+
+
+def _colorbar_axes(ax):
+    others = [a for a in ax.figure.axes if a is not ax]
+    assert len(others) == 1, "expected exactly one colorbar axes"
+    return others[0]
+
+
+@pytest.mark.parametrize("freq", ["day", "hour"])
+def test_calendarplot_colorbar_is_labeled_with_units(hourly, freq):
+    january = hourly[hourly["timestamp"].dt.month == 1]
+    ax = calendarplot(january, x="timestamp", y="pm25", freq=freq, units="ppb")
+
+    cb_ax = _colorbar_axes(ax)
+    assert cb_ax.get_ylabel() == "ppb"
+
+    # the locator may propose ticks beyond the colorbar's range that are never drawn
+    lo, hi = sorted(cb_ax.get_ylim())
+    ticks = cb_ax.get_yticks()
+    visible = ticks[(ticks >= lo) & (ticks <= hi)]
+    assert 2 <= len(visible) <= 5
+
+
+@pytest.mark.parametrize("freq", ["day", "hour"])
+def test_calendarplot_colorbar_without_units_has_no_label(hourly, freq):
+    january = hourly[hourly["timestamp"].dt.month == 1]
+    ax = calendarplot(january, x="timestamp", y="pm25", freq=freq)
+
+    assert _colorbar_axes(ax).get_ylabel() == ""
+
+
+def test_calendarplot_horizontal_colorbar_labels_x_axis(hourly):
+    ax = calendarplot(
+        hourly, x="timestamp", y="pm25", freq="day", units="ppb",
+        cbar_kws={"orientation": "horizontal"},
+    )
+
+    cb_ax = _colorbar_axes(ax)
+    assert cb_ax.get_xlabel() == "ppb"
+    assert cb_ax.get_ylabel() == ""
+
+
+@pytest.mark.parametrize("freq", ["day", "hour"])
+def test_calendarplot_does_not_mutate_cbar_kws(hourly, freq):
+    january = hourly[hourly["timestamp"].dt.month == 1]
+    kws = {"shrink": 0.5}
+
+    calendarplot(january, x="timestamp", y="pm25", freq=freq, cbar_kws=kws)
+
+    assert kws == {"shrink": 0.5}
+
+
+@pytest.mark.parametrize("freq", ["day", "hour"])
+def test_calendarplot_without_colorbar(hourly, freq):
+    january = hourly[hourly["timestamp"].dt.month == 1]
+    ax = calendarplot(january, x="timestamp", y="pm25", freq=freq, cbar=False)
+
+    assert ax.figure.axes == [ax]
 
 
 def test_calendarplot_invalid_freq(hourly):

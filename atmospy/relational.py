@@ -1,5 +1,7 @@
 """This file will contain regression figures."""
 
+import warnings
+
 import numpy as np
 import seaborn as sns
 from scipy.stats import linregress
@@ -10,8 +12,20 @@ __all__ = [
     "regplot",
 ]
 
+# keyword arguments that would break the square, single-series layout of a
+# regression plot, mapped to the reason they are rejected
+_REJECTED_KWARGS = {
+    "hue": "regplot draws a single series; facet with a seaborn FacetGrid to compare groups",
+    "hue_order": "regplot draws a single series; facet with a seaborn FacetGrid to compare groups",
+    "hue_norm": "regplot draws a single series; facet with a seaborn FacetGrid to compare groups",
+    "kind": "regplot always draws a scatter joint plot",
+    "dropna": "regplot always drops records with missing values",
+    "xlim": "both axes share the same range; use `lim` to set it",
+    "ylim": "both axes share the same range; use `lim` to set it",
+}
 
-def regplot(data, x, y, fit_reg=True, color=None, marker="o", ylim=None, **kwargs):
+
+def regplot(data, x, y, fit_reg=True, color=None, marker="o", lim=None, ylim=None, **kwargs):
     """Plot data and a best-fit line (OLS) between two variables.
 
     This figure is intended to convey the relationship between two variables. Often,
@@ -20,6 +34,9 @@ def regplot(data, x, y, fit_reg=True, color=None, marker="o", ylim=None, **kwarg
     is a straight pass-through to Seaborn's `jointplot` with a few additions such
     as a unity line and explicitly listing the fit parameters of a linear model
     (Ordinary Least Squares).
+
+    The plot is always square: both axes share the same range so that the
+    unity line sits at 45 degrees and slope is read directly off the figure.
 
     Since it is directly passed through to Seaborn's `jointplot`, it is incredibly
     customizable and powerful. Please see the Seaborn docs for more details.
@@ -41,13 +58,16 @@ def regplot(data, x, y, fit_reg=True, color=None, marker="o", ylim=None, **kwarg
         color in the color cycle will be used, by default None
     marker : str, optional
         A single marker style to use to plot the data, by default "o"
+    lim : tuple of floats, optional
+        The (min, max) range shared by both axes; if left as None,
+        it is determined from the combined range of `x` and `y`, by default None
     ylim : tuple of floats, optional
-        Set the limits of the figure on both axes using the
-        ylim (the plot is forced to be squared); if left as None,
-        defaults will be determined from the underlying data, by default None
+        Deprecated alias for `lim`; will be removed in a future release.
     kwargs : dict or None, optional
         Additional keyword arguments are passed directly to the underlying
-        :class:`seaborn.jointplot` call.
+        :class:`seaborn.jointplot` call. Arguments that would break the
+        square single-series layout (`hue`, `kind`, `xlim`, `ylim`, ...)
+        raise a `TypeError`.
 
     Returns
     -------
@@ -64,34 +84,46 @@ def regplot(data, x, y, fit_reg=True, color=None, marker="o", ylim=None, **kwarg
     >>> df = atmospy.load_dataset("air-sensors-pm")
     >>> atmospy.regplot(df, x="Reference", y="Sensor A")
 
+    Fix the range of both axes:
+
+    >>> atmospy.regplot(df, x="Reference", y="Sensor A", lim=(0, 50))
+
     """
     check_for_numeric_cols(data, [x, y])
+
+    # reject kwargs that would break the layout, naming the argument and the reason
+    for name, reason in _REJECTED_KWARGS.items():
+        if name in kwargs:
+            raise TypeError(f"regplot() got an unsupported keyword argument {name!r}: {reason}.")
+
+    # honor the deprecated alias for one release
+    if ylim is not None:
+        if lim is not None:
+            raise TypeError("regplot() got both `lim` and the deprecated `ylim`; pass only `lim`.")
+
+        warnings.warn(
+            "The `ylim` argument of regplot is deprecated and will be removed in a "
+            "future release; use `lim` instead.",
+            FutureWarning, stacklevel=2,
+        )
+        lim = ylim
 
     # drop NaNs and keep only needed columns
     _data = data[[x, y]].dropna(how="any")
 
     xdata, ydata = _data[x], _data[y]
 
-    # get the range for the plot
-    if ylim is None:
-        ymin = min([xdata.min(), ydata.min()])
-        ymax = max([xdata.max(), ydata.max()])
+    # get the shared range for both axes
+    if lim is None:
+        lo = min([xdata.min(), ydata.min()])
+        hi = max([xdata.max(), ydata.max()])
     else:
-        ymin = ylim[0]
-        ymax = ylim[1]
+        lo, hi = lim
 
-        if ymax <= ymin:
-            raise ValueError("`ymax` must be larger than `ymin`")
+        if hi <= lo:
+            raise ValueError("`lim` must be (min, max) with max larger than min.")
 
-    # update the kwargs
-    kwargs.update({"color": color, "marker": marker})
-
-    # remove certain kwargs that we don't want to allow to be passed to the jointplot
-    for each in ("hue", "kind", "dropna", "xlim", "ylim", "hue_order", "hue_norm"):
-        if each in kwargs:
-            kwargs.pop(each)
-
-    # set the color if one wasn't explicitly set
+    # resolve the color once so the points, marginals, and fit line always agree
     if color is None:
         color = "C0"
 
@@ -101,8 +133,10 @@ def regplot(data, x, y, fit_reg=True, color=None, marker="o", ylim=None, **kwarg
         x=x,
         y=y,
         kind="scatter",
-        xlim=(ymin, ymax),
-        ylim=(ymin, ymax),
+        color=color,
+        marker=marker,
+        xlim=(lo, hi),
+        ylim=(lo, hi),
         **kwargs,
     )
 
@@ -111,7 +145,7 @@ def regplot(data, x, y, fit_reg=True, color=None, marker="o", ylim=None, **kwarg
 
     # if set, add a regression line
     if fit_reg:
-        _x = np.linspace(ymin, ymax, 10)
+        _x = np.linspace(lo, hi, 10)
         res = linregress(xdata, ydata)
 
         # build the label

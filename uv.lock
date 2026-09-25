@@ -164,11 +164,11 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "ipykernel" },
     { name = "pytest" },
     { name = "pytest-cov" },
 ]
 docs = [
-    { name = "ipykernel" },
     { name = "jupyter" },
     { name = "nbconvert" },
     { name = "numpydoc" },
@@ -191,11 +191,11 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "ipykernel", specifier = ">=6.29.4" },
     { name = "pytest", specifier = ">=8.1.1" },
     { name = "pytest-cov", specifier = ">=5.0.0" },
 ]
 docs = [
-    { name = "ipykernel", specifier = ">=6.29.4" },
     { name = "jupyter", specifier = ">=1.0.0" },
     { name = "nbconvert", specifier = ">=7.16.3" },
     { name = "numpydoc", specifier = ">=1.5" },

@@ -1,9 +1,10 @@
+import math
+import warnings
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-import seaborn as sns
-import pandas as pd
 import numpy as np
-import math
+import pandas as pd
 from .utils import (
     check_for_numeric_cols,
     check_for_timestamp_col
@@ -15,126 +16,168 @@ __all__ = ["dielplot", "calendarplot"]
 def custom_month_formatter(x, pos):
     return str(math.ceil(x))
 
-def _yearplot(data, x, y, ax=None, agg="mean", cmap="crest", 
+def _add_colorbar(im, ax, cbar_kws=None, units=None, **defaults):
+    """Attach a colorbar for `im` to `ax` without mutating the caller's `cbar_kws`."""
+    kws = dict(defaults, **(cbar_kws or {}))
+
+    cb = ax.figure.colorbar(im, ax=ax, **kws)
+    cb.outline.set_visible(False)
+
+    # keep the colorbar uncluttered regardless of orientation
+    cb.locator = mpl.ticker.MaxNLocator(4)
+    cb.update_ticks()
+
+    if units:
+        cb.set_label(units)
+
+    return cb
+
+def _yearplot(data, x, y, ax=None, agg="mean", cmap="crest",
               height=2, aspect=5, vmin=None, vmax=None,
-              linecolor="white", linewidths=0, cbar=True, cbar_kws=None, 
+              linecolor="white", linewidths=0, cbar=True, cbar_kws=None,
               units="", faceted=False, **kwargs):
     """Plot a full year of time series data on a heatmap by month.
+
+    Columns are calendar weeks counted from the Monday on or before
+    January 1, so every day of the year lands in exactly one cell no
+    matter which weekday the year starts on and regardless of ISO
+    week numbering.
     """
     if ax is None:
         ax = plt.gca()
-        
+
         if not faceted:
             ax.figure.set_size_inches(height*aspect, height)
-        
-    # if more than 1Y of data was provided, limit to 1Y
-    years = np.unique(data.index.year)
-    if years.size > 1:
-        # warn
-        data = data[data.index.year == years[0]]
 
-    data = data.assign(**{
+    # only a single year can be shown at once
+    years = np.unique(data.index.year)
+    year = int(years[0])
+    if years.size > 1:
+        warnings.warn(
+            f"calendarplot with freq='day' shows a single year; plotting {year} "
+            f"and ignoring {', '.join(str(y) for y in years[1:])}.",
+            UserWarning, stacklevel=3,
+        )
+        data = data[data.index.year == year]
+
+    # the grid starts on the Monday on or before Jan 1 and runs through Dec 31
+    tz = data.index.tz
+    jan1 = pd.Timestamp(year=year, month=1, day=1, tz=tz)
+    dec31 = pd.Timestamp(year=year, month=12, day=31, tz=tz)
+    grid_origin = jan1 - pd.Timedelta(days=jan1.weekday())
+    n_weeks = (dec31 - grid_origin).days // 7 + 1
+
+    day_offset = (data.index.normalize() - grid_origin).days
+    cells = pd.DataFrame({
         "Day of Week": data.index.weekday,
-        "Week of Year": data.index.isocalendar().week,
+        "Week": day_offset // 7,
+        y: data[y].values,
     })
-    
+
     # compute pivoted data
-    pivot = data.pivot_table(
-        index="Day of Week", 
-        columns="Week of Year", 
-        values=y, 
+    pivot = cells.pivot_table(
+        index="Day of Week",
+        columns="Week",
+        values=y,
         aggfunc=agg
     )
-    
+
     # adjust the index to ensure we have a properly-sized array
     pivot = pivot.reindex(
         index=range(0, 7),
-        columns=range(1, 53)
+        columns=range(0, n_weeks)
     )
-    
+
     # reverse the array along the yaxis so that Monday ends up at the top of the fig
     pivot = pivot[::-1]
-    
+
     # set the min and max of the colorbar
     if vmin is None:
         vmin = np.nanmin(pivot.values)
-    
+
     if vmax is None:
         vmax = np.nanmax(pivot.values)
-        
+
     # plot the heatmap
     im = ax.pcolormesh(
-        pivot, 
+        pivot,
         vmin=vmin, vmax=vmax, cmap=cmap,
         linewidth=linewidths, edgecolors=linecolor
     )
-    
-    # modify the axes ticks
-    ax.xaxis.set_major_locator(mpl.ticker.LinearLocator(14))
-    ax.xaxis.set_ticklabels([
-        "",
+
+    # label each month at the center of the weeks it spans, with a small
+    # tick marking each month boundary
+    month_starts = [
+        (pd.Timestamp(year=year, month=m, day=1, tz=tz) - grid_origin).days / 7
+        for m in range(1, 13)
+    ]
+    bounds = month_starts + [n_weeks]
+    centers = [(lo + hi) / 2 for lo, hi in zip(bounds[:-1], bounds[1:])]
+
+    ax.xaxis.set_major_locator(mpl.ticker.FixedLocator(centers))
+    ax.xaxis.set_major_formatter(mpl.ticker.FixedFormatter([
         "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-        ""
-    ], rotation="horizontal", va="center")
-    
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    ]))
+    ax.xaxis.set_minor_locator(mpl.ticker.FixedLocator(bounds))
+    ax.tick_params(axis="x", which="major", length=0)
+    ax.tick_params(axis="x", which="minor", length=3)
+
     ax.yaxis.tick_right()
-    ax.yaxis.set_ticks([0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5])
-    ax.yaxis.set_ticklabels([
+    ax.yaxis.set_major_locator(mpl.ticker.FixedLocator([0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5]))
+    ax.yaxis.set_major_formatter(mpl.ticker.FixedFormatter([
         "Sun", "Sat", "Fri", "Thu", "Wed", "Tue", "Mon"
-    ], rotation="horizontal", va="center", ha="left")
-    ax.yaxis.set_tick_params(right=False)
-    
+    ]))
+    ax.tick_params(axis="y", which="major", right=False, labelrotation=0)
+    for label in ax.get_yticklabels():
+        label.set_ha("left")
+        label.set_va("center")
+
     # add a big ol' year on the left-hand side
     ax.set_ylabel(
-        f"{years[0]}",
+        f"{year}",
         fontsize=28, color="gray", ha="center"
     )
-    
+
     # add a colorbar if set
     if cbar:
-        cbar_kws["pad"] = cbar_kws.get("pad", 0.05)
+        _add_colorbar(im, ax, cbar_kws, units, pad=0.05)
 
-        cb = ax.figure.colorbar(im, ax=ax, **cbar_kws)
-        cb.outline.set_visible(False)
-        
-        # adjust the colorbar ticklabels
-        cb.ax.yaxis.set_major_locator(mpl.ticker.MaxNLocator(4))
-        
-        # modify the tick labels
-        # TODO: this is currently not working
-        ticklabels = [x.get_text() for x in cb.ax.get_yticklabels()]
-        ticklabels[-1] = f"{ticklabels[-1]} {units}"
-        cb.set_ticks(cb.get_ticks())
-        cb.set_ticklabels(ticklabels)
-    
     return ax
-    
 
-def _monthplot(data, x, y, ax=None, agg="mean", height=3, aspect=1, 
+
+def _monthplot(data, x, y, ax=None, agg="mean", height=3, aspect=1,
                vmin=None, vmax=None, cmap="crest", linewidths=0.1,
-               linecolor="white", cbar=True, cbar_kws=None, 
+               linecolor="white", cbar=True, cbar_kws=None,
                units=None, faceted=False, **kwargs):
     """Plot a full month of time series data on a heatmap by hour.
     """
     if ax is None:
         ax = plt.gca()
-        
+
         if not faceted:
             ax.figure.set_size_inches(height*aspect, height)
-        
-    # if more than 1mo of data was provided, limit to 1mo
-    months = np.unique(data.index.month)
+
+    # only a single calendar month can be shown at once
+    year_month = data.index.year * 100 + data.index.month
+    months = np.unique(year_month)
     if months.size > 1:
-        # TODO: log warning
-        data = data[data.index.month == months[0]]
-        
+        def _fmt(ym):
+            return f"{ym // 100}-{ym % 100:02d}"
+
+        warnings.warn(
+            f"calendarplot with freq='hour' shows a single month; plotting {_fmt(months[0])} "
+            f"and ignoring {', '.join(_fmt(m) for m in months[1:])}.",
+            UserWarning, stacklevel=3,
+        )
+        data = data[year_month == months[0]]
+
     # add pivot columns
     data = data.assign(**{
         "Day of Month": data.index.day,
         "Hour of Day": data.index.hour,
     })
-    
+
     # compute the pivot data
     pivot = data.pivot_table(
         index="Hour of Day",
@@ -142,44 +185,37 @@ def _monthplot(data, x, y, ax=None, agg="mean", height=3, aspect=1,
         values=y,
         aggfunc=agg
     )
-    
+
     # get the total number of available days in the month
     days_in_month = data.index.days_in_month[0]
-    
+
     # adjust the index to ensure we have a properly-sized array
     pivot = pivot.reindex(
         index=range(0, 24),
         columns=range(1, days_in_month + 1)
     )
-    
-    # reverse the order of the matrix along the y-axis so that Monday is at the top
+
+    # reverse the order of the matrix along the y-axis so that midnight is at the top
     pivot = pivot[::-1]
-    
+
     # set the min and max values for the colorbar
     if vmin is None:
         vmin = np.nanmin(pivot.values)
-    
+
     if vmax is None:
         vmax = np.nanmax(pivot.values)
-    
+
     # plot the heatmap
     im = ax.pcolormesh(
         pivot,
         cmap=cmap, vmin=vmin, vmax=vmax,
         linewidth=linewidths, edgecolors=linecolor
     )
-    
+
     # add a colorbar if set
     if cbar:
-        cb = ax.figure.colorbar(im, ax=ax, **cbar_kws)
-        cb.outline.set_visible(False)
-        
-        # adjust the tick labels
-        ticklabels = [x.get_text() for x in cb.ax.get_yticklabels()]
-        ticklabels[-1] = f"{ticklabels[-1]} {units}"
-        cb.set_ticks(cb.get_ticks())
-        cb.set_ticklabels(ticklabels)
-        
+        _add_colorbar(im, ax, cbar_kws, units)
+
     # adjust the axes labels
     ax.xaxis.set_major_locator(mpl.ticker.FixedLocator([x - 0.5 for x in list(range(1, days_in_month, 4))]))
     ax.xaxis.set_major_formatter(custom_month_formatter)
@@ -187,7 +223,7 @@ def _monthplot(data, x, y, ax=None, agg="mean", height=3, aspect=1,
     ax.set_yticklabels([
         "12 AM", "6 PM", "12 PM", "6 AM", "12 AM"
     ])
-    
+
     return ax
 
 
@@ -201,11 +237,11 @@ def calendarplot(data, x, y, freq="day", agg="mean", vmin=None, vmax=None, cmap=
     of time. This function is quite generic and allows you to visualize data either by 
     month (where the x-axis is day of month and y-axis is hour of day) or year (where 
     x-axis is the week of the year and y-axis is the day of the week). Configure the plot
-    to aggregrate the data any way you choose (e.g., sum, mean, max).
+    to aggregate the data any way you choose (e.g., sum, mean, max).
     
-    Currently, you can only plot a single month or single year at a time depending on 
-    configuration. To facet these, please set up a Seaborn FacetGrid and call the 
-    calendarplot separately.
+    Only a single month or single year can be shown at a time. If the data span
+    more than one, the first is plotted and a warning lists what was ignored. To
+    show several, set up a Seaborn FacetGrid and call calendarplot per facet.
     
     This function is heavily influenced by the `calplot <https://calplot.readthedocs.io/en/latest/>`_ 
     python library.
@@ -245,7 +281,7 @@ def calendarplot(data, x, y, freq="day", agg="mean", vmin=None, vmax=None, cmap=
     title : str, optional
         The figure title, by default None
     units : str, optional
-        The units of the plotted item for labeling purposes only, by default ""
+        The units of the plotted item, used to label the colorbar, by default ""
     height : int, optional
         The figure height in inches, by default 2
     aspect : float, optional
@@ -288,14 +324,14 @@ def calendarplot(data, x, y, freq="day", agg="mean", vmin=None, vmax=None, cmap=
     
     if freq == "day":
         ax = _yearplot(
-            df, x, y,
+            df, x, y, ax=ax,
             agg=agg, height=height, aspect=aspect,
             vmin=vmin, vmax=vmax, linewidths=linewidths, linecolor=linecolor,
             cbar=cbar, cbar_kws=cbar_kws, units=units, cmap=cmap, faceted=faceted, **kwargs
         )
     elif freq == "hour":
         ax = _monthplot(
-            df, x, y,
+            df, x, y, ax=ax,
             agg=agg, height=height, aspect=aspect,
             vmin=vmin, vmax=vmax, linewidths=linewidths, linecolor=linecolor,
             cbar=cbar, cbar_kws=cbar_kws, units=units, cmap=cmap, faceted=faceted, **kwargs
