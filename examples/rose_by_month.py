@@ -29,9 +29,8 @@ g = sns.FacetGrid(
 # map the dataframe using the pollutionroseplot function
 g.map_dataframe(
     atmospy.pollutionroseplot, 
-    ws="ws", wd="wd", pollutant="value", 
-    faceted=True, 
-    segments=20, 
+    ws="ws", wd="wd", pollutant="value",
+    segments=20,
     suffix="$µgm^{-3}$"
 )
 

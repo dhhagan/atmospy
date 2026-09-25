@@ -323,6 +323,18 @@ def test_calendarplot_horizontal_colorbar_labels_x_axis(hourly):
 
 
 @pytest.mark.parametrize("freq", ["day", "hour"])
+def test_calendarplot_colorbar_caps_when_vmax_clips(hourly, freq):
+    january = hourly[hourly["timestamp"].dt.month == 1]
+
+    ax = calendarplot(january, x="timestamp", y="pm25", freq=freq)
+    assert _colorbar_axes(ax)._colorbar.extend == "neither"
+
+    plt.figure()
+    ax = calendarplot(january, x="timestamp", y="pm25", freq=freq, vmax=10)
+    assert _colorbar_axes(ax)._colorbar.extend == "max"
+
+
+@pytest.mark.parametrize("freq", ["day", "hour"])
 def test_calendarplot_does_not_mutate_cbar_kws(hourly, freq):
     january = hourly[hourly["timestamp"].dt.month == 1]
     kws = {"shrink": 0.5}

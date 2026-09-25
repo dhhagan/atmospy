@@ -5,6 +5,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from ._base import _add_colorbar
 from .utils import (
     check_for_numeric_cols,
     check_for_timestamp_col
@@ -15,22 +16,6 @@ __all__ = ["dielplot", "calendarplot"]
 @mpl.ticker.FuncFormatter
 def custom_month_formatter(x, pos):
     return str(math.ceil(x))
-
-def _add_colorbar(im, ax, cbar_kws=None, units=None, **defaults):
-    """Attach a colorbar for `im` to `ax` without mutating the caller's `cbar_kws`."""
-    kws = dict(defaults, **(cbar_kws or {}))
-
-    cb = ax.figure.colorbar(im, ax=ax, **kws)
-    cb.outline.set_visible(False)
-
-    # keep the colorbar uncluttered regardless of orientation
-    cb.locator = mpl.ticker.MaxNLocator(4)
-    cb.update_ticks()
-
-    if units:
-        cb.set_label(units)
-
-    return cb
 
 def _yearplot(data, x, y, ax=None, agg="mean", cmap="crest",
               height=2, aspect=5, vmin=None, vmax=None,
@@ -141,7 +126,7 @@ def _yearplot(data, x, y, ax=None, agg="mean", cmap="crest",
 
     # add a colorbar if set
     if cbar:
-        _add_colorbar(im, ax, cbar_kws, units, pad=0.05)
+        _add_colorbar(im, ax, cbar_kws, units, values=pivot.values, pad=0.05)
 
     return ax
 
@@ -214,7 +199,7 @@ def _monthplot(data, x, y, ax=None, agg="mean", height=3, aspect=1,
 
     # add a colorbar if set
     if cbar:
-        _add_colorbar(im, ax, cbar_kws, units)
+        _add_colorbar(im, ax, cbar_kws, units, values=pivot.values)
 
     # adjust the axes labels
     ax.xaxis.set_major_locator(mpl.ticker.FixedLocator([x - 0.5 for x in list(range(1, days_in_month, 4))]))
