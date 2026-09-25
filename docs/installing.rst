@@ -23,7 +23,7 @@ Dependencies
 Supported Python versions
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- Python3.8 - Python3.11 are currently supported 
+- Python 3.10 and newer are currently supported
 
 Mandatory Dependencies
 ^^^^^^^^^^^^^^^^^^^^^^

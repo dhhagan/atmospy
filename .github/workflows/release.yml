@@ -4,28 +4,22 @@ on:
     types: [published]
 
 jobs:
-    build-n-publish:
-        name: Build and publish to PyPI
-        runs-on: ubuntu-20.04
-        steps:
-            - name: Checkout branch
-              uses: actions/checkout@v2
+  build-n-publish:
+    name: Build and publish to PyPI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
 
-            - name: Setup python 
-              uses: actions/setup-python@master
-              with:
-                python-version: "3.11"
-            
-            - name: Install poetry
-              uses: snok/install-poetry@v1
-              with:
-                version: 1.8.5
-                virtualenvs-create: true
-            
-            - name: Install dependencies
-              run: poetry install --no-interaction
-            
-            - name: Build and publish to PyPI
-              run: |
-                poetry build
-                poetry publish -u __token__ -p ${{ secrets.PYPI_TOKEN }}
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: Build sdist and wheel
+        run: uv build
+
+      - name: Publish to PyPI
+        run: uv publish
+        env:
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}

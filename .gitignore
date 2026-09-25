@@ -10,9 +10,12 @@ __pycache__/
 # C extensions
 *.so
 
+# Virtual environments
+.venv/
+env/
+
 # Distribution / packaging
 .Python
-env/
 build/
 develop-eggs/
 dist/
@@ -38,6 +41,7 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
+.pytest_cache/
 htmlcov/
 .tox/
 .coverage

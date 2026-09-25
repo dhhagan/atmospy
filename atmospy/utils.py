@@ -5,10 +5,14 @@ from urllib.request import (
     urlopen,
     urlretrieve
 )
-from seaborn.external.appdirs import (
-    user_cache_dir,
-)
 import pandas as pd
+from platformdirs import user_cache_dir
+
+__all__ = [
+    "load_dataset",
+    "get_dataset_names",
+    "get_data_home",
+]
 
 DATASET_SOURCE = "https://raw.githubusercontent.com/dhhagan/atmospy-data/main"
 DATASET_NAMES_URL = f"{DATASET_SOURCE}/dataset_names.txt"
@@ -133,7 +137,7 @@ def load_dataset(name, cache=True, data_home=None, **kwargs):
     return df
 
 def remove_na(vec):
-    return
+    raise NotImplementedError("remove_na is not implemented yet.")
 
 def check_for_timestamp_col(data, col):
     """Make sure the column is a proper timestamp according to Pandas.
@@ -145,7 +149,7 @@ def check_for_timestamp_col(data, col):
     col : str
         The name of the column to check.
     """
-    if not pd.core.dtypes.common.is_datetime64_any_dtype(data[col]):
+    if not pd.api.types.is_datetime64_any_dtype(data[col]):
         raise TypeError(f"Column `{col}` is not a proper timestamp.")
     
 def check_for_numeric_cols(data, cols):
@@ -159,5 +163,5 @@ def check_for_numeric_cols(data, cols):
         A list of column names to check.
     """
     for col in cols:
-        if not pd.core.dtypes.common.is_numeric_dtype(data[col]):
+        if not pd.api.types.is_numeric_dtype(data[col]):
             raise TypeError(f"Column `{col}` is not numeric. Please convert to a numeric dtype before proceeding.")
